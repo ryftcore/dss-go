@@ -12,8 +12,7 @@
 // TrustStatusListType) and its exact property order, and every property
 // carries the xml struct tag that reproduces its JAXB annotation, so that
 // marshalling with Marshal/MarshalMRA reproduces the bytes the JAXB
-// reference implementation produces for the same tree. Per the phase-8a
-// generated-JAXB rule (see dss/diagnostic/jaxb's doc.go) the classes are
+// reference implementation produces for the same tree. The classes are
 // grouped into files by schema area rather than one file per class:
 //
 //   - jaxb_common.go: the schema's shared simple types (Base64Binary,

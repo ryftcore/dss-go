@@ -189,8 +189,7 @@ func (w *RevocationWrapper) SourceAddress() string {
 // AbstractTokenProxy, comparing only Id - unlike AbstractTokenProxy.equals() it does NOT
 // additionally compare getClass(), so this compares only by Id, faithfully. hashCode() has no
 // Go equivalent (nothing here keys a hash-based collection on a RevocationWrapper) and is
-// dropped, matching the omission pattern documented elsewhere in this port (see
-// model/certificate_token.go).
+// omitted.
 func (w *RevocationWrapper) Equals(other TokenProxy) bool {
 	if other == nil {
 		return false

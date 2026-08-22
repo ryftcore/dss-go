@@ -1,22 +1,19 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/source/TLSource.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCIES (see this batch's porter notes):
+// Embeds job.DocumentSource (Java
+// eu.europa.esig.dss.validation.job.source.DocumentSource). The embedded name and its
+// constructor follow PORTING.md's "exported Go identifiers keep the Java name" rule literally
+// (DocumentSource / NewDocumentSource).
 //
-//  1. This file embeds eu.europa.esig.dss.validation.job.source.DocumentSource, ported by the
-//     dss-validation-job chunk into Go package dss/validation/job, which had not landed when this
-//     file was written. The embedded name and its constructor follow PORTING.md's "exported Go
-//     identifiers keep the Java name" rule literally (DocumentSource / NewDocumentSource).
-//
-//  2. Java types the three predicate fields as the raw java.util.function.Predicate<T>. Go has no
-//     generic functional interface with a canonical name, and every predicate the ported tree
-//     actually assigns here is one of the NAMED interfaces the dss-tsl-validation "function"
-//     package declares for exactly these three T's - TrustServiceProviderPredicate
-//     (Predicate<TSPType>), TrustServicePredicate (Predicate<TSPServiceType>) and
-//     TrustAnchorPeriodPredicate (Predicate<TrustServiceStatusAndInformationExtensions>), all
-//     produced by TLPredicateFactory. The fields therefore carry those named interface types
-//     (same Go package tsl, ported by the TSLJOB chunk); an arbitrary caller lambda is wrapped in
-//     an implementation of the corresponding interface rather than assigned directly, which is
-//     the only expressible difference from Java.
+// Java types the three predicate fields as the raw java.util.function.Predicate<T>. Go has no
+// generic functional interface with a canonical name, and every predicate the ported tree
+// actually assigns here is one of the NAMED interfaces the dss-tsl-validation "function" package
+// declares for exactly these three T's - TrustServiceProviderPredicate (Predicate<TSPType>),
+// TrustServicePredicate (Predicate<TSPServiceType>) and TrustAnchorPeriodPredicate
+// (Predicate<TrustServiceStatusAndInformationExtensions>), all produced by TLPredicateFactory.
+// The fields therefore carry those named interface types (this same Go package tsl); an
+// arbitrary caller lambda is wrapped in an implementation of the corresponding interface rather
+// than assigned directly, which is the only expressible difference from Java.
 package tsl
 
 import "github.com/ryftcore/dss-go/dss/validation/job"

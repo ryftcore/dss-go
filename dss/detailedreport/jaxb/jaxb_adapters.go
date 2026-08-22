@@ -5,7 +5,7 @@
 // so that encoding/xml can marshal it through encoding.TextMarshaler with the
 // exact lexical form the parser prints, and reject any other lexical form on
 // the way in - the same pattern dss/diagnostic/jaxb/jaxb_adapters.go
-// establishes; see that file for the precedent.
+// establishes.
 //
 // Adapter12 (ListType), Adapter13 (LoTEServiceTypeIdentifier) and Adapter14
 // (LoTEServiceStatus) bind to enumerations interfaces backed by a dynamic
@@ -18,9 +18,9 @@
 //
 // Deviation from the Java parsers: every parser here returns nil/null on an
 // unrecognised lexical form (e.g. RevocationReasonParser.parseShortName,
-// CertificateQualificationParser.parse). Consistent with every other adapter in
-// this port (see dss/diagnostic/jaxb/jaxb_adapters.go), UnmarshalText returns an
-// error instead of silently producing the zero value.
+// CertificateQualificationParser.parse). Consistent with every other adapter
+// (see dss/diagnostic/jaxb/jaxb_adapters.go), UnmarshalText returns an error
+// instead of silently producing the zero value.
 package jaxb
 
 import (

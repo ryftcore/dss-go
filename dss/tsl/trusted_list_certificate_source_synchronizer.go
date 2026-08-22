@@ -1,7 +1,7 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/sync/TrustedListCertificateSourceSynchronizer.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY (see xml_download_result.go's header): uses job.CacheKey and
-// job.SynchronizerCacheAccess.
+// Uses job.CacheKey and job.SynchronizerCacheAccess (see xml_download_result.go's header for
+// the wider job.* convention).
 package tsl
 
 import (
@@ -44,10 +44,8 @@ func NewTrustedListCertificateSourceSynchronizer(tlSources []*TLSource, lotlSour
 }
 
 // Sync synchronizes the trusted certificate source based on the validation job processing
-// result. Port of sync(). Java catches and logs any Exception; this port recovers a panic the
-// same way, since the private helper methods below panic instead of propagating an error (per
-// PORTING.md, matching the rest of this batch's error handling of data-dependent construction
-// failures).
+// result. Port of sync(). Java catches and logs any Exception; this recovers a panic the same
+// way, since the private helper methods below panic instead of returning an error.
 func (s *TrustedListCertificateSourceSynchronizer) Sync() {
 	defer func() {
 		_ = recover()
@@ -283,14 +281,13 @@ func (s *TrustedListCertificateSourceSynchronizer) getRelatedTLSource(tlInfo *ts
 
 // trustPropertiesListContains reports whether list contains value.
 //
-// DEVIATION: model/tsl.TrustProperties (frozen package, out of this manifest) exposes no
-// Equals method, so this compares by pointer identity rather than Java's List#contains (which
-// delegates to TrustProperties#equals()). Within one addCertificatesFromTLs pass the same
-// *TrustProperties instance is reused for every certificate of one trust service (see
-// getTrustProperties's single call site above the certificates loop), so pointer identity still
-// dedups the common case exactly; it only under-dedups two structurally-equal but
-// separately-constructed TrustProperties values, which addCertificatesFromTLs never produces for
-// the same certificate within one summary.
+// DEVIATION: model/tsl.TrustProperties exposes no Equals method, so this compares by pointer
+// identity rather than Java's List#contains (which delegates to TrustProperties#equals()).
+// Within one addCertificatesFromTLs pass the same *TrustProperties instance is reused for every
+// certificate of one trust service (see getTrustProperties's single call site above the
+// certificates loop), so pointer identity still dedups the common case exactly; it only
+// under-dedups two structurally-equal but separately-constructed TrustProperties values, which
+// addCertificatesFromTLs never produces for the same certificate within one summary.
 func trustPropertiesListContains(list []*tslmodel.TrustProperties, value *tslmodel.TrustProperties) bool {
 	for _, v := range list {
 		if v == value {

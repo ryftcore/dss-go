@@ -118,7 +118,7 @@ func (d XSDateTime) MarshalText() ([]byte, error) {
 // unmarshals normally. Go's encoding/xml has no per-field-tolerant mode: any
 // error an encoding.TextUnmarshaler returns aborts the whole Unmarshal call,
 // so the tolerance has to live here. Returning an error instead made
-// diagnostic/jaxb reject documents upstream accepts - found by the phase-8f
+// diagnostic/jaxb reject documents upstream accepts - found via the
 // full-corpus oracle on qwac-validation/2-qwac-valid-diag-data.xml, whose
 // <TrustedList><LastLoading>2025-11-12T14:40:00</LastLoading> lacks the literal
 // trailing 'Z' the pattern requires.
@@ -191,7 +191,7 @@ func collapseWhitespace(s string) string {
 // decimal integer written with leading zeros. Java's BigInteger(String)
 // constructor, which is what JAXB's built-in xs:integer binding calls, is
 // decimal-only and has no such prefix sniffing, so upstream parses those
-// documents fine - the four diag-data fixtures the phase-8f full-corpus oracle
+// documents fine - the four diag-data fixtures the full-corpus oracle
 // flagged as F1 (valid-diag-data-crl-{lt,lta}.xml and
 // diag_data_cert_on_hold_with_tst_{after,before}.xml, whose <SerialNumber> is
 // "001122445566778899" / "0782723948319656423178326307535116") among them.
@@ -674,7 +674,7 @@ func resolveRefs(sv reflect.Value, ids map[string]reflect.Value, baseViews map[u
 // certificate-approval-status (ETSI TS 119 602 "certificate usage") process
 // found no acceptable List of Trusted Entities and concluded
 // FAILED/CERT_USAGE_VALID_LOTE_PRESENT_ANS where upstream concludes PASSED.
-// Found by the phase-8f full-corpus report byte-parity run on
+// Found by the full-corpus report byte-parity run on
 // eaa-validation/diag_data_pid.xml.
 //
 // The view is CACHED per target, so every reference to the same id resolves to

@@ -8,8 +8,8 @@ import _ "embed"
 // TRUSTED_LIST_SCHEMA_LOCATION/TRUSTED_LIST_SIE_SCHEMA_LOCATION/
 // TRUSTED_LIST_ADDITIONALTYPES_SCHEMA_LOCATION. Java resolves these against
 // the classpath to build a javax.xml.validation.Schema for
-// AbstractJaxbFacade to validate against; this port does not perform
-// runtime XSD validation (nothing in TLMODEL's scope consumes it - see
+// AbstractJaxbFacade to validate against; no runtime XSD validation is
+// performed (nothing in this port consumes it - see
 // dss/trustedlist/jaxb's doc.go), so the constants and the embedded bytes
 // below exist for provenance/documentation and for any future validator,
 // not because anything in this package reads them today.

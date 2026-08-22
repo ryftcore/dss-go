@@ -1,12 +1,11 @@
 // Ported from dss-diagnostic-jaxb/src/main/java/eu/europa/esig/dss/diagnostic/DiagnosticData.java (DSS 6.5.RC1).
 //
 // Java's getAllSignatures()/getAllCounterSignatures()/getAllKeyBindingSignatures()/
-// getAllRevocationData()/getAllEAA()/getAllEAARevocationTokens() return java.util.Set<T>. Per
-// PORTING.md, Set<T> normally becomes map[T]struct{}, but every element here is already a
+// getAllRevocationData()/getAllEAA()/getAllEAARevocationTokens() return java.util.Set<T>.
+// Set<T> normally becomes map[T]struct{}, but every element here is already a
 // unique wrapper instance drawn from this type's own cached slices (getSignatures(),
 // getAllRevocationData() iterates wrapped.getUsedRevocations() once), so a map would only add
-// nondeterministic iteration order without changing membership semantics - the same class of
-// bug PORTING.md's determinism sweep (see repo history) exists to avoid. This port therefore
+// nondeterministic iteration order without changing membership semantics. This port therefore
 // returns a deterministic, insertion-ordered []*T instead; documented here as a deliberate
 // deviation from the literal Set<T> mapping rule.
 package diagnostic

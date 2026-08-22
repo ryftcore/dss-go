@@ -6,16 +6,12 @@
 // has no Go stdlib equivalent: a JAXBContext (needed only to drive JAXB's own
 // (un)marshaller, which policy/jaxb's Marshal/Unmarshal replace directly with
 // encoding/xml - see that package's xml.go) and an XSD Schema used to
-// validate a validation-policy document against policy.xsd. Per
-// S8A_BRIEF.md's marshal-parity contract ("policy.xsd ... copied under
-// testdata/ + embedded where upstream loads them at runtime"), this port
-// keeps the schema resource path and embeds its bytes, but Schema() is a stub
-// returning an error, following the precedent set by
-// dss/diagnostic/diagnostic_data_xml_definer.go: no XSD validator ships in
-// the Go stdlib and none has been added to this port without tech-lead
-// sign-off (PORTING.md "Dependency policy"). ValidationPolicyFacade (the half
-// of this pair the marshal-parity KAT actually exercises) does not depend on
-// Schema().
+// validate a validation-policy document against policy.xsd. This port keeps
+// the schema resource path and embeds its bytes, but Schema() is a stub
+// returning an error: no XSD validator ships in the Go stdlib and none has
+// been added to this port without tech-lead sign-off (PORTING.md "Dependency
+// policy"). ValidationPolicyFacade (the half of this pair the marshal-parity
+// KAT actually exercises) does not depend on Schema().
 package policy
 
 import (
@@ -30,8 +26,8 @@ const ValidationPolicySchemaLocation = "/xsd/policy.xsd"
 
 // validationPolicyXSD is a byte-identical copy of upstream's
 // src/main/resources/xsd/policy.xsd, embedded for documentation/testdata
-// purposes per S8A_BRIEF.md - see the file header for why Schema() does not
-// use it to actually validate.
+// purposes - see the file header for why Schema() does not use it to
+// actually validate.
 //
 //go:embed jaxb/testdata/xsd/policy.xsd
 var validationPolicyXSD string

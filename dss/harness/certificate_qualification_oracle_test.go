@@ -1,10 +1,10 @@
-// Phase 9 cross-validation harness, contract item (D): end-to-end trust, Phase 9 -> Phase 8.
+// Cross-validation harness: end-to-end trust.
 //
 // Ports eu.europa.esig.dss.tsl.validation.SKCertificateTest#skTLTest (dss-tsl-validation 6.5.RC1)
 // verbatim: build a TrustedListsCertificateSource offline from the real Slovak trusted list
 // (dss/tsl/testdata/sk-tl-sn-95.xml, already vendored for that package's own sha2/parsing
 // coverage - the SAME upstream fixture, unchanged), signed by the real "KCA NBU SR 3" issuer
-// certificate; then run Phase 8's CertificateValidator on a real Slovak qualified certificate
+// certificate; then run CertificateValidator on a real Slovak qualified certificate
 // (also transcribed verbatim from the Java test) against that trust source, and compare the
 // resulting qualification conclusion end to end.
 //
@@ -91,7 +91,7 @@ type cqDump struct {
 }
 
 // cqTSP is one XmlTrustServiceProvider of the certificate's diagnostic data: the TL content
-// Phase 9 handed to Phase 8 for this certificate.
+// the trusted-list build handed to CertificateValidator for this certificate.
 type cqTSP struct {
 	TSPNames                   []string     `json:"tspNames"`
 	TSPTradeNames              []string     `json:"tspTradeNames"`
@@ -187,7 +187,8 @@ func cqLoadCertificate(t *testing.T, base64Certificate string) *model.Certificat
 	return cert
 }
 
-// TestCertificateQualificationOracle is the Phase 9 harness contract item (D).
+// TestCertificateQualificationOracle validates a real Slovak qualified certificate against a
+// trusted list built offline and compares the qualification conclusion against the Java oracle.
 func TestCertificateQualificationOracle(t *testing.T) {
 	issuerSource := spi.NewCommonCertificateSource()
 	issuerSource.AddCertificate(cqLoadCertificate(t, cqTLIssuer))

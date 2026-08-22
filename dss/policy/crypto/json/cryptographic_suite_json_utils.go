@@ -4,13 +4,11 @@
 // dss-json-common JSONSchemaAbstractUtils base) validates a document
 // against the ETSI TS 119 322 JSON Schema (19322algocatjsonschema.json).
 // No JSON Schema validator ships in the Go stdlib and none has been added
-// to this port without tech-lead sign-off (PORTING.md "Dependency
-// policy"), following the precedent set by
-// dss/diagnostic/diagnostic_data_xml_definer.go's deferred Schema() stub.
-// This file keeps the schema URI/location constants and embeds the schema
-// document for documentation/testdata purposes, per S8A_BRIEF.md's
-// "Schema/suite resources embedded" instruction, but ValidateAgainstSchema
-// is a stub returning an error.
+// without tech-lead sign-off (PORTING.md "Dependency
+// policy"), the same way dss/diagnostic/diagnostic_data_xml_definer.go's
+// deferred Schema() stub does. This file keeps the schema URI/location
+// constants and embeds the schema document for documentation/testdata
+// purposes, but ValidateAgainstSchema is a stub returning an error.
 package cryptojson
 
 import (
@@ -37,7 +35,7 @@ var cryptographicSuiteJsonSchema []byte
 
 // ErrCryptographicSuiteJsonSchemaNotSupported is returned by
 // ValidateAgainstSchema: no JSON Schema validator ships in the Go stdlib
-// and none has been added to this port (see the file header).
+// and none has been added (see the file header).
 var ErrCryptographicSuiteJsonSchemaNotSupported = errors.New("cryptojson: 19322algocatjsonschema.json schema validation is not implemented in this port (deferred, see CryptographicSuiteJsonUtils)")
 
 // ValidateAgainstSchema is a stub for JSON-Schema validation of a

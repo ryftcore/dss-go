@@ -1,7 +1,7 @@
 // Ported from SimpleCertificateReport.xsd (DSS 6.5.RC1) via the JAXB class
 // generated into eu.europa.esig.dss.simplecertificatereport.jaxb.XmlSignature.
-// Per the phase-8a generated-JAXB rule the generated classes are grouped
-// into schema-area files rather than one file per class.
+// The generated classes are grouped into schema-area files rather than one
+// file per class.
 //
 // Unlike dss/simplereport/jaxb.XmlSignature, this Signature complexType is
 // not an extension of an abstract Token base (the certificate-report schema

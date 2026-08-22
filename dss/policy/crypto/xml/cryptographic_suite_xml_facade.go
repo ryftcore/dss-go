@@ -1,12 +1,9 @@
 // Ported from dss-policy-crypto-xml/.../xml/CryptographicSuiteXmlFacade.java (DSS 6.5.RC1).
 //
 // Java's CryptographicSuiteXmlFacade extends dss-jaxb-common's
-// AbstractJaxbFacade<SecuritySuitabilityPolicyType>, a module outside
-// S8A_BRIEF.md's manifest - see doc.go and cryptojson's doc.go for the
-// precedent this port follows (dss/diagnostic/diagnostic_data_facade.go)
-// of collapsing AbstractJaxbFacade's unmarshal template method directly
-// into the concrete facade, here using encoding/xml against this
-// package's own xml_types.go structs instead of a JAXBContext.
+// AbstractJaxbFacade<SecuritySuitabilityPolicyType>; this port implements unmarshalling
+// directly with encoding/xml against this package's own xml_types.go structs instead of a
+// JAXBContext.
 package cryptoxml
 
 import (

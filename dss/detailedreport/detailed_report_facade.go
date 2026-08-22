@@ -1,22 +1,11 @@
 // Ported from dss-detailed-report-jaxb/src/main/java/eu/europa/esig/dss/detailedreport/DetailedReportFacade.java
 // (DSS 6.5.RC1).
 //
-// Java's DetailedReportFacade extends the generic dss-jaxb-common
-// AbstractJaxbFacade<T>, a module outside this phase's manifest (only
-// dss-detailed-report-jaxb's own files are). dss/diagnostic/jaxb's
-// DiagnosticDataFacade precedent collapses AbstractJaxbFacade's marshal/
-// unmarshal template method into a direct encoding/xml call instead - this
-// port does one better, since jaxb.Marshal/jaxb.Unmarshal (jaxb/xml.go)
-// already exist and reproduce the JAXB reference implementation's bytes
-// exactly (the marshal-parity KAT's whole purpose): Marshal/Unmarshal below
-// call them directly, so this facade is actually byte-exact where the
-// diagnostic-module precedent it otherwise mirrors is not. Flagged here per
-// the porting brief's "judgment calls, cross-chunk assumptions" instruction.
-//
-// XSD-schema validation (the `validate` booleans on every Java overload) and
-// the HTML/PDF XSLT generation methods are stubbed via
-// DetailedReportXmlDefiner's deferred Schema()/HtmlBootstrap4Templates()/
-// PdfTemplates() (see that file's header) and surface the same error here.
+// Java's DetailedReportFacade extends dss-jaxb-common's AbstractJaxbFacade<T>; this port
+// implements Marshal/Unmarshal by delegating to jaxb.Marshal/jaxb.Unmarshal (jaxb/xml.go),
+// which reproduce the JAXB reference implementation's bytes exactly. XSD-schema validation and
+// HTML/PDF report generation are not implemented - see DetailedReportXmlDefiner's deferred
+// Schema()/HtmlBootstrap4Templates()/PdfTemplates() stubs.
 package detailedreport
 
 import (

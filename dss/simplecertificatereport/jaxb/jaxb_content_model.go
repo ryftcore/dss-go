@@ -1,8 +1,8 @@
 // Ported from SimpleCertificateReport.xsd (DSS 6.5.RC1): the content model
 // the marshaller needs to reproduce one JAXB spelling that encoding/xml
 // cannot express on its own (see xml.go's "self-closing tags" quirk). Same
-// rationale and design as dss/simplereport/jaxb/jaxb_content_model.go
-// (Phase 8b): the schema is small enough, and binds every element name to
+// rationale and design as dss/simplereport/jaxb/jaxb_content_model.go:
+// the schema is small enough, and binds every element name to
 // exactly one content kind everywhere it appears, that a flat hand-verified
 // table is equivalent to (and far shorter than) deriving it by reflection as
 // dss/diagnostic/jaxb does. The XSD-completeness sweep in

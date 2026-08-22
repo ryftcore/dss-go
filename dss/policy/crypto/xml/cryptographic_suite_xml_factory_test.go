@@ -1,5 +1,4 @@
-// Accessor behavior tests vs Java-dumped answers, per PORTING.md/S8A_BRIEF.md's
-// crypto-suite KAT requirement.
+// Accessor behavior tests vs Java-dumped answers.
 //
 // testdata/oracle/dss-crypto-suite.accessors.txt is a tab-separated
 // "key<TAB>value" dump produced by running upstream's real
@@ -8,7 +7,7 @@
 // (byte-identical to dss/policy/crypto/json's dss-crypto-suite.json content,
 // so the golden values are identical too), calling this package's own
 // CryptoXmlOracle.java (not checked into this repository - see
-// policy/jaxb/doc.go for the sibling PolicyOracle.java precedent). See
+// policy/jaxb/doc.go for PolicyOracle.java). See
 // dss/policy/crypto/json/cryptographic_suite_json_factory_test.go's header
 // for the Set<CryptographicSuiteEvaluation>-has-no-order rationale this
 // file's canonicalization follows too.

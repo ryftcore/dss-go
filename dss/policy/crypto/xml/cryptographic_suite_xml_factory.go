@@ -16,8 +16,7 @@ import (
 // src/main/resources/suite/dss-crypto-suite.xml, embedded because
 // CryptographicSuiteXmlFactory#loadDefaultCryptographicSuite loads it from
 // the classpath at runtime (DEFAULT_CRYPTOGRAPHIC_SUITES_LOCATION =
-// "/suite/dss-crypto-suite.xml") - per S8A_BRIEF.md's "Schema/suite
-// resources embedded" instruction.
+// "/suite/dss-crypto-suite.xml").
 //
 //go:embed resources/dss-crypto-suite.xml
 var defaultCryptographicSuite []byte

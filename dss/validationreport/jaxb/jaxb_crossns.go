@@ -4,8 +4,7 @@
 // eu.europa.esig.xades.jaxb.xades132.{DigestAlgAndValueType,SignaturePolicyIdentifierType}
 // and eu.europa.esig.trustedlist211.jaxb.tsl.{DigitalIdentityType,TSPInformationType}.
 // See doc.go's "Cross-namespace types" section for why these are modelled
-// here rather than imported from a port of those modules (none exists;
-// they are outside S8B_BRIEF.md's manifest).
+// here rather than imported from a port of those modules (none exists).
 //
 // DigestMethodType/DigestAlgAndValueType/SignatureValueType are small,
 // low-cardinality and well-known (unchanged since the 2002 xmldsig-core and

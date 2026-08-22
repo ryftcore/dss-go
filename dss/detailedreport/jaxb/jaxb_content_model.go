@@ -1,8 +1,8 @@
 // Ported from DetailedReport.xsd (DSS 6.5.RC1): the content model the
 // marshaller needs to reproduce one JAXB spelling that encoding/xml cannot
 // express on its own. This is dss/diagnostic/jaxb/jaxb_content_model.go's
-// mechanism, replicated for this schema per the phase-8a rule ("Replicate the
-// pattern per package; do NOT invent a new marshalling approach").
+// mechanism, replicated for this schema: the same pattern per package,
+// rather than inventing a new marshalling approach.
 //
 // The JAXB RI writes an empty element as <X/> when nothing at all was written
 // inside it, but as <X></X> once character data - even the empty string - was

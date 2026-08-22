@@ -12,7 +12,7 @@ const DateUtilsDefaultDateFormat = "yyyy-MM-dd"
 // cryptographic_constraint_wrapper.go, whose only format strings are
 // DateUtilsDefaultDateFormat itself and whatever AlgoExpirationDate.Format
 // carries from a policy document - always "yyyy-MM-dd" in every upstream
-// resource this chunk ports, see policy/jaxb/testdata) into the equivalent
+// resource this package ports, see policy/jaxb/testdata) into the equivalent
 // Go reference-time layout.
 var javaToGoDateLayout = map[byte]string{
 	'y': "2006",

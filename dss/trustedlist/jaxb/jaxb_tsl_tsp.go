@@ -1,10 +1,9 @@
 // Ported from ts_119612v020401_xsd.xsd (DSS 6.5.RC1) via the JAXB classes
-// generated into eu.europa.esig.trustedlist.jaxb.tsl. Per the phase-8a
-// generated-JAXB rule the generated classes are grouped into schema-area
-// files rather than one file per class; every Java class keeps its name and
-// its exact field order so that encoding/xml reproduces the JAXB element
-// sequence byte for byte. This file holds the TSP-information and
-// scheme-information types.
+// generated into eu.europa.esig.trustedlist.jaxb.tsl. The generated classes
+// are grouped into schema-area files rather than one file per class; every
+// Java class keeps its name and its exact field order so that encoding/xml
+// reproduces the JAXB element sequence byte for byte. This file holds the
+// TSP-information and scheme-information types.
 package jaxb
 
 // TSPInformationType is the Go form of the generated JAXB class

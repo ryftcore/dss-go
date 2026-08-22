@@ -1,11 +1,9 @@
 // Ported from dss-diagnostic-jaxb/src/main/java/eu/europa/esig/dss/diagnostic/EAAWrapper.java (DSS 6.5.RC1).
 //
-// Depends on the `claim` Java subpackage (ClaimWrapper, AddressClaimWrapper, ...), which
-// S8A_BRIEF.md flattens into this same Go package `diagnostic` ("wrappers + `claim` (mutual
-// imports, collision-checked) -> ONE pkg diagnostic"); those types are assigned to a sibling
-// chunk and are referenced here unqualified, matching that flattening. Also depends on
-// EAAPayloadProxy (this file's sibling in the DIAGWRAP_A manifest, see eaa_payload_proxy.go) and
-// on SignatureWrapper (DIAGWRAP_B).
+// Depends on the `claim` Java subpackage (ClaimWrapper, AddressClaimWrapper, ...), which this
+// port flattens into this same Go package `diagnostic` (mutual imports, collision-checked);
+// those types are referenced here unqualified. Also depends on EAAPayloadProxy (see
+// eaa_payload_proxy.go) and on SignatureWrapper.
 package diagnostic
 
 import (
@@ -1436,8 +1434,7 @@ func (w *EAAWrapper) EAAType() enumerations.EAAType {
 	return ""
 }
 
-// Binaries is the AbstractTokenProxy override. Port of getBinaries(). TODO: add support (per
-// upstream Java comment).
+// Binaries is not implemented; it always returns nil. TODO: add support. Port of getBinaries().
 func (w *EAAWrapper) Binaries() []byte {
 	return nil
 }

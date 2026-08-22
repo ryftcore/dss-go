@@ -20,7 +20,7 @@
 // modelled the same way here: a name-tagged item list plus hand-written
 // MarshalXML/UnmarshalXML that dispatches by element name against a small
 // name->type table, exactly the technique dss/diagnostic/jaxb's
-// CertificateExtensionsWrapper (Phase 8a) uses for DiagnosticData.xsd's
+// CertificateExtensionsWrapper uses for DiagnosticData.xsd's
 // CertificateExtensions choice. Order is preserved item-for-item, which is
 // what the marshal-parity KAT depends on.
 //
@@ -327,11 +327,8 @@ type choiceItem struct {
 // counterpart of Java's ETSIValidationReportBuilder). Java's generated classes
 // expose the choice as a plain List<Object> the builder fills directly; this
 // port needs the element name recorded alongside the value, so the builder
-// constructs items through NewChoiceItem instead.
-//
-// Added in phase 8f (flagged for the integrator): the phase-8b models kept the
-// type unexported because nothing outside the package built these lists yet.
-// Marshalling behaviour is unchanged - this is an alias plus a constructor.
+// constructs items through NewChoiceItem instead. Marshalling behaviour is
+// unchanged - this is an alias plus a constructor.
 type ChoiceItem = choiceItem
 
 // NewChoiceItem records value as the choice member selected under the schema

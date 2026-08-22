@@ -2,8 +2,8 @@
 // (DSS 6.5.RC1).
 //
 // DetailedReport wraps the generated jaxb.XmlDetailedReport with the
-// block/constraint navigation logic later phases (8c-8f) drive validation
-// reporting through: locating a token's Basic Building Block, its highest
+// block/constraint navigation logic the validation reporting stack drives
+// through: locating a token's Basic Building Block, its highest
 // completed validation level, its qualification, and the messages attached to
 // each. Every public method here is a direct port of the same-named Java
 // method; order and null-propagation follow the Java source line for line
@@ -199,7 +199,7 @@ func (r *DetailedReport) FirstEvidenceRecordId() string {
 
 // EvidenceRecordIds returns a list of all evidence record ids.
 //
-// NOTE: faithfully ports a copy-paste artifact in the upstream Java: the final
+// NOTE: reproduces a copy-paste artifact in the upstream Java: the final
 // loop filters BasicBuildingBlocks by Context.TIMESTAMP, not
 // Context.EVIDENCE_RECORD, so it never contributes an id in practice - see
 // getTimestampIds for the loop it appears to have been copied from.

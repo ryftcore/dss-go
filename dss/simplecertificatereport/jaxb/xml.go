@@ -5,9 +5,9 @@
 // This file holds the runtime the generated model needs: the XML Schema
 // simple type JAXB binds by hand (dateTime), and the Marshal/Unmarshal entry
 // points. It reproduces the pattern documented in dss/diagnostic/jaxb/xml.go
-// (Phase 8a) and dss/simplereport/jaxb/xml.go (Phase 8b); see those files
-// for the full rationale. Like SimpleReport.xsd this schema declares no
-// @XmlID/@XmlIDREF attributes, so no IDREF object-graph linking is needed.
+// and dss/simplereport/jaxb/xml.go; see those files for the full rationale.
+// Like SimpleReport.xsd this schema declares no @XmlID/@XmlIDREF attributes,
+// so no IDREF object-graph linking is needed.
 //
 // # JAXB quirks encoding/xml cannot reproduce
 //

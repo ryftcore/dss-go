@@ -1,13 +1,9 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/download/XmlDownloadResult.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY (see this batch's porter notes): this file implements
-// eu.europa.esig.dss.validation.job.download.DownloadResult, ported by the dss-validation-job
-// chunk into Go package dss/validation/job, which had not landed when this file was written -
-// following the same job.<Name> cross-chunk convention TSLCORE's already-landed files use (see
-// e.g. tl_source.go's header). The assumed member is job.DownloadResult, an interface with
-// GetDSSDocument() model.DSSDocument, GetDigest() model.Digest and
-// GetSha2ErrorMessages() []string (mirrored here as DSSDocument()/Digest()/Sha2ErrorMessages()
-// per PORTING.md's get-prefix-dropped naming).
+// Implements job.DownloadResult (Java
+// eu.europa.esig.dss.validation.job.download.DownloadResult): GetDSSDocument()/GetDigest()/
+// GetSha2ErrorMessages() are spelled DSSDocument()/Digest()/Sha2ErrorMessages() here, per
+// PORTING.md's get-prefix-dropped naming.
 package tsl
 
 import (

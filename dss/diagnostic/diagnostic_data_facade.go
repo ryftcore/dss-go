@@ -1,14 +1,9 @@
 // Ported from dss-diagnostic-jaxb/src/main/java/eu/europa/esig/dss/diagnostic/DiagnosticDataFacade.java (DSS 6.5.RC1).
 //
-// Java's DiagnosticDataFacade extends the generic dss-jaxb-common AbstractJaxbFacade<T>, a
-// module outside S8A_BRIEF.md's manifest (dss-i18n, dss-policy-jaxb(+crypto-json/xml),
-// dss-diagnostic-jaxb only). Rather than leaving DiagnosticDataFacade unbuildable on an unported
-// base class, this port collapses AbstractJaxbFacade's marshal/unmarshal template method
-// directly into DiagnosticDataFacade using encoding/xml (the marshal-parity contract this phase
-// exists to satisfy), and flags the collapse here per S8A_BRIEF.md's "Report: cross-chunk
-// assumptions" instruction. XSD-schema validation (the `validate` booleans on every Java
-// overload) and the SVG XSLT generation methods are stubbed via DiagnosticDataXmlDefiner's
-// deferred Schema()/SvgTemplates() (see that file's header) and surface the same error here.
+// Java's DiagnosticDataFacade extends dss-jaxb-common's AbstractJaxbFacade<T>; this port
+// implements Marshal/Unmarshal directly with encoding/xml. XSD-schema validation and SVG
+// generation are not implemented - see DiagnosticDataXmlDefiner's deferred
+// Schema()/SvgTemplates() stubs.
 package diagnostic
 
 import (

@@ -340,7 +340,7 @@ func cryptographicConstraintWrapperToEncryptionAlgorithm(algorithmName string) (
 // list if an equal (by CryptographicSuiteEvaluation#Equals) entry is not
 // already present, mirroring java.util.HashSet#add semantics for the
 // Set<CryptographicSuiteEvaluation> Java uses (see this file's header for
-// why a slice, not a map, backs the "Set" in this port).
+// why a slice, not a map, backs this "Set").
 func cryptographicConstraintWrapperAddUniqueEvaluation(list []*modelpolicy.CryptographicSuiteEvaluation, evaluation *modelpolicy.CryptographicSuiteEvaluation) []*modelpolicy.CryptographicSuiteEvaluation {
 	for _, e := range list {
 		if e.Equals(evaluation) {

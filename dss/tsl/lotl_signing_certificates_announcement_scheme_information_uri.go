@@ -4,7 +4,7 @@
 // a getUri() accessor) with exactly one implementation in the ported tree,
 // OfficialJournalSchemeInformationURI.
 //
-// JUDGMENT CALL: source/lotl_source.go (TSLCORE chunk, already landed) declares its
+// source/lotl_source.go declares its
 // signingCertificatesAnnouncementPredicate field as *LOTLSigningCertificatesAnnouncementSchemeInformationURI
 // and lotl_parsing_task.go (same chunk) calls .Test(...) and .Uri() directly on that pointer value.
 // A pointer-to-Go-interface does not forward method calls the way a Java interface reference

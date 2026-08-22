@@ -29,9 +29,9 @@ type OtherTSLPointerConverter struct {
 //
 // Named ...Default (rather than the bare NewOtherTSLPointerConverter PORTING.md's overload
 // convention would otherwise give this zero-arg constructor) because tsl/lotl_parsing_task.go
-// (TSLCORE, frozen, out of this manifest) already calls NewOtherTSLPointerConverter(bool) for the
-// single-arg constructor below - this file conforms to that frozen call site instead of the
-// reverse, since the zero-arg constructor has no callers anywhere in this module.
+// already calls NewOtherTSLPointerConverter(bool) for the single-arg constructor below - this
+// file conforms to that call site instead of the reverse, since the zero-arg constructor has no
+// callers anywhere in this module.
 func NewOtherTSLPointerConverterDefault() *OtherTSLPointerConverter {
 	return &OtherTSLPointerConverter{}
 }

@@ -51,7 +51,7 @@ func walkSchema(n node, visit func(node)) {
 // crossNamespaceNames are element and attribute names 1910202xmlSchema.xsd
 // references via xs:element ref="ds:..." (or, for Algorithm, an attribute
 // of such a referenced type) without declaring locally - they live in the
-// XMLDSig/XAdES/trusted-list schemas this phase's manifest does not include
+// XMLDSig/XAdES/trusted-list schemas this port does not include
 // (see doc.go's "Cross-namespace types"), so the model binds them (as
 // DigestMethodType, DSDigestValue, SignatureValueType, SignatureType and
 // their fields) without them ever appearing as a top-level xs:element/

@@ -1,7 +1,7 @@
 // Ported from 1910202xmlSchema.xsd (DSS 6.5.RC1): the content model the
 // marshaller needs to reproduce one JAXB spelling that encoding/xml cannot
-// express on its own. This is the same mechanism dss/diagnostic/jaxb (Phase
-// 8a) and the rest of Phase 8b's generated-JAXB packages use; see
+// express on its own. This is the same mechanism dss/diagnostic/jaxb and the
+// rest of the generated-JAXB packages use; see
 // dss/diagnostic/jaxb/jaxb_content_model.go for the full rationale.
 //
 // Three schema elements bind to a plain xs:anyURI/xs:base64Binary inside the
@@ -211,9 +211,8 @@ func carriesCharData(name string, stack []string) bool {
 	// absent the JAXB RI writes <ns2:SignatureValue/>, not the <x></x> an
 	// empty text element would otherwise get here. Verified against the
 	// upstream ETSI-VR oracle corpus, in which every empty element - this one
-	// included - is self-closed. Phase 8f addition, flagged for the
-	// integrator: the phase-8b corpus never produced an empty signature value,
-	// so the case was not covered by the original heuristic.
+	// included - is self-closed. Not exercised by the KAT corpus: no fixture
+	// produces an empty signature value.
 	if local == "SignatureValue" {
 		return false
 	}

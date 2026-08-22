@@ -1,9 +1,8 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/dto/builder/TLParsingCacheDTOBuilder.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY (see this batch's porter notes): this file extends
-// eu.europa.esig.dss.validation.job.dto.builder.AbstractParsingCacheDTOBuilder, ported by the
-// dss-validation-job chunk into Go package dss/validation/job, which had not landed when this file
-// was written. The members it relies on, all named after their Java counterparts, are:
+// Extends job.AbstractParsingCacheDTOBuilder (Java
+// eu.europa.esig.dss.validation.job.dto.builder.AbstractParsingCacheDTOBuilder). The members it
+// relies on, all named after their Java counterparts, are:
 //
 //	job.CachedEntry[job.ParsingResult]                          - the cached entry the constructor takes
 //	job.NewAbstractParsingCacheDTOBuilder(*job.CachedEntry[...]) - the super(cachedEntry) constructor

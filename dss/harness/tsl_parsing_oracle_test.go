@@ -1,4 +1,4 @@
-// Phase 9 cross-validation harness, contract item (A): LOTL/TL/pivot/MRA parse parity.
+// Cross-validation harness: LOTL/TL/pivot/MRA parse parity against a Java oracle dump.
 //
 // testdata/oracle/tsl/tsl_parsing.jsonl is a pure Java dump, produced by
 // testdata/oracle/tsl/gen/TSLParsingOracle.java against DSS 6.5.RC1's
@@ -581,7 +581,8 @@ func tpReadOracle(t *testing.T) map[string]tpRecord {
 	return out
 }
 
-// TestTSLParsingOracle is the Phase 9 harness contract item (A).
+// TestTSLParsingOracle parses every fixture in the manifest and compares the result against the
+// Java oracle dump.
 func TestTSLParsingOracle(t *testing.T) {
 	rows := tpReadManifest(t)
 	oracle := tpReadOracle(t)

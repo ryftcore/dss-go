@@ -6,7 +6,7 @@
 // The inherited fields are declared directly here rather than via an embedded
 // TrustedSourceServiceWrapper; see the package note at the top of
 // trusted_source_service_wrapper.go for why (composite-literal field-key constraints, and the
-// exact field names DIAGWRAP_A's certificate_wrapper.go already relies on).
+// exact field names certificate_wrapper.go already relies on).
 package diagnostic
 
 import (

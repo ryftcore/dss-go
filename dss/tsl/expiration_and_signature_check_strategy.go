@@ -1,7 +1,7 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/sync/ExpirationAndSignatureCheckStrategy.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY (see accept_all_strategy.go's header): implements
-// job.SynchronizationStrategy[*tslmodel.TLInfo, *tslmodel.LOTLInfo].
+// Implements job.SynchronizationStrategy[*tslmodel.TLInfo, *tslmodel.LOTLInfo] (see
+// accept_all_strategy.go's header for the wider convention).
 package tsl
 
 import (

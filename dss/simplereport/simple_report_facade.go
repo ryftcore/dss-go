@@ -1,19 +1,12 @@
 // Ported from dss-simple-report-jaxb/src/main/java/eu/europa/esig/dss/simplereport/SimpleReportFacade.java
 // (DSS 6.5.RC1).
 //
-// Java's SimpleReportFacade extends the generic dss-jaxb-common
-// AbstractJaxbFacade<T>, a module outside S8B_BRIEF.md's manifest. As with
-// dss/diagnostic/diagnostic_data_facade.go (Phase 8a), this port collapses
-// AbstractJaxbFacade's marshal/unmarshal template method directly into
-// SimpleReportFacade using encoding/xml (the marshal-parity contract this
-// phase exists to satisfy; the low-level byte-exact Marshal/Unmarshal that
-// the KAT actually exercises lives in jaxb/xml.go, which this facade does
-// NOT call - matching dss/diagnostic's precedent that the hand facade's own
-// marshalling is a convenience, not the parity-pinned path). XSD-schema
-// validation (the `validate` booleans on every Java overload) and the HTML
-// Bootstrap4/PDF report generation methods are stubbed via
-// SimpleReportXmlDefiner's deferred Schema()/HtmlBootstrap4Templates()/
-// PdfTemplates() (see that file's header) and surface the same error here.
+// Java's SimpleReportFacade extends dss-jaxb-common's AbstractJaxbFacade<T>; this port
+// implements Marshal/Unmarshal directly with encoding/xml (the low-level byte-exact
+// Marshal/Unmarshal that the KAT actually exercises lives in jaxb/xml.go, which this facade
+// does not call). XSD-schema validation and HTML Bootstrap4/PDF report generation are not
+// implemented - see SimpleReportXmlDefiner's deferred
+// Schema()/HtmlBootstrap4Templates()/PdfTemplates() stubs.
 package simplereport
 
 import (

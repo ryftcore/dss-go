@@ -11,8 +11,8 @@ import (
 //
 // Upstream is a class extending AbstractPath purely to reach its static builders; since those
 // builders are free package functions in the Go port of dss-xml-common (see
-// xml/common/abstract_path.go), the fields become package-level variables here, following the
-// precedent of xades/definition's TrustedListPath. Java's public no-arg constructor has no
+// xml/common/abstract_path.go), the fields become package-level variables here, the same way
+// xades/definition's TrustedListPath does. Java's public no-arg constructor has no
 // counterpart (the class carries no state).
 //
 // KAT-verified against the Java source: each XPathQuery below is built from the same element

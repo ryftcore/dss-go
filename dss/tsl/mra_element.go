@@ -5,8 +5,8 @@ import "github.com/ryftcore/dss-go/dss/xml/common"
 
 // MRAElement contains a list of MRA (Mutual Recognition Agreement) elements. Java enum ->
 // typed string constants whose value is exactly Java's name(), per PORTING.md; the per-constant
-// tag name is backed by the package-level lookup table below, following the precedent set by
-// xades/definition's TrustedListElement.
+// tag name is backed by the package-level lookup table below, the same way
+// xades/definition's TrustedListElement is.
 type MRAElement string
 
 const (

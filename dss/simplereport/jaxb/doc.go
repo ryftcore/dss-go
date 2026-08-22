@@ -7,8 +7,8 @@
 // XmlSignature) and its property order, and every property carries the xml
 // struct tag that reproduces its JAXB annotation, so that marshalling with
 // Marshal produces the bytes the JAXB reference implementation produces for
-// the same tree. Per the phase-8a generated-JAXB rule the classes are
-// grouped into files by schema area rather than one file per class.
+// the same tree. The classes are grouped into files by schema area rather
+// than one file per class.
 //
 // Two generated files have no Go counterpart of their own, by design (see
 // dss/diagnostic/jaxb's doc.go, which documents the same choice for that

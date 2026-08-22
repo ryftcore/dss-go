@@ -1,14 +1,13 @@
 // Ported from dss-jaxb-parsers/src/main/java/eu/europa/esig/dss/jaxb/object/Message.java
 // (DSS 6.5.RC1).
 //
-// dss-jaxb-parsers is outside S8B_BRIEF.md's manifest (it belongs to the
+// dss-jaxb-parsers has not been ported as its own package (it belongs to the
 // generic JAXB machinery dss-diagnostic-jaxb's port already collapsed past,
 // see dss/diagnostic/diagnostic_data_facade.go's header), but SimpleReport's
-// public method surface returns []Message, so this file collapses the one
+// public method surface returns []Message, so this file implements the one
 // class it actually needs directly into this package rather than leaving
-// SimpleReport unbuildable - the same cross-chunk assumption
-// diagnostic_data_facade.go documents for AbstractJaxbFacade, flagged here
-// per S8B_BRIEF.md's "Report: cross-chunk assumptions" instruction.
+// SimpleReport unbuildable, the same way diagnostic_data_facade.go handles
+// AbstractJaxbFacade.
 package simplereport
 
 // Message represents the Message returned in the validation process. Port

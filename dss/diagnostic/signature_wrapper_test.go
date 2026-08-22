@@ -7,7 +7,7 @@ import (
 	"github.com/ryftcore/dss-go/dss/enumerations"
 )
 
-// Compile-time checks that every DIAGWRAP_B concrete wrapper satisfies TokenProxy, the way
+// Compile-time checks that every concrete wrapper satisfies TokenProxy, the way
 // AbstractTokenProxyBase's InitTokenProxy contract requires.
 var (
 	_ TokenProxy = (*SignatureWrapper)(nil)

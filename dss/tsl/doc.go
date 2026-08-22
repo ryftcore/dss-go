@@ -1,8 +1,7 @@
 // Package tsl ports dss-tsl-validation, flattening its Java subpackages
 // (alerts, alerts/detections, alerts/handlers/log, cache, cache/access, definition/mra,
 // download, dto, dto/builder, dto/condition, function, function/converter, job, parsing,
-// runnable, sha2, source, summary, sync, validation) into a single Go package, as instructed
-// for this phase.
+// runnable, sha2, source, summary, sync, validation) into a single Go package.
 //
 // The flattening was collision-checked: snake_case-ing every upstream file name produces no
 // clash across the subpackages, so no subpackage-name filename prefixing was needed. The one

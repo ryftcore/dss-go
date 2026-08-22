@@ -1,14 +1,14 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/summary/TLValidationJobSummaryBuilder.java (DSS 6.5.RC1).
 //
-// FLAG (pre-existing, model/tsl frozen package - out of this manifest): the header of
+// FLAG: the header of
 // model/tsl/tl_validation_job_summary.go claims *TLValidationJobSummary "implements the assumed
 // job.ValidationJobSummary[TLInfo, LOTLInfo] interface (getDocumentListInfos/getOtherDocumentInfos,
 // ported as DocumentListInfos()/OtherDocumentInfos())", but the type's actual accessors are named
 // LOTLInfos()/OtherTLInfos() - they do NOT satisfy modeljob.ValidationJobSummary[TLInfo, LOTLInfo]
 // (github.com/ryftcore/dss-go/dss/model/job, requiring exactly DocumentListInfos()/OtherDocumentInfos())
-// by name, which the now-landed validation/job package's ValidationJobSummaryBuilder[D, L]
+// by name, which the validation/job package's ValidationJobSummaryBuilder[D, L]
 // interface (Build() modeljob.ValidationJobSummary[D, L]) requires verbatim. Rather than editing
-// the frozen model/tsl file, tlValidationJobSummaryAdapter below (this file, package tsl) wraps a
+// model/tsl, tlValidationJobSummaryAdapter below (this file, package tsl) wraps a
 // built *TLValidationJobSummary and supplies the two missing names by delegation; BuildTyped()
 // returns it as the interface job.ValidationJobSummaryBuilder[TLInfo, LOTLInfo].Build() needs,
 // while Build() keeps returning the concrete *TLValidationJobSummary Java's covariant build()
@@ -85,8 +85,8 @@ func (b *TLValidationJobSummaryBuilder) BuildTyped() validationjob.ValidationJob
 // Build builds the TLValidationJobSummary. Port of build().
 //
 // Java's IllegalArgumentException, raised by the TLValidationJobSummary constructor when both
-// lists end up empty, becomes NewTLValidationJobSummary's returned error; this port panics with
-// that error's message to keep Build()'s signature aligned with the assumed
+// lists end up empty, becomes NewTLValidationJobSummary's returned error; Build() panics with
+// that error's message to keep its signature aligned with the
 // job.ValidationJobSummaryBuilder[D, L] contract's non-erroring Build() D (see this file's FLAG
 // header) - a data-dependent condition upstream never actually allowed a caller to recover from
 // either (the constructor threw an unchecked exception).

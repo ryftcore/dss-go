@@ -6,15 +6,14 @@
 // IntegrityClaimWrapper, StatusClaimWrapper, DrivingPrivilegesClaimWrapper,
 // AttestedAttributesSubjectClaimWrapper, AgeEqualOrOverClaimWrapper, AgeOverNNClaimWrapper,
 // BiometricTemplateXXClaimWrapper, CredentialSubjectProxy, CredentialSubjectClaimWrapper), which
-// S8A_BRIEF.md flattens into this same Go package `diagnostic` ("wrappers + `claim` (mutual
-// imports, collision-checked) -> ONE pkg diagnostic"); those types are assigned to a sibling
-// chunk and are referenced here unqualified, matching that flattening (see the same note in
-// eaa_wrapper.go). CredentialSubjectProxy is assumed to expose accessors named after the Java
-// getters (FullName(), GivenName(), Birthdate(), Address(), PlaceOfBirth(), ...), each returning
-// the same wrapper type as the corresponding EAAPayloadProxy claim (nil when absent). Every Claim
-// subtype wrapper is assumed to expose AsClaim() *ClaimWrapper to view itself as its Java base
-// type ClaimWrapper (Go has no struct-inheritance upcast for heterogeneous []*ClaimWrapper
-// slices/appends the way Java's covariant generics do); this mirrors the AsClaim() convention
+// this port flattens into this same Go package `diagnostic` (mutual imports, collision-checked);
+// those types are referenced here unqualified (see the same note in eaa_wrapper.go).
+// CredentialSubjectProxy exposes accessors named after the Java getters (FullName(),
+// GivenName(), Birthdate(), Address(), PlaceOfBirth(), ...), each returning the same wrapper
+// type as the corresponding EAAPayloadProxy claim (nil when absent). Every Claim subtype wrapper
+// exposes AsClaim() *ClaimWrapper to view itself as its Java base type ClaimWrapper (Go has no
+// struct-inheritance upcast for heterogeneous []*ClaimWrapper slices/appends the way Java's
+// covariant generics do); this mirrors the AsClaim() convention
 // eaa_wrapper.go already relies on for AgeOverNNClaimWrapper/PlaceOfBirthClaimWrapper/
 // BiometricTemplateXXClaimWrapper.
 package diagnostic

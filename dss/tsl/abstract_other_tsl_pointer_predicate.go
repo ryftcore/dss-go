@@ -19,7 +19,7 @@ import (
 // Each entry's key mirrors Java's javax.xml.namespace.QName#toString(): "{namespaceURI}localPart"
 // for both the recognized-element branch (Elem, JAXBElement in Java) and the raw-element branch
 // (Raw, org.w3c.dom.Element in Java). The value is the element's text content: the recognized
-// wildcard elements this port's predicates ever look up (TSLType, SchemeTerritory, MimeType) all
+// wildcard elements these predicates ever look up (TSLType, SchemeTerritory, MimeType) all
 // decode to a Go string (see dss/trustedlist/jaxb's wildcardElements table), matching Java's
 // JAXBElement<String>#getValue(); a raw (unrecognized) element's text content is approximated by
 // concatenating its own top-level character-data tokens, which is exact for every element these

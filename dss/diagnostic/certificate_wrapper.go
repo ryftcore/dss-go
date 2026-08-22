@@ -538,9 +538,8 @@ func (w *CertificateWrapper) TrustServiceProviders() []*jaxb.XmlTrustServiceProv
 
 // TrustServices returns a list of TrustServiceWrapper. Port of getTrustServices().
 //
-// NOTE (cross-chunk assumption): TrustServiceWrapper is owned by DIAGWRAP_B; this constructs it
-// as a plain struct literal with exported fields named after the Java setter names (minus
-// "set"), per this port's convention elsewhere. Verify/adjust field names once DIAGWRAP_B lands.
+// TrustServiceWrapper is constructed as a plain struct literal with exported fields named
+// after the Java setter names (minus "set").
 func (w *CertificateWrapper) TrustServices() []*TrustServiceWrapper {
 	var result []*TrustServiceWrapper
 	tsps := w.certificate.TrustServiceProviders.All()
@@ -607,8 +606,8 @@ func (w *CertificateWrapper) TrustedEntities() []*jaxb.XmlTrustedEntity {
 // TrustedEntityServices returns a list of TrustedEntityServiceWrapper. Port of
 // getTrustedEntityServices().
 //
-// NOTE (cross-chunk assumption): TrustedEntityServiceWrapper is owned by DIAGWRAP_B; see the
-// same note on TrustServices().
+// TrustedEntityServiceWrapper is constructed the same way as TrustServiceWrapper in
+// TrustServices() above.
 func (w *CertificateWrapper) TrustedEntityServices() []*TrustedEntityServiceWrapper {
 	var result []*TrustedEntityServiceWrapper
 	tes := w.TrustedEntities()

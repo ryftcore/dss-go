@@ -56,10 +56,10 @@ func (t tlValidatorTaskAdapter) Get() (job.ValidationResult, error) {
 
 // parsingTaskAdapter narrows a concrete Get() (R, error) closure to job.ParsingTask's Get()
 // (job.ParsingResult, error). Used by TLAnalysis/LOTLAnalysis's GetParsingTask to wrap
-// *TLParsingTask/*LOTLParsingTask (tsl/tl_parsing_task.go, tsl/lotl_parsing_task.go - both out of
-// this manifest, ported by TSLCORE), whose Get() likewise returns the covariant concrete
-// *TLParsingResult/*LOTLParsingResult rather than job.ParsingResult - the same
-// no-covariant-interface-return-types gap as tlValidatorTaskAdapter above.
+// *TLParsingTask/*LOTLParsingTask (tsl/tl_parsing_task.go, tsl/lotl_parsing_task.go), whose
+// Get() likewise returns the covariant concrete *TLParsingResult/*LOTLParsingResult rather than
+// job.ParsingResult - the same no-covariant-interface-return-types gap as tlValidatorTaskAdapter
+// above.
 type parsingTaskAdapter[R job.ParsingResult] struct {
 	get func() (R, error)
 }

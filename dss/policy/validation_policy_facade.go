@@ -1,19 +1,11 @@
 // Ported from dss-policy-jaxb/.../policy/ValidationPolicyFacade.java (DSS
 // 6.5.RC1).
 //
-// Java's ValidationPolicyFacade extends the generic dss-jaxb-common
-// AbstractJaxbFacade<T>, a module outside S8A_BRIEF.md's manifest (dss-i18n,
-// dss-policy-jaxb(+crypto-json/xml), dss-diagnostic-jaxb only). Following the
-// precedent set by dss/diagnostic/diagnostic_data_facade.go, this port
-// collapses AbstractJaxbFacade's marshal/unmarshal template method directly
-// into ValidationPolicyFacade - concretely, by delegating to
-// policy/jaxb.Marshal/Unmarshal, which already implement the JAXB-canonical
-// byte-for-byte output the marshal-parity contract requires (see that
-// package's xml.go). XSD-schema validation (the `validate` boolean Java
-// threads through every overload) is out of scope, per
-// ValidationPolicyXmlDefiner's deferred Schema() - every unmarshal here is
-// schema-unchecked, matching AbstractJaxbFacade#unmarshall(InputStream,
-// false).
+// Java's ValidationPolicyFacade extends dss-jaxb-common's AbstractJaxbFacade<T>; this port
+// implements Marshal/Unmarshal by delegating to policy/jaxb.Marshal/Unmarshal, which already
+// implement the JAXB-canonical byte-for-byte output (see that package's xml.go). XSD-schema
+// validation is not implemented - see ValidationPolicyXmlDefiner's deferred Schema() stub;
+// every unmarshal here is schema-unchecked.
 package policy
 
 import (

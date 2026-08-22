@@ -8,9 +8,8 @@
 // ValidationReportType) and its property order, and every property carries
 // the xml struct tag that reproduces its JAXB annotation, so that
 // marshalling with Marshal produces the bytes the JAXB reference
-// implementation produces for the same tree. Per the phase-8a
-// generated-JAXB rule the classes are grouped into files by schema area
-// rather than one file per class.
+// implementation produces for the same tree. The classes are grouped into
+// files by schema area rather than one file per class.
 //
 // Two generated files have no Go counterpart of their own, by design (see
 // dss/diagnostic/jaxb's doc.go, which documents the same choice):
@@ -25,17 +24,16 @@
 //     is bound by ValidationReportType's own XMLName field, so porting the
 //     class would add nothing callers can use.
 //
-// # Cross-namespace types (S8B_BRIEF.md)
+// # Cross-namespace types
 //
 // 1910202xmlSchema.xsd imports the XMLDSig, XAdES 1.3.2 and ETSI TS 119 612
 // (trusted-list) namespaces for a handful of properties: ds:Signature,
 // ds:SignatureValue, ds:DigestMethod/DigestValue, XAdES's
 // DigestAlgAndValueType and SignaturePolicyIdentifierType, and the
 // trusted-list DigitalIdentityType/TSPInformationType. None of those
-// modules' own generated-JAXB classes are in this phase's manifest (they
-// belong to specs-xmldsig, specs-xades and specs-trusted-list, ported, if
-// ever, by a later phase), so this package cannot import a matching Go
-// type for them. Two shapes are used instead, both documented in
+// modules' own generated-JAXB classes has been ported to Go (they belong to
+// specs-xmldsig, specs-xades and specs-trusted-list), so this package
+// cannot import a matching Go type for them. Two shapes are used instead, both documented in
 // jaxb_crossns.go:
 //
 //   - The small, low-cardinality XMLDSig types this schema actually
@@ -52,11 +50,10 @@
 //     DigitalIdentityType/TSPInformationType - are modelled as raw-XML
 //     capture stand-ins (innerxml in, innerxml out), which guarantees
 //     marshal-parity byte-for-byte for whatever content a real report
-//     carries there without requiring a full port of those schemas. A
-//     future phase that ports specs-xmldsig-jaxb/specs-xades-jaxb/
-//     specs-trusted-list-jaxb should replace these stand-ins with the real
-//     generated types; the field names and positions are already correct
-//     and would not move.
+//     carries there without requiring a full port of those schemas. If
+//     specs-xmldsig-jaxb/specs-xades-jaxb/specs-trusted-list-jaxb are ever
+//     ported, the real generated types should replace these stand-ins; the
+//     field names and positions are already correct and would not move.
 //
 // # xs:anyType / xs:any content (AnyType, TypedDataType.Value, ...)
 //
@@ -64,13 +61,13 @@
 // properties (VOReferenceType.Any, TypedDataType.Value,
 // IndividualValidationConstraintReportType.Indications,
 // ValidationObjectRepresentationType's "direct" choice member) as
-// extensibility points nothing in this manifest interprets. They are
+// extensibility points nothing in this package interprets. They are
 // captured verbatim with `xml:",innerxml"` (see AnyType and RawContent in
 // jaxb_common.go) rather than modelled as a DOM tree: unmarshal captures
 // the exact bytes and marshal re-emits them unchanged, which is a stronger
 // parity guarantee than reconstructing the content from a parsed
 // representation would be, and is sufficient for the marshal-parity KAT
-// this phase is pinned to.
+// this package is pinned to.
 //
 // The parity contract is pinned by the round-trip KAT in xml_kat_test.go
 // over testdata/oracle: validation-report dumps produced by upstream

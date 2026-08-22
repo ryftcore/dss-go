@@ -1,10 +1,10 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/parsing/TLParsingTask.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY (see this batch's porter notes): the three structural predicates
-// (NonEmptyTSPInformation, NonEmptyServiceInformation, NonEmptyTrustService) and
-// TrustServiceProviderConverter live in dss-tsl-validation's "function" package, which the TSLJOB
-// chunk ports into this same Go package (tsl). They are referenced here by their Java names, with
-// this codebase's constructor (New<Name>) and functional-interface (Test / Apply) spellings.
+// The three structural predicates (NonEmptyTSPInformation, NonEmptyServiceInformation,
+// NonEmptyTrustService) and TrustServiceProviderConverter live in dss-tsl-validation's
+// "function" package, ported into this same Go package (tsl). They are referenced here by their
+// Java names, with this codebase's constructor (New<Name>) and functional-interface (Test /
+// Apply) spellings.
 package tsl
 
 import (
@@ -43,8 +43,9 @@ func NewTLParsingTask(document model.DSSDocument, tlSource *TLSource) *TLParsing
 // getJAXBObject and verifyTLVersionConformity raise become returned errors, per PORTING.md.
 //
 // NOTE: Java's covariant return type (TLParsingResult, narrowing ParsingTask's ParsingResult) is
-// kept here; Go has no covariance, so a caller holding this task through the ParsingTask interface
-// needs the trivial adapter the porter notes describe.
+// kept here; Go has no covariance, so a caller holding this task through the job.ParsingTask
+// interface needs the trivial adapter parsingTaskAdapter (abstract_runnable_tl_analysis.go)
+// provides.
 func (t *TLParsingTask) Get() (*TLParsingResult, error) {
 	result := NewTLParsingResult()
 	jaxbObject, err := t.JAXBObject()

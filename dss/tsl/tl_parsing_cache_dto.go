@@ -1,12 +1,10 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/dto/TLParsingCacheDTO.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY (see this batch's porter notes): this file embeds
-// eu.europa.esig.dss.validation.job.dto.AbstractParsingCacheDTO, ported by the dss-validation-job
-// chunk into Go package dss/validation/job, which had not landed when this file was written. The
-// embedded name and its two constructors follow PORTING.md's "exported Go identifiers keep the
-// Java name" rule literally (AbstractParsingCacheDTO / NewAbstractParsingCacheDTO /
-// NewAbstractParsingCacheDTOFromCacheDTO for the AbstractCacheDTO copy constructor); if that
-// chunk chose different spellings, the fix is a mechanical rename here.
+// Embeds job.AbstractParsingCacheDTO (Java
+// eu.europa.esig.dss.validation.job.dto.AbstractParsingCacheDTO). The embedded name and its two
+// constructors follow PORTING.md's "exported Go identifiers keep the Java name" rule literally
+// (AbstractParsingCacheDTO / NewAbstractParsingCacheDTO / NewAbstractParsingCacheDTOFromCacheDTO
+// for the AbstractCacheDTO copy constructor).
 //
 // DEAD FIELD: Java re-declares `protected List<String> structureValidationMessages` on this class,
 // shadowing the identically named field its superclass already declares. Nothing ever writes the

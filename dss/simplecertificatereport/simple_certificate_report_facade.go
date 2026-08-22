@@ -1,19 +1,11 @@
 // Ported from dss-simple-certificate-report-jaxb/src/main/java/eu/europa/esig/dss/simplecertificatereport/SimpleCertificateReportFacade.java
 // (DSS 6.5.RC1).
 //
-// Java's SimpleCertificateReportFacade extends the generic dss-jaxb-common
-// AbstractJaxbFacade<T>, a module outside S8B_BRIEF.md's manifest. As with
-// dss/diagnostic/diagnostic_data_facade.go (Phase 8a) and
-// dss/simplereport/simple_report_facade.go (Phase 8b), this port collapses
-// AbstractJaxbFacade's marshal/unmarshal template method directly into
-// SimpleCertificateReportFacade using encoding/xml (the marshal-parity
-// contract this phase exists to satisfy; the low-level byte-exact
-// Marshal/Unmarshal that the KAT actually exercises lives in jaxb/xml.go,
-// which this facade does NOT call). XSD-schema validation and the HTML
-// report generation methods are stubbed via
-// SimpleCertificateReportXmlDefiner's deferred
-// Schema()/HtmlBootstrap4Templates() (see that file's header) and surface
-// the same error here.
+// Java's SimpleCertificateReportFacade extends dss-jaxb-common's AbstractJaxbFacade<T>; this
+// port implements Marshal/Unmarshal directly with encoding/xml (the low-level byte-exact
+// Marshal/Unmarshal that the KAT actually exercises lives in jaxb/xml.go, which this facade
+// does not call). XSD-schema validation and HTML report generation are not implemented - see
+// SimpleCertificateReportXmlDefiner's deferred Schema()/HtmlBootstrap4Templates() stubs.
 package simplecertificatereport
 
 import (

@@ -15,8 +15,7 @@ import (
 // src/main/resources/suite/dss-crypto-suite.json, embedded because
 // CryptographicSuiteJsonFactory#loadDefaultCryptographicSuite loads it from
 // the classpath at runtime (DEFAULT_CRYPTOGRAPHIC_SUITES_LOCATION =
-// "/suite/dss-crypto-suite.json") - per S8A_BRIEF.md's "Schema/suite
-// resources embedded" instruction.
+// "/suite/dss-crypto-suite.json").
 //
 //go:embed resources/dss-crypto-suite.json
 var defaultCryptographicSuite []byte
@@ -42,8 +41,7 @@ func NewCryptographicSuiteJsonFactory() *CryptographicSuiteJsonFactory {
 // "SecuritySuitabilityPolicy" property - since no JSON Schema validator is
 // available (see ValidateAgainstSchema's doc comment). This is a strictly
 // weaker check than upstream's (accepts some malformed-but-structurally-
-// shaped documents upstream would reject), documented here per
-// S8A_BRIEF.md's "JAXB quirks / deviations" reporting instruction.
+// shaped documents upstream would reject).
 func (f *CryptographicSuiteJsonFactory) IsSupported(cryptographicSuiteDocument model.DSSDocument) bool {
 	rc, err := cryptographicSuiteDocument.OpenStream()
 	if err != nil {

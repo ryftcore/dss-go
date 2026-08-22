@@ -19,8 +19,8 @@
 //     eu.europa.esig.xades.jaxb.xades132.{AnyType,ObjectIdentifierType}
 //     (specs-xades).
 //
-// specs-xmldsig and specs-xades are not in this manifest (S9_BRIEF.md scopes
-// this package to specs-trusted-list), and TLValidatorTask's actual
+// specs-xmldsig and specs-xades have not been ported (this package covers
+// specs-trusted-list only), and TLValidatorTask's actual
 // signature verification runs the frozen xades/xmldsig validator over the
 // ORIGINAL document bytes, never through this JAXB tree (mirroring upstream:
 // TrustedListFacade's unmarshalled ds:Signature is not what TLValidatorTask
@@ -45,10 +45,10 @@
 // elements) inside the 1.3.2 xades: namespace; xades132.
 // SignedSignaturePropertiesType has no property for that name in that
 // namespace, so the JAXB RI's oracle remarshal omits it entirely, while
-// this port's token replay preserves it. This can only ever make this
-// port's Signature/KeyValue/ObjectIdentifierType/xadesAnyType content a
+// the token replay here preserves it. This can only ever make the
+// Signature/KeyValue/ObjectIdentifierType/xadesAnyType content here a
 // SUPERSET of the JAXB RI's own (never missing information the RI kept),
-// and does not affect anything this manifest is responsible for (schema
+// and does not affect anything this package is responsible for (schema
 // completeness of tsl/ecc/tslx/mra, or TLValidatorTask's signature
 // verification, which uses the original bytes - see above).
 package jaxb
@@ -441,7 +441,7 @@ func wildcardPrefix(namespace string) (prefix string, ok bool) {
 // resolves prefixes away on Unmarshal, so the source document's own prefix
 // spelling is not recoverable - which is well-formed and semantically
 // identical but not necessarily byte-identical to an exotic input prefix; no
-// fixture in this port's KAT corpus exercises this fallback; every extension
+// fixture in the KAT corpus exercises this fallback; every extension
 // element eu-lotl/country trusted lists actually carry is one of
 // wildcardElements.
 type RawWildcardElement struct {
@@ -487,7 +487,7 @@ type AnyContent struct {
 // unmarshalAnyContent reads the mixed content of the element start already
 // opened, reproducing lax @XmlAnyElement dispatch via wildcardElements.
 // Whitespace-only character data (the indentation between sibling elements
-// - the only kind any fixture in this port's KAT corpus carries here) is
+// - the only kind any fixture in the KAT corpus carries here) is
 // dropped rather than preserved as a mixed-content item: keeping it is
 // pointless (JAXB's own oracle, being itself indented, would never
 // distinguish "no text was here" from "insignificant whitespace was here"

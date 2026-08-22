@@ -6,12 +6,10 @@
 // Every generated JAXB class keeps its name (XmlSignature stays XmlSignature)
 // and its property order, and every property carries the xml struct tag that
 // reproduces its JAXB annotation, so that marshalling with Marshal produces the
-// bytes the JAXB reference implementation produces for the same tree. Per the
-// phase-8a generated-JAXB rule (extended to every generated-JAXB module in
-// phase 8b) the classes are grouped into files by schema area rather than one
-// file per class; jaxb_model.go lists them all, and the schema sweep in
-// jaxb_schema_test.go checks the model against DetailedReport.xsd complexType
-// by complexType.
+// bytes the JAXB reference implementation produces for the same tree. The
+// classes are grouped into files by schema area rather than one file per class;
+// jaxb_model.go lists them all, and the schema sweep in jaxb_schema_test.go
+// checks the model against DetailedReport.xsd complexType by complexType.
 //
 // Two generated files have no Go counterpart of their own, by design, exactly
 // as in dss/diagnostic/jaxb:

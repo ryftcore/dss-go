@@ -24,8 +24,8 @@ import (
 	validationpolicy "github.com/ryftcore/dss-go/dss/validation/policy"
 )
 
-// INTEGRATION FLAG (see this batch's porter notes): Java discovers the ETSI
-// ValidationPolicyFactory through ServiceLoader against dss-policy-jaxb, which reaches
+// Java discovers the ETSI ValidationPolicyFactory through ServiceLoader against
+// dss-policy-jaxb, which reaches
 // dss-tsl-validation's classpath transitively via dss-validation. The Go port of
 // ValidationPolicyLoader replaces ServiceLoader with an explicit registry that NOTHING in the
 // production tree populates yet (see validation/policy/validation_policy_loader.go's header),

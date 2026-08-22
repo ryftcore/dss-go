@@ -1,4 +1,4 @@
-// Phase 9 cross-validation harness, contract item (C): offline TLValidationJob parity.
+// Cross-validation harness: offline TLValidationJob parity.
 //
 // This test runs the SAME TLValidationJob pipeline the Java side runs, entirely offline (a
 // caller-supplied file loader stands in for both Java's FileCacheDataLoader/MockDataLoader and
@@ -345,7 +345,8 @@ func tvjRunJob(t *testing.T) tvjDump {
 	return dump
 }
 
-// TestTLValidationJobOracle is the Phase 9 harness contract item (C).
+// TestTLValidationJobOracle runs TLValidationJob offline over the vendored fixtures and compares
+// the result against the Java oracle dump.
 func TestTLValidationJobOracle(t *testing.T) {
 	got := tvjRunJob(t)
 

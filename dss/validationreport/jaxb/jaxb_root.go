@@ -1,7 +1,7 @@
 // Ported from the generated JAXB classes ValidationReportType.java and
 // SignatureValidationReportType.java (specs-validation-report, DSS 6.5.RC1),
 // plus the modelTypes registry jaxb_content_model.go's self-closing
-// heuristic needs (see dss/diagnostic/jaxb/jaxb_model.go, Phase 8a, for the
+// heuristic needs (see dss/diagnostic/jaxb/jaxb_model.go for the
 // same registry's rationale): every complexType of 1910202xmlSchema.xsd,
 // listed exactly once.
 package jaxb
@@ -69,9 +69,9 @@ func (v *ValidationReportType) MarshalXML(e *xml.Encoder, start xml.StartElement
 		// ETSIValidationReportBuilder, the Go counterpart of Java's) has no
 		// captured declarations. The JAXB RI still pre-declares every namespace
 		// of the bound packages at the document element, in a fixed order, for
-		// exactly such a marshal - so reproduce that set here. Phase 8f
-		// addition, flagged for the integrator: it only applies when nothing was
-		// captured, so round-tripping an unmarshalled report is unaffected.
+		// exactly such a marshal - so reproduce that set here. This only applies
+		// when nothing was captured, so round-tripping an unmarshalled report is
+		// unaffected.
 		extraNamespaces = jaxbRootNamespaces
 	}
 	for _, a := range extraNamespaces {

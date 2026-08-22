@@ -5,13 +5,10 @@
 // thread-safe singletons built by javax.xml.validation/javax.xml.transform
 // machinery that has no Go stdlib equivalent: an XSD Schema (for
 // marshaller/unmarshaller validation) and XSLT Templates (for Bootstrap 4
-// HTML and PDF report rendering). Per S8B_BRIEF.md ("xslt not executed -
-// documented deferral, 8a precedent"), this port keeps the schema/XSLT
+// HTML and PDF report rendering). This port keeps the schema/XSLT
 // resource location constants for documentation/testdata purposes, but
 // Schema()/HtmlBootstrap4Templates()/PdfTemplates() are stubs returning an
-// error, matching dss/simplereport/simple_report_xml_definer.go's
-// (Phase 8b) precedent for the sibling module.
-// SimpleCertificateReportFacade.Marshal/Unmarshal (the half of this pair
+// error. SimpleCertificateReportFacade.Marshal/Unmarshal (the half of this pair
 // that the marshal-parity KAT actually exercises, via jaxb.Marshal/
 // Unmarshal) does not depend on any of the three.
 package simplecertificatereport

@@ -5,7 +5,7 @@
 // This file holds the runtime the generated model needs: the XML Schema
 // simple types JAXB binds by hand (base64Binary, dateTime), and the
 // Marshal/Unmarshal entry points. It reproduces the pattern documented in
-// dss/diagnostic/jaxb/xml.go (Phase 8a); see that file for the full
+// dss/diagnostic/jaxb/xml.go; see that file for the full
 // rationale of jaxbCanonical. Unlike DiagnosticData.xsd's root, ValidationReportType
 // carries no XML attributes of its own (its content is a plain element
 // sequence), so the document element never has attributes ahead of its

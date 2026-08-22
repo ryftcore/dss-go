@@ -1,22 +1,13 @@
 // Ported from specs-validation-report/src/main/java/eu/europa/esig/validationreport/ValidationReportFacade.java
 // (DSS 6.5.RC1).
 //
-// Java's ValidationReportFacade extends the generic dss-jaxb-common
-// AbstractJaxbFacade<T>, a module outside S8B_BRIEF.md's manifest. As with
-// dss/diagnostic/diagnostic_data_facade.go (Phase 8a) and
-// dss/simplereport/simple_report_facade.go (Phase 8b), this port collapses
-// AbstractJaxbFacade's marshal/unmarshal template method directly into
-// ValidationReportFacade using encoding/xml (the marshal-parity contract
-// this phase exists to satisfy; the low-level byte-exact Marshal/Unmarshal
-// that the KAT actually exercises lives in jaxb/xml.go, which this facade
-// does NOT call - matching the 8a/8b precedent that the hand facade's own
-// marshalling is a convenience, not the parity-pinned path). XSD-schema
-// validation (the `validate` boolean AbstractJaxbFacade's constructor
-// implies) is stubbed via ValidationReportUtils's deferred Schema() and
-// surfaces the same error here. ValidationReportFacade has no HTML/PDF
-// report generation methods to port, unlike SimpleReportFacade/
-// DetailedReportFacade - the ETSI Validation Report has no XSLT stylesheets
-// of its own.
+// Java's ValidationReportFacade extends dss-jaxb-common's AbstractJaxbFacade<T>; this port
+// implements Marshal/Unmarshal directly with encoding/xml (the low-level byte-exact
+// Marshal/Unmarshal that the KAT actually exercises lives in jaxb/xml.go, which this facade
+// does not call). XSD-schema validation is not implemented - see ValidationReportUtils's
+// deferred Schema() stub. ValidationReportFacade has no HTML/PDF report generation methods to
+// port, unlike SimpleReportFacade/DetailedReportFacade - the ETSI Validation Report has no
+// XSLT stylesheets of its own.
 package validationreport
 
 import (

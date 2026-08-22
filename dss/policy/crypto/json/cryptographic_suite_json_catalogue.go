@@ -84,7 +84,7 @@ func buildJSONAlgorithmList(securitySuitabilityPolicy jsonObject) []*modelpolicy
 //
 // Java catches any exception raised while processing a single algorithm
 // entry, logs it (slf4j dropped, per PORTING.md), and skips the entry
-// (returning null). This port's accessors never panic on malformed JSON
+// (returning null). The accessors here never panic on malformed JSON
 // shapes (see json_object.go: every getter degrades to a zero value rather
 // than erroring), so there is nothing to recover from here - the function
 // simply cannot fail, unlike its Java counterpart.
@@ -241,11 +241,11 @@ func jsonToInteger(parameterType jsonObject, name string) *int {
 // string propagates uncaught out of buildEvaluation, through
 // buildEvaluationList, and is only caught by buildAlgorithm's
 // try/catch (skipping that whole algorithm entry - see buildJSONAlgorithm's
-// doc comment on why this port has no equivalent catch to perform). This
-// port instead treats an unparseable date the same as an absent one
+// doc comment on why there is no equivalent catch here). This function
+// instead treats an unparseable date the same as an absent one
 // (returns nil), which is more permissive for a single malformed date but
 // avoids introducing panic/recover control flow for a case the upstream
-// resources this chunk ports (dss-crypto-suite.json) never exercise.
+// resources this package ports (dss-crypto-suite.json) never exercise.
 func getAsDate(jsonObj jsonObject, name string) *time.Time {
 	dateString := jsonObj.getAsString(name)
 	if dateString == "" {
@@ -264,7 +264,7 @@ func getAsDate(jsonObj jsonObject, name string) *time.Time {
 // doc comment for the same malformed-input handling note (buildMetadata,
 // this method's only caller, has no enclosing try/catch in Java either -
 // an unparseable PolicyIssueDate/NextUpdate propagates all the way out of
-// getCryptographicSuite in Java, but this port's callers never observe
+// getCryptographicSuite in Java, but callers here never observe
 // that path since dss-crypto-suite.json's dates are well-formed).
 func getAsDateTime(jsonObj jsonObject, name string) *time.Time {
 	dateString := jsonObj.getAsString(name)

@@ -42,7 +42,7 @@ type ConstraintsParameters struct {
 // @XmlElementDecl-annotated createConstraintsParameters(ConstraintsParameters)
 // that wraps a value for marshalling as the document element. Go's
 // composite literals are the natural equivalent of the trivial "return new
-// X()" factories, so this port keeps only the document-element wrapping,
+// X()" factories, so this package keeps only the document-element wrapping,
 // which JAXBElement made an explicit step; every other ObjectFactory method
 // is exercised (as &X{}) throughout this package's KATs and the ../ wrapper
 // package instead of being re-declared as a same-signature indirection here.

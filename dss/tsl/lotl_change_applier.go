@@ -1,7 +1,7 @@
 // Ported from dss-tsl-validation/src/main/java/eu/europa/esig/dss/tsl/job/LOTLChangeApplier.java (DSS 6.5.RC1).
 //
-// CROSS-CHUNK DEPENDENCY (see xml_download_result.go's header): uses job.CacheKey and
-// job.ChangesCacheAccess.
+// Uses job.CacheKey and job.ChangesCacheAccess (see xml_download_result.go's header for the
+// wider job.* convention).
 package tsl
 
 import (
