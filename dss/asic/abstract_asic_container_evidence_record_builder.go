@@ -3,6 +3,7 @@ package asic
 
 import (
 	"fmt"
+	"slices"
 
 	"github.com/ryftcore/dss-go/dss/enumerations"
 	"github.com/ryftcore/dss-go/dss/model"
@@ -14,9 +15,9 @@ import (
 )
 
 // AbstractASiCContainerEvidenceRecordBuilderOverrides declares the operation
-// AbstractASiCContainerEvidenceRecordBuilder calls back into virtually from Build(). Per
-// S7_BRIEF.md's virtual-dispatch warning, every concrete builder must call
-// InitAbstractASiCContainerEvidenceRecordBuilder with itself before use.
+// AbstractASiCContainerEvidenceRecordBuilder calls back into virtually from Build(). Every
+// concrete builder must call InitAbstractASiCContainerEvidenceRecordBuilder with itself before
+// use, or the base's virtual calls will not reach the override.
 type AbstractASiCContainerEvidenceRecordBuilderOverrides interface {
 	// GetASiCContentBuilder gets an instance of AbstractASiCContentBuilder. Port of the
 	// protected abstract getASiCContentBuilder().
@@ -167,7 +168,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) parseManifestFile(evidenceR
 // ASiCContent).
 func (b *AbstractASiCContainerEvidenceRecordBuilder) assertASiCEvidenceRecordManifestValid(manifestFilename string, asicContent *ASiCContent) {
 	asicDocumentNames := spi.DSSUtilsDocumentNames(asicContent.AllDocuments())
-	if containsString(asicDocumentNames, manifestFilename) {
+	if slices.Contains(asicDocumentNames, manifestFilename) {
 		panic(exception.NewIllegalInputException(fmt.Sprintf("The manifest filename '%s' is already present "+
 			"within the ASiC container!", manifestFilename)))
 	}
@@ -210,7 +211,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) getDocumentsCoveredByEviden
 	allDocuments := asicContent.AllDocuments()
 	allDocumentFilenames := spi.DSSUtilsDocumentNames(allDocuments)
 	for _, referenceValidation := range evidenceRecord.ReferenceValidation() {
-		if referenceValidation.Document() != nil && containsString(allDocumentFilenames, referenceValidation.Document().Name()) {
+		if referenceValidation.Document() != nil && slices.Contains(allDocumentFilenames, referenceValidation.Document().Name()) {
 			coveredDocuments = append(coveredDocuments, spi.DSSUtilsDocumentWithName(allDocuments, referenceValidation.Document().Name()))
 		}
 	}
@@ -285,7 +286,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) assertASiCContentValid(asic
 func (b *AbstractASiCContainerEvidenceRecordBuilder) assertSignedDataCovered(asicContent *ASiCContent, coveredDocumentFilenames []string) {
 	signedDocumentNames := spi.DSSUtilsDocumentNames(asicContent.SignedDocuments())
 	for _, signedDocumentFilename := range signedDocumentNames {
-		if !containsString(coveredDocumentFilenames, signedDocumentFilename) {
+		if !slices.Contains(coveredDocumentFilenames, signedDocumentFilename) {
 			panic(exception.NewIllegalInputException(fmt.Sprintf("The original document with name '%s' is not covered "+
 				"by the evidence record!", signedDocumentFilename)))
 		}
@@ -303,14 +304,14 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) assertManifestSignedDataCov
 	if manifestDocument == nil {
 		return
 	}
-	if !containsString(coveredDocumentNames, manifestDocument.Name()) {
+	if !slices.Contains(coveredDocumentNames, manifestDocument.Name()) {
 		panic(exception.NewIllegalInputException(fmt.Sprintf("Digest of a signed ASiC Manifest with name '%s' "+
 			"has not been found in the evidence record's covered objects!", manifestDocument.Name())))
 	}
 	manifestFile := ASiCManifestParserGetManifestFile(manifestDocument)
 	if manifestFile != nil {
 		for _, entry := range manifestFile.Entries() {
-			if !containsString(coveredDocumentNames, entry.Uri()) {
+			if !slices.Contains(coveredDocumentNames, entry.Uri()) {
 				panic(exception.NewIllegalInputException(fmt.Sprintf("Digest for a document referenced from "+
 					"a covered ASiC Manifest with name '%s' has not been found in the evidence record's covered objects!",
 					entry.Uri())))
@@ -364,7 +365,7 @@ func (b *AbstractASiCContainerEvidenceRecordBuilder) assertEvidenceRecordValid(e
 // the protected assertEvidenceRecordFilenameValid(String, EvidenceRecordTypeEnum, ASiCContent).
 func (b *AbstractASiCContainerEvidenceRecordBuilder) AssertEvidenceRecordFilenameValid(evidenceRecordFilename string, evidenceRecordType enumerations.EvidenceRecordTypeEnum, asicContent *ASiCContent) {
 	asicDocumentNames := spi.DSSUtilsDocumentNames(asicContent.AllDocuments())
-	if containsString(asicDocumentNames, evidenceRecordFilename) {
+	if slices.Contains(asicDocumentNames, evidenceRecordFilename) {
 		panic(exception.NewIllegalInputException(fmt.Sprintf("The evidence record filename '%s' is already present "+
 			"within the ASiC container!", evidenceRecordFilename)))
 	}

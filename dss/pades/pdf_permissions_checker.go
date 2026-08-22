@@ -1,12 +1,13 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pdf/PdfPermissionsChecker.java (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.pdf is the one Java package of dss-pades that landed in no s5b manifest
-// (see pdf_object.go's header). slf4j is dropped, per PORTING.md; the sole non-debug log
+// eu.europa.esig.dss.pdf is implemented by this file and others (see pdf_object.go's header).
+// slf4j is dropped, per PORTING.md; the sole non-debug log
 // (an INFO about the deprecated usage-rights signature) is kept as a comment where it fired.
 package pades
 
 import (
 	"fmt"
+	"slices"
 
 	"github.com/ryftcore/dss-go/dss/alert"
 	"github.com/ryftcore/dss-go/dss/enumerations"
@@ -125,14 +126,14 @@ func (c *PdfPermissionsChecker) isSignatureFieldCreationForbidden(sigFieldPermis
 		if signatureFieldID == "" {
 			return false
 		}
-		if containsString(sigFieldPermissions.Fields(), signatureFieldID) {
+		if slices.Contains(sigFieldPermissions.Fields(), signatureFieldID) {
 			return true
 		}
 	case enumerations.PdfLockActionExclude:
 		if signatureFieldID == "" {
 			return true
 		}
-		if !containsString(sigFieldPermissions.Fields(), signatureFieldID) {
+		if !slices.Contains(sigFieldPermissions.Fields(), signatureFieldID) {
 			return true
 		}
 	default:

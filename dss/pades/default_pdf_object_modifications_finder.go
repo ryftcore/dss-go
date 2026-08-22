@@ -1,8 +1,8 @@
 // Ported from dss-pades/src/main/java/eu/europa/esig/dss/pdf/modifications/DefaultPdfObjectModificationsFinder.java
 // (DSS 6.5.RC1).
 //
-// eu.europa.esig.dss.pdf.modifications is part of the eu.europa.esig.dss.pdf module that landed
-// in no s5b manifest (see pdf_object.go's header). slf4j is dropped, per PORTING.md; the sole
+// eu.europa.esig.dss.pdf.modifications is part of the eu.europa.esig.dss.pdf package implemented
+// here (see pdf_object.go's header). slf4j is dropped, per PORTING.md; the sole
 // WARN-level messages that are not pure debug tracing (the maximum-deepness warning and the
 // "unsupported comparison" ones) are kept as comments where they fired.
 //
@@ -27,6 +27,7 @@ package pades
 import (
 	"bytes"
 	"io"
+	"slices"
 
 	"github.com/ryftcore/dss-go/dss/utils"
 )
@@ -140,7 +141,7 @@ func (f *DefaultPdfObjectModificationsFinder) compareDictsRecursively(modificati
 
 	for _, objectName := range finalRevObjNames {
 		currentObjectTree := objectTree.Copy()
-		if !containsString(signedRevObjNames, objectName) {
+		if !slices.Contains(signedRevObjNames, objectName) {
 			currentObjectTree.AddKey(objectName)
 			finalObject := finalDict.Object(objectName)
 			if isPdfDictOrArray(finalObject) {

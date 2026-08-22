@@ -4,6 +4,7 @@ package cades
 import (
 	"bytes"
 	"fmt"
+	"slices"
 
 	"github.com/ryftcore/dss-go/dss/asic"
 	"github.com/ryftcore/dss-go/dss/enumerations"
@@ -139,7 +140,7 @@ func (m *ASiCEWithCAdESContainerMerger) ensureSignatureDocumentsValid() {
 
 		signatureDocumentList := append([]model.DSSDocument{}, asicContent.SignatureDocuments()...)
 		for _, signatureDocument := range signatureDocumentList {
-			if containsString(mergedSignatureNames, signatureDocument.Name()) {
+			if slices.Contains(mergedSignatureNames, signatureDocument.Name()) {
 				continue
 			}
 
@@ -196,7 +197,7 @@ func (m *ASiCEWithCAdESContainerMerger) getSignatureDocumentsToBeMerged(currentA
 
 func (m *ASiCEWithCAdESContainerMerger) updateMergedSignatureInContainers(mergedCmsSignature model.DSSDocument) {
 	for _, asicContent := range m.AsicContents {
-		if containsString(spi.DSSUtilsDocumentNames(asicContent.SignatureDocuments()), mergedCmsSignature.Name()) {
+		if slices.Contains(spi.DSSUtilsDocumentNames(asicContent.SignatureDocuments()), mergedCmsSignature.Name()) {
 			asicContent.SetSignatureDocuments(asic.ASiCUtilsAddOrReplaceDocument(asicContent.SignatureDocuments(), mergedCmsSignature))
 		}
 	}
@@ -373,17 +374,6 @@ func digestEquals(a, b model.DSSDocument) bool {
 	da, errA := a.DigestValue(asic.DefaultContainerMergerDefaultDigestAlgorithm)
 	db, errB := b.DigestValue(asic.DefaultContainerMergerDefaultDigestAlgorithm)
 	return errA == nil && errB == nil && bytes.Equal(da, db)
-}
-
-// containsString is a tiny local helper (List.contains equivalent); not a cross-file shared
-// helper per PORTING.md.
-func containsString(items []string, target string) bool {
-	for _, item := range items {
-		if item == target {
-			return true
-		}
-	}
-	return false
 }
 
 // createEmptyContainer exposes the embedded DefaultContainerMerger's unexported

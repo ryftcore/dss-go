@@ -4,18 +4,16 @@
 //
 // PdfSignatureDictionary is a Java interface with exactly one implementation upstream,
 // eu.europa.esig.dss.pdf.PdfSigDictWrapper (dss-pdf root package, flattened into this same
-// package per the phase 5b layout, but not itself part of this chunk's manifest). Sibling
-// chunks already fixed the collapse of interface+impl into a single concrete Go type -
+// package). The collapse of interface+impl into a single concrete Go type is fixed elsewhere -
 // pdf_document_reader.go's PdfSignatureDictionaryFields keys on `*PdfSignatureDictionary`, and
 // native_pdf_document_reader.go/native_pdf_signature_service.go call
 // `NewPdfSigDictWrapperFactory(dictionary).Create()` and `.CheckConsistency(...)` against it -
 // so this file plays both roles: the getters PdfSignatureDictionary.java declares, and the
 // state + checkConsistency/isConsistent bodies PdfSigDictWrapper.java supplies for them.
 //
-// FORWARD DEPENDENCIES, closed during integration by the eu.europa.esig.dss.pdf package's files
-// (see pdf_object.go's header for why that whole Java package landed in no s5b manifest):
-// PdfDict (pdf_object.go), SigFieldPermissions (sig_field_permissions.go),
-// PAdESConstantsReferenceName / PAdESConstantsDataName (pades_constants.go).
+// PdfDict (pdf_object.go), SigFieldPermissions (sig_field_permissions.go) and
+// PAdESConstantsReferenceName / PAdESConstantsDataName (pades_constants.go) come from the
+// eu.europa.esig.dss.pdf package, which is flattened into this same package too.
 //
 // INTEGRATION CORRECTION: this file originally assumed a PdfObjectModificationsFinder with a
 // PdfDict-based Find(PdfDict, PdfDict); the actual Java PdfObjectModificationsFinder interface
@@ -31,6 +29,7 @@
 package pades
 
 import (
+	"slices"
 	"time"
 
 	"github.com/ryftcore/dss-go/dss/cms"
@@ -269,23 +268,12 @@ func removeReferenceData(modifications []ObjectModification) []ObjectModificatio
 	filtered := modifications[:0]
 	for _, objectModification := range modifications {
 		keyChain := objectModification.ObjectTree().KeyChain()
-		if containsString(keyChain, PAdESConstantsReferenceName) && containsString(keyChain, PAdESConstantsDataName) {
+		if slices.Contains(keyChain, PAdESConstantsReferenceName) && slices.Contains(keyChain, PAdESConstantsDataName) {
 			continue
 		}
 		filtered = append(filtered, objectModification)
 	}
 	return filtered
-}
-
-// containsString reports whether needle is present in haystack, standing in for
-// List#contains(Object) over the object tree's key chain.
-func containsString(haystack []string, needle string) bool {
-	for _, s := range haystack {
-		if s == needle {
-			return true
-		}
-	}
-	return false
 }
 
 // IsConsistent checks if the signature dictionary is consistent.

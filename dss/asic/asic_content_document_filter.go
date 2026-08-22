@@ -2,6 +2,8 @@
 package asic
 
 import (
+	"slices"
+
 	"github.com/ryftcore/dss-go/dss/model"
 	"github.com/ryftcore/dss-go/dss/utils"
 )
@@ -153,7 +155,7 @@ func (f *ASiCContentDocumentFilter) filterDocuments(documents []model.DSSDocumen
 	result := make([]model.DSSDocument, 0)
 	if utils.IsCollectionNotEmpty(f.includedFilenames) {
 		for _, d := range documents {
-			if containsString(f.includedFilenames, d.Name()) {
+			if slices.Contains(f.includedFilenames, d.Name()) {
 				result = append(result, d)
 			}
 		}
@@ -166,31 +168,9 @@ func (f *ASiCContentDocumentFilter) filterDocuments(documents []model.DSSDocumen
 	}
 	filtered := make([]model.DSSDocument, 0)
 	for _, d := range documents {
-		if !containsDocument(result, d) && !containsString(f.excludedFilenames, d.Name()) {
+		if !slices.Contains(result, d) && !slices.Contains(f.excludedFilenames, d.Name()) {
 			filtered = append(filtered, d)
 		}
 	}
 	return filtered
-}
-
-// containsString ports the Collection.contains(Object) used against a String collection.
-func containsString(strs []string, s string) bool {
-	for _, v := range strs {
-		if v == s {
-			return true
-		}
-	}
-	return false
-}
-
-// containsDocument ports the List.contains(Object) used against a List<DSSDocument>, relying
-// on Go interface equality (comparable pointer/value identity), matching Java's default
-// Object.equals reference-identity semantics used here.
-func containsDocument(documents []model.DSSDocument, d model.DSSDocument) bool {
-	for _, v := range documents {
-		if v == d {
-			return true
-		}
-	}
-	return false
 }

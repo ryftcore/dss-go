@@ -4,6 +4,7 @@ package asic
 import (
 	"bytes"
 	"fmt"
+	"slices"
 	"strings"
 	"time"
 
@@ -20,10 +21,10 @@ const DefaultContainerMergerDefaultDigestAlgorithm = enumerations.DigestAlgorith
 
 // DefaultContainerMergerOverrides declares the operations DefaultContainerMerger calls back
 // into virtually - the base's Merge()/MergeToASiCContent() dispatch to these, the way
-// model.TokenBase dispatches to model.TokenOverrides via InitToken. Per S7_BRIEF.md's
-// virtual-dispatch warning, every concrete merger (ASiCWithCAdESContainerMerger,
-// ASiCWithXAdESContainerMerger, ASiCSContainerMerger; CADSIGN/XADSIGN chunks) must call
-// InitDefaultContainerMerger with itself before use.
+// model.TokenBase dispatches to model.TokenOverrides via InitToken. Every concrete merger
+// (ASiCWithCAdESContainerMerger, ASiCWithXAdESContainerMerger, ASiCSContainerMerger) must call
+// InitDefaultContainerMerger with itself before use, or the base's virtual calls will not reach
+// the override.
 type DefaultContainerMergerOverrides interface {
 	// GetContainerExtractor returns a relevant ASiC container extractor. Port of the protected
 	// abstract getContainerExtractor(DSSDocument).
@@ -349,7 +350,7 @@ func (m *DefaultContainerMerger) mergeDocumentLists(documentsLists [][]model.DSS
 	addedDocumentNames := make([]string, 0)
 	for _, documentsList := range documentsLists {
 		for _, document := range documentsList {
-			if !containsString(addedDocumentNames, document.Name()) {
+			if !slices.Contains(addedDocumentNames, document.Name()) {
 				result = append(result, document)
 				addedDocumentNames = append(addedDocumentNames, document.Name())
 			} else {
