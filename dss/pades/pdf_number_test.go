@@ -26,6 +26,10 @@ func TestPdfNumberToInt(t *testing.T) {
 		{"negative infinity is rejected", math.Inf(-1), 0, false},
 		{"positive infinity is rejected", math.Inf(1), 0, false},
 		{"NaN is rejected", math.NaN(), 0, false},
+		{"2^53 is beyond int32 but still exact, and rejected on the int32 bound", 1 << 53, 0, false},
+		{"-2^53 is beyond int32 but still exact, and rejected on the int32 bound", -(1 << 53), 0, false},
+		{"one past 2^53 is rejected by the exactness guard", (1 << 53) + 2, 0, false},
+		{"one before -2^53 is rejected by the exactness guard", -(1 << 53) - 2, 0, false},
 	}
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
