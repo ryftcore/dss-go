@@ -1,22 +1,4 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/sav/SignatureAcceptanceValidation.java (DSS 6.5.RC1).
-//
-// UNPORTED DEPENDENCY (flagged per porter brief - do not invent): the
-// contentTimestampMessageImprint() method wires
-// eu.europa.esig.dss.validation.process.vpfltvd.checks.TimestampMessageImprintWithIdCheck,
-// which lives in the Java package eu.europa.esig.dss.validation.process.vpfltvd,
-// NOT part of the phase 8c package layout (bbb/{isc,vci,cv,fc,sav} only) and not
-// present anywhere in the repository at port time - it in turn extends
-// eu.europa.esig.dss.validation.process.vpftspwatsp.checks.TimestampMessageImprintCheck,
-// another unported package, so this is a two-level forward dependency. This
-// file assumes vpfltvd will land in a sibling package
-// "github.com/ryftcore/dss-go/dss/validation/process/vpfltvd" with a generic
-// constructor
-// NewTimestampMessageImprintWithIdCheck[T any](i18nProvider *i18n.I18nProvider,
-// result *process.Result[T], timestamp *diagnostic.TimestampWrapper,
-// constraint policy.LevelRule) *TimestampMessageImprintWithIdCheck[T]
-// returning a process.ChainItem[T], mirroring every other check constructor in
-// this port. See porter notes: this file does not build until that package
-// exists.
 package sav
 
 import (

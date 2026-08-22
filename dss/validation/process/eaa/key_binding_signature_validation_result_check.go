@@ -1,27 +1,8 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/eaa/checks/KeyBindingSignatureValidationResultCheck.java (DSS 6.5.RC1).
 //
-// NECESSARY ADDITION (LTVB, phase 8e): not itself a line in this porter's
-// manifest (only EAAValidationBlock.java and EAAValidationProcess.java are),
-// but doc.go already flagged it as the one eaa.checks class the phase 8d
-// integration pass deliberately left unported, "wires
-// eu.europa.esig.dss.validation.process.qualification.signature.checks.SignatureValidationResultCheck
-// and eu.europa.esig.dss.detailedreport.jaxb.XmlValidationProcessEAA... left
-// unported, consistent with 'port minimally from upstream'" - i.e. left for
-// whichever future pass ports EAAValidationProcess, which is this one:
-// EAAValidationProcess.keyBindingSignatureValidationConclusive() constructs it
-// directly. Porting it here keeps the eaa package buildable.
-//
-// FORWARD DEPENDENCY: qualification.SignatureValidationResultCheck is ported
-// by the shared QCERT/QTRUST/QSIG porters into package
-// github.com/ryftcore/dss-go/dss/validation/process/qualification, assumed to have
-// the shape
-//
-//	type SignatureValidationResultCheck[T any] struct { *process.ChainItemBase[T]; ... }
-//	func NewSignatureValidationResultCheck[T any](i18nProvider *i18n.I18nProvider, result *process.Result[T],
-//	    basicValidationConclusion *jaxb.XmlConclusion, constraint policy.LevelRule) *SignatureValidationResultCheck[T]
-//
-// mirroring Java's
-// SignatureValidationResultCheck(I18nProvider, T, XmlConclusion, LevelRule).
+// KeyBindingSignatureValidationResultCheck wraps
+// qualification.SignatureValidationResultCheck for the key-binding
+// signature's own validation result.
 package eaa
 
 import (

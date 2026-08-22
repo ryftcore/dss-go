@@ -1,16 +1,4 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/CertificateQualificationBlock.java (DSS 6.5.RC1).
-//
-// CROSS-CHUNK ASSUMPTION: AcceptableListOfTrustedListsCheck, AcceptableTrustedListCheck,
-// AcceptableTrustedListPresenceCheck (Java package
-// qualification.signature.checks) and TrustServiceFilter,
-// TrustServicesFilterFactoryCreateFilterByUrls (Java package
-// qualification.trust.filter) are owned by sibling porters of this shared
-// package and were not present on disk while this file was written. Their
-// call sites here follow this package's established naming convention
-// (generic [T any] chain items constructed via NewXxx[T], "Factory" static
-// methods flattened to TrustServicesFilterFactoryCreateXxx package
-// functions) but must be reconciled against the sibling porters' actual
-// signatures once available.
 package qualification
 
 import (

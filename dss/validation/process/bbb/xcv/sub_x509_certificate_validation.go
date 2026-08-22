@@ -1,15 +1,4 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/bbb/xcv/sub/SubX509CertificateValidation.java (DSS 6.5.RC1).
-//
-// Cross-chunk assumption: this file calls NewCertificateRevocationSelector,
-// which XCVA (crs.CertificateRevocationSelector, ported into the same shared
-// pkg xcv per the phase 8d brief) is expected to provide with a
-// LatestAcceptableCertificateRevocation() *diagnostic.CertificateRevocationWrapper
-// accessor and an Execute() *jaxb.XmlCRS method (the process.ChainBase
-// convention every other Chain subclass in this port follows); and calls
-// aov.NewRevocationDataAlgorithmObsolescenceValidation, which the AOV porter
-// is expected to add to package aov with an Execute() *jaxb.XmlAOV method,
-// mirroring aov.AlgorithmObsolescenceValidation's Java sibling class of the
-// same name. See S8D_BRIEF.md.
 package xcv
 
 import (

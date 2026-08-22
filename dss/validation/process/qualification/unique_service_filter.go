@@ -1,18 +1,8 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/trust/filter/UniqueServiceFilter.java (DSS 6.5.RC1).
 //
-// FORWARD DEPENDENCY: CertificateQualificationCalculator is ported by the
-// qualification/certificate porter into this same package (dss/validation/process/qualification),
-// assumed to have the shape
-//
-//	func NewCertificateQualificationCalculator(endEntityCert *diagnostic.CertificateWrapper,
-//	    trustService *diagnostic.TrustServiceWrapper) *CertificateQualificationCalculator
-//	// with a Qualification() enumerations.CertificateQualification method
-//
-// mirroring Java's CertificateQualificationCalculator(CertificateWrapper, TrustServiceWrapper)
-// and getQualification().
-//
-// slf4j logging (the "More than one selected trust services" / "Unable to select..." /
-// "All trust services conclude..." records) is dropped per PORTING.md.
+// Java's slf4j logging (the "More than one selected trust services" /
+// "Unable to select..." / "All trust services conclude..." records) has no
+// Go equivalent and is not ported.
 package qualification
 
 import (

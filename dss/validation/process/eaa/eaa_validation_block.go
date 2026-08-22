@@ -1,24 +1,4 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/eaa/EAAValidationBlock.java (DSS 6.5.RC1).
-//
-// FORWARD DEPENDENCY: qualification.EAAQualificationBlock and
-// qualification.SignatureQualificationBlock are ported by the shared
-// QCERT/QTRUST/QSIG porters into package
-// github.com/ryftcore/dss-go/dss/validation/process/qualification, assumed to have
-// the shapes
-//
-//	func NewEAAQualificationBlock(i18nProvider *i18n.I18nProvider, eaa *diagnostic.EAAWrapper,
-//	    eaaConclusion *jaxb.XmlConclusion, signatureMap map[string]*jaxb.XmlSignature,
-//	    tlAnalysis []*jaxb.XmlTLAnalysis, loteAnalysis []*jaxb.XmlLoTEAnalysis,
-//	    currentTime time.Time) *EAAQualificationBlock
-//	// with an Execute() *jaxb.XmlValidationEAAQualification method
-//
-//	func NewSignatureQualificationBlock(i18nProvider *i18n.I18nProvider,
-//	    etsi319102validation *jaxb.XmlConstraintsConclusionWithProofOfExistence,
-//	    signingCertificate *diagnostic.CertificateWrapper, tlAnalysis []*jaxb.XmlTLAnalysis) *SignatureQualificationBlock
-//	// with an Execute() *jaxb.XmlValidationSignatureQualification method
-//
-// mirroring Java's EAAQualificationBlock(I18nProvider, EAAWrapper, XmlConclusion, Map, List, List, Date)
-// and SignatureQualificationBlock(I18nProvider, XmlConstraintsConclusionWithProofOfExistence, CertificateWrapper, List).
 package eaa
 
 import (

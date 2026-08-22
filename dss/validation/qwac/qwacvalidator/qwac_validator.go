@@ -2,16 +2,6 @@
 //
 // See doc.go for why this file lives in its own package instead of dss/validation/qwac.
 //
-// FORWARD DEPENDENCY (narrow, flagged for the integrator): executor.QWACCertificateProcessExecutor
-// and its constructor are part of this same phase 8f batch's EXEC chunk manifest
-// (dss-validation/src/main/java/.../executor/certificate/qwac/QWACCertificateProcessExecutor.java,
-// flattened into dss/validation/executor per that chunk's own manifest note) and had not landed
-// at the time this file was written; DefaultProcessExecutor below is the only call site that
-// needs it. Every other type this file touches (AbstractCertificateValidator,
-// SignedDocumentValidator, CertificateProcessExecutor, CertificateReports,
-// QWACCertificateDiagnosticDataBuilder, ...) is confirmed landed and used against its real
-// signature.
-//
 // CROSS-CHUNK GAP (flagged for the integrator): createQWACDiagnosticDataBuilder needs to call
 // initializeDiagnosticDataBuilder() on an arbitrary SignedDocumentValidator obtained from
 // dssvalidation.SignedDocumentValidatorFromDocument (the TLS Certificate Binding signature's

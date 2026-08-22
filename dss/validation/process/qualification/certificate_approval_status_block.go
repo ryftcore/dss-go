@@ -1,11 +1,4 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/usage/CertificateApprovalStatusBlock.java (DSS 6.5.RC1).
-//
-// CROSS-CHUNK ASSUMPTION: TrustedEntityServiceFilter and
-// TrustedEntitiesFilterFactoryCreateFilterByListUrls (Java package
-// qualification.trust.filter) are owned by a sibling porter of this shared
-// package and were not present on disk while this file was written; see
-// cert_qualification_at_time_block.go's header for the established
-// flattening convention this file's call sites follow.
 package qualification
 
 import (

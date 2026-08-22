@@ -1,15 +1,4 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/qwac/sub/checks/TLSCertificateBindingPresentInSignatureCheck.java (DSS 6.5.RC1).
-//
-// EXTERNAL DEPENDENCY GAP: eu.europa.esig.dss.validation.qwac.QWACUtils lives
-// outside both this porter's manifest and the shared qualification package
-// (it is a top-level dss-validation class, Java package
-// eu.europa.esig.dss.validation.qwac, not
-// eu.europa.esig.dss.validation.process.qualification.*) and had not been
-// ported to Go on disk while this file was written. The call below assumes
-// a Go package qwac (github.com/ryftcore/dss-go/dss/validation/qwac) exposing
-// GetIdentifiedTLSCertificates(*diagnostic.SignatureWrapper, []*diagnostic.CertificateWrapper)
-// []*diagnostic.CertificateWrapper, matching this port's static-utility-class
-// flattening convention; must be reconciled once that package exists.
 package qualification
 
 import (

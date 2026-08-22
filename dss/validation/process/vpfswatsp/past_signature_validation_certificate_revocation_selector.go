@@ -2,16 +2,14 @@
 //
 // See poe.go for the package-flattening note.
 //
-// CROSS-CHUNK NOTE (phase 8e): the Java base class
-// eu.europa.esig.dss.validation.process.vpfltvd.LongTermValidationCertificateRevocationSelector
-// belongs to the vpfltvd chunk. Its Go form is subclassed here through the
+// This type subclasses the base that lives in package vpfltvd
+// (eu.europa.esig.dss.validation.process.vpfltvd.LongTermValidationCertificateRevocationSelector)
+// and overrides getRevocationBBBConclusion, through the
 // InitLongTermValidationCertificateRevocationSelectorState /
 // InitLongTermValidationCertificateRevocationSelector pair, the same
 // state-then-register shape bbb/xcv's CertificateRevocationSelector defines;
 // the protected Java constructor that passes a null DiagnosticData is the state
-// initializer called with a nil one below. The overrides interface that routes
-// getRevocationBBBConclusion (overridden here) back to this type was added to
-// that file as part of this batch - see the notes.
+// initializer called with a nil one below.
 package vpfswatsp
 
 import (

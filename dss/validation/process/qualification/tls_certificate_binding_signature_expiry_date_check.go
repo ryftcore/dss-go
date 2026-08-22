@@ -1,8 +1,4 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/qualification/certificate/qwac/sub/checks/TLSCertificateBindingSignatureExpiryDateCheck.java (DSS 6.5.RC1).
-//
-// EXTERNAL DEPENDENCY GAP: see tls_certificate_binding_present_in_signature_check.go's
-// header for the qwac.GetIdentifiedTLSCertificates assumption this file also
-// depends on.
 package qualification
 
 import (
