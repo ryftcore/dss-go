@@ -117,6 +117,10 @@ func TestSplitQName(t *testing.T) {
 func TestDecodeRefRejectsNonXMLCharacters(t *testing.T) {
 	bad := []string{"#0", "#x0", "#x1", "#x8", "#xB", "#xC", "#xE", "#x1F",
 		"#xD800", "#xDBFF", "#xDC00", "#xDFFF", "#xFFFE", "#xFFFF", "#x110000", "#xFFFFFFFF",
+		// #4294967295 is the decimal form of #xFFFFFFFF: v > utf8.MaxRune must be
+		// rejected before rune(v) is taken (CodeQL go/incorrect-integer-conversion
+		// alert 36 — the check now runs before the narrowing, not after).
+		"#4294967295",
 		"#", "#x", "#xZZ", "#-1", "#+1", "#X41", "nbsp", "foo"}
 	for _, b := range bad {
 		if r, err := decodeRef(b); err == nil {

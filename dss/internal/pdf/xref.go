@@ -10,6 +10,7 @@ package pdf
 import (
 	"bytes"
 	"fmt"
+	"math"
 	"sort"
 	"strconv"
 )
@@ -258,7 +259,10 @@ func (d *Document) parseXrefTableAt(p *parser, off int64, recovered bool) (*rawS
 			case fields[len(fields)-1] == "n":
 				offVal, err1 := strconv.ParseInt(fields[0], 10, 64)
 				genVal, err2 := strconv.ParseInt(fields[1], 10, 32)
-				if err1 == nil && err2 == nil && offVal > 0 {
+				// ISO 32000-1 Table 18: the generation number is 0..65535, which is
+				// what ObjectKey.Gen can hold. Anything else would wrap into a key
+				// that collides with a legitimate entry.
+				if err1 == nil && err2 == nil && offVal > 0 && isValidGeneration(genVal) {
 					rs.entries = append(rs.entries, keyedEntry{
 						key: ObjectKey{Num: objID, Gen: uint16(genVal)},
 						e:   xrefRec{typ: 1, offset: offVal, gen: uint16(genVal)},
@@ -579,7 +583,7 @@ func (d *Document) findObjectKey(p *parser, key ObjectKey, off int64) (ObjectKey
 		q.lex.seek(int64(j + 1))
 		t1 := q.lex.next()
 		t2 := q.lex.next()
-		if t1.kind == tokInteger && t2.kind == tokInteger {
+		if t1.kind == tokInteger && t2.kind == tokInteger && isValidGeneration(t2.i) {
 			other := ObjectKey{Num: t1.i, Gen: uint16(t2.i)}
 			if e, exists := d.xref[other]; exists && e.typ == 1 && e.offset > 0 && absInt64(off-e.offset) < 10 {
 				return key, false
@@ -601,6 +605,9 @@ func (d *Document) findObjectKey(p *parser, key ObjectKey, off int64) (ObjectKey
 	}
 	t3 := p.lex.next()
 	if t3.kind != tokKeyword || t3.raw != "obj" {
+		return key, false
+	}
+	if !isValidGeneration(t2.i) {
 		return key, false
 	}
 	gen := uint16(t2.i)
@@ -641,6 +648,13 @@ func sortObjectKeys(keys []ObjectKey) {
 		}
 		return keys[i].Gen < keys[j].Gen
 	})
+}
+
+// isValidGeneration reports whether a parsed generation number is inside the
+// 0..65535 range ISO 32000-1 Table 18 gives it - i.e. whether it fits in
+// ObjectKey.Gen without wrapping into some other object's key.
+func isValidGeneration(gen int64) bool {
+	return gen >= 0 && gen <= math.MaxUint16
 }
 
 func dictInt(d *Dict, key Name, def int64) int64 {

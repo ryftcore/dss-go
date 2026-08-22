@@ -86,9 +86,15 @@ func (f *PdfSigDictWrapperFactory) byteRange() (*ByteRange, error) {
 	result := make([]int, arraySize)
 	for i := 0; i < arraySize; i++ {
 		number := byteRangeArray.Number(i)
-		if number != nil {
-			result[i] = int(*number)
+		if number == nil {
+			continue
 		}
+		value, ok := pdfNumberToInt(*number)
+		if !ok {
+			return nil, fmt.Errorf("the '%s' field holds an out-of-range value %v",
+				PAdESConstantsByteRangeName, *number)
+		}
+		result[i] = value
 	}
 	return NewByteRange(result), nil
 }
@@ -116,7 +122,11 @@ func (f *PdfSigDictWrapperFactory) docMDP() enumerations.CertificationPermission
 			// validation!".
 			continue
 		}
-		certificationPermission, err := enumerations.CertificationPermissionFromCode(int(*permissions))
+		code, ok := pdfNumberToInt(*permissions)
+		if !ok {
+			continue
+		}
+		certificationPermission, err := enumerations.CertificationPermissionFromCode(code)
 		if err != nil {
 			continue
 		}

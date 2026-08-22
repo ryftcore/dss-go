@@ -248,8 +248,11 @@ func decodeRef(body string) (rune, error) {
 	if err != nil {
 		return 0, fmt.Errorf("malformed character reference &%s;", body)
 	}
+	if v > utf8.MaxRune {
+		return 0, fmt.Errorf("character reference &%s; denotes U+%04X, which is not an XML 1.0 character", body, v)
+	}
 	r := rune(v)
-	if v > utf8.MaxRune || !isXMLChar(r) {
+	if !isXMLChar(r) {
 		return 0, fmt.Errorf("character reference &%s; denotes U+%04X, which is not an XML 1.0 character", body, v)
 	}
 	return r, nil

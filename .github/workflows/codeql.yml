@@ -27,6 +27,7 @@ jobs:
       - uses: github/codeql-action/init@v4
         with:
           languages: go
+          config-file: ./.github/codeql/codeql-config.yml
 
       # CodeQL's Go analysis works off the build; running it inside dss/
       # keeps it scoped to the actual module rather than the repo root
