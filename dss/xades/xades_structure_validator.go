@@ -27,7 +27,7 @@ import (
 
 // XAdESStructureXSDUtils stands in for eu.europa.esig.dss.jaxb.common.XSDAbstractUtils; see the
 // file header's note on XSD validation.
-type XAdESStructureXSDUtils interface{}
+type XAdESStructureXSDUtils any
 
 // XAdESStructureValidator validates a structure of a XAdES signature against a corresponding
 // XSD. Port of the class XAdESStructureValidator.
