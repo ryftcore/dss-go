@@ -68,6 +68,44 @@ func clampKeyLen(keyLen, digestLen int) int {
 	}
 }
 
+// permissionWord reads a resolved /Encrypt /P. COSDictionary.getInt accepts any
+// COSNumber, not just COSInteger, so a /P written as a real is read rather than
+// ignored — for /R 5 and /R 6 ignoring it would mean rejecting the document at
+// the /Perms check below.
+//
+// The two branches narrow differently because Java's two narrowing conversions
+// do. COSInteger.intValue() is (int) of a long, which keeps the low 32 bits:
+// that is not merely a hostile-input concern, since a producer that writes the
+// permission word unsigned (/P 4294966244 for -1052) relies on it, and
+// saturating instead would derive a different key for /R 2 to /R 4, where /P is
+// hashed into Algorithm 2. The truncation is spelled out rather than left to an
+// unchecked int64-to-int32 conversion. COSFloat.intValue() is (int) of a float,
+// which saturates and maps NaN to zero — in Go that conversion is undefined for
+// out-of-range values, so those cases are spelled out too.
+func permissionWord(o Object) int32 {
+	switch v := o.(type) {
+	case Integer:
+		low := int64(v) & 0xFFFFFFFF
+		if low > math.MaxInt32 {
+			low -= 1 << 32 // reinterpret the low 32 bits as two's complement
+		}
+		return int32(low)
+	case Real:
+		switch {
+		case math.IsNaN(v.Val):
+			return 0
+		case v.Val >= math.MaxInt32:
+			return math.MaxInt32
+		case v.Val <= math.MinInt32:
+			return math.MinInt32
+		default:
+			return int32(v.Val)
+		}
+	default:
+		return 0
+	}
+}
+
 // Permissions is the decoded /P bitfield plus which password matched.
 type Permissions struct {
 	Raw              int32
@@ -144,7 +182,10 @@ func (d *Document) setupEncryption() error {
 	h.enc.V = clampDictInt(dictInt(encDict, "V", 0))
 	h.enc.R = clampDictInt(dictInt(encDict, "R", 0))
 	length := clampDictInt(dictInt(encDict, "Length", 40))
-	if b, ok := encDict.GetRaw("EncryptMetadata").(Bool); ok {
+	// isEncryptMetaData -> COSDictionary.getBoolean -> getDictionaryObject
+	// follows /EncryptMetadata through a reference; d.sec is still nil here, so
+	// resolving cannot recurse into decryption.
+	if b, ok := d.Resolve(encDict.GetRaw("EncryptMetadata")).(Bool); ok {
 		h.encryptMeta = bool(b)
 	}
 	keyLenBytes := length / 8
@@ -208,7 +249,10 @@ func (d *Document) setupEncryption() error {
 	u := stringBytes(encDict.GetRaw("U"))
 	oe := stringBytes(encDict.GetRaw("OE"))
 	ue := stringBytes(encDict.GetRaw("UE"))
-	p := int32(dictInt(encDict, "P", 0))
+	// PDEncryption.getPermissions -> COSDictionary.getInt -> getDictionaryObject
+	// follows /P through a reference; resolve here rather than through the
+	// shared dictInt helper, which does not.
+	p := permissionWord(d.Resolve(encDict.GetRaw("P")))
 	id := d.ID()[0]
 
 	password := d.opts.Password
@@ -243,7 +287,84 @@ func (d *Document) setupEncryption() error {
 		copy(k, h.key)
 		h.key = k
 	}
+	if h.enc.R == 5 || h.enc.R == 6 {
+		// Same position and the same gate as pdfbox: after the key is installed,
+		// on whichever password branch produced it, for /R 5 and /R 6 only.
+		//
+		// All three Algorithm 13 inputs - /Perms here, /P and /EncryptMetadata
+		// above - follow references, as getDictionaryObject does; d.Resolve, not
+		// the bare stringBytes(encDict.GetRaw(...)). /Encrypt is never itself
+		// decrypted and d.sec is still nil here, so what comes back is still raw
+		// ciphertext.
+		if err := validatePerms(stringBytes(d.Resolve(encDict.GetRaw("Perms"))), h.key, p, h.encryptMeta); err != nil {
+			return err
+		}
+	}
 	d.sec = h
+	return nil
+}
+
+// validatePerms is ISO 32000-2 Algorithm 13, the /R 5//R 6 check that binds /P to
+// the file key. /Encrypt /Perms is one AES block, ECB with no padding, under the
+// file encryption key; it carries /P as a little-endian int32 at bytes 0-3, the
+// /EncryptMetadata flag as 'T' or 'F' at byte 8, and the constant 'a' 'd' 'b' at
+// bytes 9-11. Ports StandardSecurityHandler.validatePerms, which compares exactly
+// those three fields: bytes 4-7 are the reserved 0xFF filler and bytes 12-15 are
+// producer-chosen randomness, so neither is checked here either.
+//
+// DIVERGENCE, deliberate: pdfbox makes all three comparisons and answers every
+// failure with LOG.warn("Verification of permissions failed ...") - no else, no
+// return, no throw - so the document loads and AccessPermission is driven by the
+// unauthenticated dictionary /P. Executed against pdfbox 3.0.7 on
+// corpus/internal/pdf/testdata/corpus/protected/restricted_fields.pdf, rewriting
+// its /P -1052 to /P -1028 logs the warning, loads, and reports canModify=true.
+// For /R 5 and /R 6 /P is not mixed into the file key, so /Perms is the only
+// thing that authenticates it, and pades.PdfPermissionsChecker's
+// CanCreateSignatureField gate (CanModify && CanModifyAnnots) would be driven by
+// that unauthenticated /P: warning and continuing would leave it defeated by a
+// one-byte edit of a document under validation, which is hostile input. This
+// port therefore rejects. An absent or wrong-length /Perms is rejected too, but
+// pdfbox's fate per length is not uniformly "the same verdict, reached by
+// crashing": absent, doFinal(null) throws IllegalArgumentException out of
+// Loader.loadPDF; 0 bytes, doFinal returns an empty array and perms[9] throws
+// ArrayIndexOutOfBoundsException (0 is a legal AES block count, not the
+// IllegalBlockSizeException the other bad lengths get); 12, 15, 17 (not a
+// multiple of 16), IllegalBlockSizeException wrapped into IOException. A
+// larger multiple of 16 (32, 48, ...) is the one length class pdfbox does not
+// crash on: doFinal succeeds and validatePerms reads only the first block, so
+// a fabricated tail that hides a valid first block loads. This port accepts
+// exactly one block and is therefore stricter than pdfbox on that class, not
+// merely at parity with it.
+func validatePerms(perms, fileKey []byte, p int32, encryptMetadata bool) error {
+	if len(perms) != aes.BlockSize {
+		return fmt.Errorf("%w: the password was accepted but /Encrypt /Perms is %d bytes, want %d",
+			ErrInvalidPassword, len(perms), aes.BlockSize)
+	}
+	block, err := aes.NewCipher(fileKey)
+	if err != nil {
+		// A key size error here means /UE or /OE unwrapped to the wrong length,
+		// not that /Perms itself is malformed - say so, rather than blaming /Perms.
+		return fmt.Errorf("%w: the password was accepted but the file key recovered from /UE or /OE is not an AES key size: %v",
+			ErrInvalidPassword, err)
+	}
+	var out [aes.BlockSize]byte
+	block.Decrypt(out[:], perms)
+	if out[9] != 'a' || out[10] != 'd' || out[11] != 'b' {
+		return fmt.Errorf("%w: the password was accepted but /Encrypt /Perms does not decrypt to the 'adb' marker, so it was not produced with this file key",
+			ErrInvalidPassword)
+	}
+	if got := int32(binary.LittleEndian.Uint32(out[0:4])); got != p {
+		return fmt.Errorf("%w: the password was accepted but /Encrypt /Perms says /P %d and the dictionary says %d",
+			ErrInvalidPassword, got, p)
+	}
+	want := byte('F')
+	if encryptMetadata {
+		want = 'T'
+	}
+	if out[8] != want {
+		return fmt.Errorf("%w: the password was accepted but /Encrypt /Perms says /EncryptMetadata %q and the dictionary says %q",
+			ErrInvalidPassword, rune(out[8]), rune(want))
+	}
 	return nil
 }
 

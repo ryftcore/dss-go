@@ -67,6 +67,7 @@ Naming a constant, given Java's `TYPE` + `NAME`: split `NAME` on `_`, then join 
 
 - BouncyCastle → Go stdlib (`crypto/*`, `encoding/asn1`) plus `golang.org/x/crypto/cryptobyte` for ASN.1 that `encoding/asn1` can't round-trip byte-exactly. No cgo, no unmaintained third-party crypto.
 - DER output must be byte-exact where upstream's is (signed attributes, c14n, etc.). When Java produces BER quirks we normalize only where the spec allows, and the deviation is documented in the file header.
+- **Refusing what upstream only warns about.** Where the Java stack logs a warning and carries on with input whose own integrity check has just failed, a network-facing reader in this port may reject instead. Such a refusal is a behavioural divergence under CONTRIBUTING.md's upstream-tracking rule: it needs a `// DIVERGENCE, deliberate:` comment naming the upstream method, what it does instead, and the concrete input that motivates it, plus an entry in the package's DESIGN document. Reference case: `internal/pdf`'s `validatePerms` (`crypt.go`), the ISO 32000-2 Algorithm 13 `/Encrypt /Perms` check, versus `org.apache.pdfbox.pdmodel.encryption.StandardSecurityHandler.validatePerms`, which answers a `/P` mismatch with `LOG.warn("Verification of permissions failed")` and loads the document.
 
 ## Collections & generics
 

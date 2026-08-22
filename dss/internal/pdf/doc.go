@@ -20,9 +20,18 @@
 // The reader's leniency is not "best effort": every tolerance is a copy of a
 // specific pdfbox 3.0.7 recovery path (pdfbox runs isLenient=true by default and
 // Loader.loadPDF never turns it off, so lenient is the only mode), enumerated in
-// DESIGN.md §2.7 and pinned by a unit test named for its rule ID. Behavioural
-// divergence from pdfbox is a bug even when pdfbox is the one behaving oddly —
-// the /ByteRange arithmetic DSS performs downstream depends on reproducing it.
+// DESIGN.md §2.7 and pinned by a unit test named for its rule ID. On those
+// recovery paths behavioural divergence from pdfbox is a bug even when pdfbox is
+// the one behaving oddly — the /ByteRange arithmetic DSS performs downstream
+// depends on reproducing it.
+//
+// The one carve-out is refusal. Where pdfbox recovers by accepting a document
+// whose own integrity check has just failed, this package may reject instead,
+// because it is the network-facing side of a signature validator and a document
+// under validation is hostile input. Such a refusal never widens what is
+// accepted, is listed in DESIGN.md §2.6, and carries a "DIVERGENCE, deliberate:"
+// comment naming the pdfbox method it departs from and the concrete input that
+// motivates it.
 //
 // # Layering
 //
