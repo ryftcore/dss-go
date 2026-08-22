@@ -1,4 +1,4 @@
-// THE PHASE 8 EXIT CRITERION - report BYTE parity beyond the harness subset.
+// Report BYTE parity beyond the marshal-parity subset.
 //
 // TestReportBuildersOracle (report_builders_oracle_test.go) compares marshalled
 // report bytes on the 50-document marshal-parity corpus. This test does the

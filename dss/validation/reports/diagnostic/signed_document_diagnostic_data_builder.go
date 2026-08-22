@@ -53,8 +53,8 @@ import (
 )
 
 // SignedDocumentDiagnosticDataBuilderOverrides declares the operations
-// SignedDocumentDiagnosticDataBuilder calls back into that at least one subclass in this port
-// (or its forward-declared out-of-manifest CAdES/PAdES/JAdES/ASiC consumers) overrides.
+// SignedDocumentDiagnosticDataBuilder calls back into that at least one subclass, in this
+// package or in the CAdES/PAdES/JAdES/ASiC packages, overrides.
 type SignedDocumentDiagnosticDataBuilderOverrides interface {
 	// BuildDetachedXmlSignature builds the XmlSignature. Port of the public
 	// buildDetachedXmlSignature(AdvancedSignature).

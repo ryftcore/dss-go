@@ -3,7 +3,7 @@
 //
 // Java places this interface in the sub-package
 // eu.europa.esig.dss.validation.executor.certificate; the whole executor tree
-// is flattened into one Go package (see the batch manifest), which needs no
+// is flattened into one Go package, which needs no
 // renaming - every type name in the tree is already unique.
 
 package executor

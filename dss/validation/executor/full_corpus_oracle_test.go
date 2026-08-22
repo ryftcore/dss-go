@@ -1,5 +1,4 @@
-// THE PHASE 8 EXIT CRITERION - executor-level verdict parity, item (A) of the
-// s8f harness brief.
+// Executor-level verdict parity oracle: full-corpus byte compare.
 //
 // testdata/oracle/full_corpus.jsonl is a pure Java dump, produced by
 // testdata/oracle/gen/FullCorpusOracle.java, over EVERY file (273, no

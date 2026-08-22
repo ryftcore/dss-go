@@ -2,15 +2,12 @@
 // the EN 319 102-1 "5.2.2 Format Checking" building block, for signatures,
 // timestamps, EAAs and EAA revocation tokens.
 //
-// # Cross-chunk dependency (read before editing)
+// # Dependency on validation/process and validation/process/bbb
 //
-// FRAME owns validation/process (Chain/ChainItem) and validation/process/bbb
-// (AbstractMultiValuesCheckItem and friends); FC owns only this directory.
-// FRAME's real implementation landed in this working tree during this port
-// (see chain.go, chain_item.go, bbb/abstract_multi_values_check_item.go) and
-// every file here was type-checked against it - `go build`/`go vet`/`go test`
-// all pass for ./validation/process/bbb/fc/... as committed. The key shapes
-// this package relies on:
+// This package relies on validation/process's Chain/ChainItem framework (see
+// chain.go, chain_item.go) and validation/process/bbb's AbstractMultiValuesCheckItem
+// and friends (bbb/abstract_multi_values_check_item.go). The key shapes this
+// package relies on:
 //
 //	// process.Result[T] is the Go stand-in for Java's "T extends
 //	// XmlConstraintsConclusion" bound: it pairs the concrete jaxb result

@@ -37,7 +37,7 @@ import (
 
 // xcvDirectRow is one line of testdata/oracle/xcv_direct.jsonl: just the
 // title/conclusion/constraints body XcvOracle's row() writes (no nesting - the
-// 83-file manifest's checks/sub.checks/rfc.checks classes produce a single
+// checks/sub.checks/rfc.checks classes produce a single
 // flat ConstraintsConclusion, never a tree).
 type xcvDirectRow struct {
 	File        string            `json:"file"`

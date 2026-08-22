@@ -1,7 +1,7 @@
 // Ported from dss-validation/src/main/java/eu/europa/esig/dss/validation/process/vpfswatsp/evidencerecord/EvidenceRecordsValidationBlock.java (DSS 6.5.RC1).
 //
 // See poe.go for the package-flattening note, and
-// evidence_record_timestamps_validation_block.go for the cross-chunk vpftsp
+// evidence_record_timestamps_validation_block.go for the vpftsp
 // dependency and the import cycle it exposes.
 //
 // HASH-ORDER (see Execute()). Java fills
