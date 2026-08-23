@@ -92,7 +92,10 @@ internal/                     engines replacing third-party Java libs with NO Ja
 incremental writer), `xmldom`, `xmlc14n` (7 canonicalization variants), `xmldsig`,
 `xpath10`, `jose`, `pfx` (PKCS#12 reader), `eccurve`. Rules for them: they import the stdlib
 and at most other `internal/` packages — **never a DSS package** — and state their
-provenance in `doc.go` instead of a `// Ported from` header. `internal/pdf/DESIGN.md` and
+provenance in `doc.go` instead of a `// Ported from` header. An allowed `golang.org/x/…`
+module is permitted only where the stdlib has no counterpart to the Java API being mirrored,
+and `doc.go` plus the DESIGN entry must name it (today: `internal/pdf/saslprep.go` on
+`x/text/unicode/{norm,bidi}`). `internal/pdf/DESIGN.md` and
 `internal/xmldom/DESIGN.md` are the design records; deliberate divergences from upstream get
 an entry there.
 

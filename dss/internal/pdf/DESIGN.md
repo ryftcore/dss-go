@@ -12,7 +12,12 @@
 
 Per `PORTING.md`: pdfbox has no DSS Java class to mirror, so — exactly like `internal/asn1ber`,
 `internal/cmscore` and `internal/xmldom` — the machinery lives under `internal/` and states its
-provenance in `doc.go`. It imports only the standard library. It never imports a DSS package.
+provenance in `doc.go`. It never imports a DSS package. Beyond the standard library it imports
+exactly one module, `golang.org/x/text`, and from one file: `saslprep.go` needs NFKC normalisation
+(`x/text/unicode/norm`) and Unicode bidirectional classes (`x/text/unicode/bidi`) to reproduce what
+pdfbox's `SaslPrep` gets from `java.text.Normalizer` and `Character.getDirectionality` (§2.6).
+`golang.org/x/text` is already a direct dependency of the module and is on `CONTRIBUTING.md`'s
+allowed list; no other file here reaches outside the standard library.
 
 ---
 
@@ -103,7 +108,7 @@ That is the whole contract. Everything else pdfbox does is out of scope.
 pades  (ported Java classes: PAdESUtils, PdfSigDictWrapper, SingleDssDict, ByteRange, …)
   │  imports
   ▼
-internal/pdf      ← this document. stdlib only.
+internal/pdf      ← this document. stdlib, plus golang.org/x/text in saslprep.go.
 ```
 
 `internal/pdf` knows nothing about CMS, certificates, OCSP, or ETSI. It hands `[]byte` up. The
