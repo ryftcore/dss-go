@@ -97,6 +97,16 @@ type ValidateOptions struct {
 	// Locale is the language of the report messages, as a language tag such
 	// as "en" or "fr". Defaults to the library default.
 	Locale string
+
+	// PasswordProtection is the password that opens an encrypted
+	// (password-protected) PDF, without which its signatures cannot be read.
+	// Either the user or the owner password is accepted; it is UTF-8 text,
+	// hashed as pdfbox hashes it (see [SignOptions.PasswordProtection]).
+	// Applies to PDF documents only: [Validate] returns
+	// [ErrPasswordProtectionNotApplicable] when it is set for a document
+	// detected as anything else. This is the facade's name for
+	// PDFDocumentValidator.setPasswordProtection.
+	PasswordProtection []byte
 }
 
 // certificateVerifier builds the verifier the validator will use.
@@ -146,6 +156,13 @@ func Validate(doc Document, opts ValidateOptions) (*Reports, error) {
 		if err != nil {
 			return err
 		}
+		if len(opts.PasswordProtection) > 0 {
+			protected, ok := validator.(passwordProtectionSetter)
+			if !ok {
+				return fmt.Errorf("%w (the document was not detected as a PDF)", ErrPasswordProtectionNotApplicable)
+			}
+			protected.SetPasswordProtection(opts.PasswordProtection)
+		}
 		validator.SetCertificateVerifier(opts.certificateVerifier())
 		validator.SetValidationLevel(opts.level())
 		if len(opts.DetachedContents) > 0 {
@@ -181,6 +198,15 @@ func Validate(doc Document, opts ValidateOptions) (*Reports, error) {
 		return nil, err
 	}
 	return &Reports{Reports: result}, nil
+}
+
+// passwordProtectionSetter is the SetPasswordProtection of
+// pades.PDFDocumentValidator, the one validator that reads encrypted
+// documents. [Validate] detects the document format itself, so it looks for
+// the method on whatever validator the detection produced rather than
+// naming the PDF validator's type.
+type passwordProtectionSetter interface {
+	SetPasswordProtection(passwordProtection []byte)
 }
 
 // LoadCertificate reads an X.509 certificate, DER or PEM encoded, from the

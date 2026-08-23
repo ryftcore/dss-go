@@ -5,6 +5,7 @@ package dss_test
 
 import (
 	"errors"
+	"strings"
 	"testing"
 
 	"github.com/ryftcore/dss-go/dss"
@@ -248,6 +249,9 @@ func TestSignOptionValidation(t *testing.T) {
 			dss.SignOptions{Format: dss.FormatCAdES, Level: dss.LevelB}, dss.ErrMultipleDocuments},
 		{"no document", nil,
 			dss.SignOptions{Format: dss.FormatCAdES, Level: dss.LevelB}, dss.ErrNoDocument},
+		{"password protection, non-PDF format", []dss.Document{document},
+			dss.SignOptions{Format: dss.FormatCAdES, Level: dss.LevelB, PasswordProtection: []byte("secret")},
+			dss.ErrPasswordProtectionNotApplicable},
 	}
 	for _, testCase := range cases {
 		t.Run(testCase.name, func(t *testing.T) {
@@ -270,6 +274,118 @@ func TestExtendOptionValidation(t *testing.T) {
 	}
 	if _, err := dss.Extend(nil, dss.ExtendOptions{Format: dss.FormatCAdES, Level: dss.LevelT}); !errors.Is(err, dss.ErrNoDocument) {
 		t.Errorf("error = %v, want ErrNoDocument", err)
+	}
+	if _, err := dss.Extend(document, dss.ExtendOptions{
+		Format: dss.FormatCAdES, Level: dss.LevelT, TSPSource: testTSA(t), PasswordProtection: []byte("secret"),
+	}); !errors.Is(err, dss.ErrPasswordProtectionNotApplicable) {
+		t.Errorf("error = %v, want ErrPasswordProtectionNotApplicable", err)
+	}
+}
+
+// TestProtectedPDF covers PasswordProtection on all three option types
+// against upstream's dss-pades/src/test/resources/protected/open_protected.pdf
+// (AES-128, user password a single space): the password opens the document for
+// signing, validation and extension; without it, or with the wrong one, each
+// of them fails to open the document - an error, never a verdict. The signed
+// and extended documents stay encrypted under the same password.
+func TestProtectedPDF(t *testing.T) {
+	signer := testSigner(t)
+	password := []byte(" ")
+
+	protected, err := dss.OpenDocument("testdata/upstream/protected/open_protected.pdf")
+	if err != nil {
+		t.Fatalf("OpenDocument: %v", err)
+	}
+
+	// wantInvalidPassword fails the test unless err is the "cannot open the
+	// encrypted document" error - not any error, which a broken fixture or
+	// a different rejection would also produce.
+	wantInvalidPassword := func(step string, err error) {
+		t.Helper()
+		if err == nil || !strings.Contains(err.Error(), "invalid password") {
+			t.Fatalf("%s: err = %v, want an invalid-password error", step, err)
+		}
+	}
+
+	_, err = dss.Sign(protected, signer, dss.SignOptions{Format: dss.FormatPAdES, Level: dss.LevelB})
+	wantInvalidPassword("Sign without the password", err)
+	_, err = dss.Sign(protected, signer, dss.SignOptions{
+		Format: dss.FormatPAdES, Level: dss.LevelB, PasswordProtection: []byte("wrong"),
+	})
+	wantInvalidPassword("Sign with the wrong password", err)
+
+	signed, err := dss.Sign(protected, signer, dss.SignOptions{
+		Format: dss.FormatPAdES, Level: dss.LevelB, PasswordProtection: password,
+	})
+	if err != nil {
+		t.Fatalf("Sign with the password: %v", err)
+	}
+	if signed.Name() != "open-protected-signed-pades-baseline-b.pdf" {
+		t.Errorf("signed name = %q, want open-protected-signed-pades-baseline-b.pdf", signed.Name())
+	}
+
+	// Still encrypted: the result does not open without the password.
+	_, err = dss.Validate(signed, dss.ValidateOptions{})
+	wantInvalidPassword("Validate without the password", err)
+	reports, err := dss.Validate(signed, dss.ValidateOptions{
+		PasswordProtection:  password,
+		TrustedCertificates: signer.CertificateChain(),
+	})
+	if err != nil {
+		t.Fatalf("Validate with the password: %v", err)
+	}
+	verdicts := reports.Verdicts()
+	if len(verdicts) != 1 || verdicts[0].SignatureLevel != "PAdES_BASELINE_B" || !verdicts[0].Valid() {
+		t.Fatalf("verdicts = %+v, want one valid PAdES_BASELINE_B", verdicts)
+	}
+
+	_, err = dss.Extend(signed, dss.ExtendOptions{
+		Format: dss.FormatPAdES, Level: dss.LevelT, TSPSource: testTSA(t),
+	})
+	wantInvalidPassword("Extend without the password", err)
+	extended, err := dss.Extend(signed, dss.ExtendOptions{
+		Format: dss.FormatPAdES, Level: dss.LevelT, TSPSource: testTSA(t), PasswordProtection: password,
+	})
+	if err != nil {
+		t.Fatalf("Extend with the password: %v", err)
+	}
+	_, err = dss.Validate(extended, dss.ValidateOptions{})
+	wantInvalidPassword("Validate extended without the password", err)
+	reports, err = dss.Validate(extended, dss.ValidateOptions{
+		PasswordProtection:  password,
+		TrustedCertificates: signer.CertificateChain(),
+	})
+	if err != nil {
+		t.Fatalf("Validate extended with the password: %v", err)
+	}
+	verdicts = reports.Verdicts()
+	if len(verdicts) != 1 || verdicts[0].SignatureLevel != "PAdES_BASELINE_T" || !verdicts[0].Valid() {
+		t.Fatalf("extended verdicts = %+v, want one valid PAdES_BASELINE_T", verdicts)
+	}
+
+	// A password for anything but a PDF is refused, since Validate detects
+	// the format itself and only the PDF validator can take one.
+	xmlDocument := dss.NewDocument("invoice.xml", []byte("<invoice/>"))
+	xmlSigned, err := dss.Sign(xmlDocument, signer, dss.SignOptions{Format: dss.FormatXAdES, Level: dss.LevelB})
+	if err != nil {
+		t.Fatalf("Sign XAdES: %v", err)
+	}
+	if _, err := dss.Validate(xmlSigned, dss.ValidateOptions{PasswordProtection: password}); !errors.Is(err, dss.ErrPasswordProtectionNotApplicable) {
+		t.Errorf("Validate XML with a password: error = %v, want ErrPasswordProtectionNotApplicable", err)
+	}
+
+	// A PDF that is not encrypted opens whatever password it is given:
+	// upstream pdfbox only consults the password when the trailer carries
+	// /Encrypt, and so does the port. A password on a plain PDF is
+	// therefore not an error.
+	plain, err := dss.OpenDocument("testdata/sample.pdf")
+	if err != nil {
+		t.Fatalf("OpenDocument: %v", err)
+	}
+	if _, err := dss.Sign(plain, signer, dss.SignOptions{
+		Format: dss.FormatPAdES, Level: dss.LevelB, PasswordProtection: []byte("ignored"),
+	}); err != nil {
+		t.Errorf("Sign of an unencrypted PDF with a password: %v, want it ignored as upstream does", err)
 	}
 }
 

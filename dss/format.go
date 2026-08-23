@@ -147,6 +147,12 @@ var (
 
 	// ErrNoDocument is returned when no document to sign was provided.
 	ErrNoDocument = errors.New("dss: at least one document to sign is required")
+
+	// ErrPasswordProtectionNotApplicable is returned when a PasswordProtection
+	// is given for anything but an encrypted PDF: a [Format] other than
+	// [FormatPAdES] in [SignOptions] or [ExtendOptions], or a document
+	// [Validate] detected as something other than a PDF.
+	ErrPasswordProtectionNotApplicable = errors.New("dss: a PasswordProtection applies to PDF documents (PAdES) only")
 )
 
 // Format identifies a signature format family. It selects which of the ported

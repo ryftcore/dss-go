@@ -143,6 +143,60 @@ covering the original revision, the second covering everything. That
 `SignatureScope` field is how a reader tells "signed the whole thing" from
 "signed an earlier version of the thing".
 
+## Signing a password-protected PDF
+
+A PDF that opens only with a password is *encrypted* — every string and stream
+in it is ciphered under a key derived from that password, and the signature
+has to be appended the same way, or the file would no longer open. Hand the
+password over and the library does exactly that: the signature goes in as an
+incremental update encrypted under the document's own security handler, and
+the signed PDF keeps the same password. The owner password bypasses the PDF's
+permission bits (`/P`); the user password opens the document too, but signing
+then also has to be allowed by those bits — if they forbid creating or filling
+a signature field, signing is refused, the same check upstream's
+`PdfPermissionsChecker` applies. Validation needs no more than the user
+password. The password is text: `café` is `café` whether the file uses RC4,
+AES-128 or AES-256, the library hashes it the way pdfbox does for each.
+
+```go
+signed, err := dss.Sign(doc, signer, dss.SignOptions{
+	Format:             dss.FormatPAdES,
+	Level:              dss.LevelB,
+	PasswordProtection: []byte(os.Getenv("PDFPASS")),
+})
+```
+
+```sh
+export PDFPASS='…'
+
+esig sign contract.pdf -format pades -level B \
+    -p12 keystore.p12 -p12-pass env:P12PASS \
+    -pdf-pass env:PDFPASS
+```
+
+`-pdf-pass` follows the same rule as `-p12-pass`: it takes the *name of an
+environment variable*, never the password itself. The same flag opens the
+document for the other commands — `esig validate`, `esig inspect` and
+`esig extend` all need it, since without the password they cannot read the
+signature they are asked to check or extend:
+
+```sh
+esig validate contract-signed-pades-baseline-b.pdf -pdf-pass env:PDFPASS -trust your-ca.cer
+esig extend contract-signed-pades-baseline-b.pdf -format pades -level T \
+    -tsa https://tsa.example.org/tsa -pdf-pass env:PDFPASS
+```
+
+From Go the field is `ValidateOptions.PasswordProtection` and
+`ExtendOptions.PasswordProtection`. Setting it for anything but a PDF is an
+error (`dss.ErrPasswordProtectionNotApplicable`) rather than silently ignored.
+
+This is the upstream feature (`PAdESSignatureParameters.setPasswordProtection`),
+and it stops where upstream stops: the library **signs** an encrypted PDF, it
+does not **encrypt** one. A PDF that is not password-protected comes out of
+signing not password-protected; applying encryption to it is a job for a PDF
+tool, done before signing — encryption rewrites every object in the file,
+which a signature must not do afterwards.
+
 ## Things that will surprise you
 
 **`SignOptions.Packaging` is ignored for PDFs.** A PDF signature is always
@@ -154,8 +208,9 @@ rasteriser in the native PDF engine. If your requirement includes a visible
 stamp on the page, this port cannot produce it today; see
 [Known gaps](../compatibility/known-gaps.md).
 
-**An encrypted PDF is fine to read.** The native engine handles RC4 and AES
-encryption and re-encrypts on write.
+**An encrypted PDF is fine to read — given its password.** The native engine
+handles RC4 and AES encryption and re-encrypts on write; see
+[Signing a password-protected PDF](#signing-a-password-protected-pdf) above.
 
 **Level LT needs revocation data, which means network sources you supply.**
 Signing at LT requires actually fetching CRLs or OCSP responses to embed. The

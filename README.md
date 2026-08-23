@@ -136,6 +136,10 @@ S-CC2F8D5D…93A496C89  TOTAL_PASSED  level=PAdES-BASELINE-B  qualification=NA  
 | `esig tl refresh` | Refresh a local trusted-list cache from the EU LOTL |
 | `esig version` | Build information |
 
+A password-protected (encrypted) PDF is opened with `-pdf-pass env:VAR` on
+`sign`, `extend`, `validate` and `inspect`; like `-p12-pass`, the flag takes the
+name of an environment variable, never the password itself.
+
 Exit codes: `0` success, `1` a signature did not reach TOTAL_PASSED, `2` usage
 error, `3` runtime error. Every subcommand is a living example of the facade
 above. Unlike the library, the CLI ships its own RFC 3161 HTTP client, so

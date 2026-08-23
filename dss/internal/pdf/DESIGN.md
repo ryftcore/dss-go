@@ -12,7 +12,12 @@
 
 Per `PORTING.md`: pdfbox has no DSS Java class to mirror, so — exactly like `internal/asn1ber`,
 `internal/cmscore` and `internal/xmldom` — the machinery lives under `internal/` and states its
-provenance in `doc.go`. It imports only the standard library. It never imports a DSS package.
+provenance in `doc.go`. It never imports a DSS package. Beyond the standard library it imports
+exactly one module, `golang.org/x/text`, and from one file: `saslprep.go` needs NFKC normalisation
+(`x/text/unicode/norm`) and Unicode bidirectional classes (`x/text/unicode/bidi`) to reproduce what
+pdfbox's `SaslPrep` gets from `java.text.Normalizer` and `Character.getDirectionality` (§2.6).
+`golang.org/x/text` is already a direct dependency of the module and is on `CONTRIBUTING.md`'s
+allowed list; no other file here reaches outside the standard library.
 
 ---
 
@@ -81,6 +86,12 @@ That is the whole contract. Everything else pdfbox does is out of scope.
   see §2.5.
 * **No full-rewrite serializer.** `internal/pdf` can only *append*. There is no code path that
   re-emits an object that already exists in the input at its original offset.
+* **No encryption of a document that is not encrypted.** `StandardSecurityHandler
+  .prepareDocumentForEncryption` / `StandardProtectionPolicy` are not ported: the writer only
+  re-encrypts under a handler the input already carries (§2.6, §3.2 R20), which is also all DSS
+  itself does (`PAdESSignatureParameters.setPasswordProtection` opens a protected document; nothing
+  in DSS protects one). Encrypting would need the full rewrite above. Consequently only
+  `SaslPrep.saslPrepQuery` is ported, not `saslPrepStored`.
 * **No PDF/A, no linearization, no tagged-PDF, no object-stream *writing*** (§3.2 R15).
 * **No openpdf port.** Upstream ships two interchangeable SPI backends selected by
   `ServiceLoaderPdfObjFactory`; the Go port has exactly one native backend, so `IPdfObjFactory`
@@ -97,7 +108,7 @@ That is the whole contract. Everything else pdfbox does is out of scope.
 pades  (ported Java classes: PAdESUtils, PdfSigDictWrapper, SingleDssDict, ByteRange, …)
   │  imports
   ▼
-internal/pdf      ← this document. stdlib only.
+internal/pdf      ← this document. stdlib, plus golang.org/x/text in saslprep.go.
 ```
 
 `internal/pdf` knows nothing about CMS, certificates, OCSP, or ETSI. It hands `[]byte` up. The
@@ -354,8 +365,10 @@ settle which cipher width is actually used; see the postcondition guard's commen
 `ProtectedDocumentException`:
 
 * `/Filter` other than `/Standard` (public-key / PKCS#7 handlers) → `ErrUnsupportedSecurityHandler`.
-* Wrong or missing password → `ErrInvalidPassword`. Both the user and owner password are tried, in
-  that order, exactly as pdfbox does; which one matched determines `Permissions.OwnerAccess`.
+* Wrong or missing password → `ErrInvalidPassword`. The password is tried as the owner password
+  first, then as the user password, exactly as `StandardSecurityHandler.prepareForDecryption` does
+  (`isOwnerPassword` before `isUserPassword`); which one matched determines
+  `Permissions.OwnerAccess`.
 * For `/R 5`/`/R 6`, an `/Encrypt /Perms` that is absent, is not a 16-byte string, or does not
   decrypt under the recovered file key to the `'a' 'd' 'b'` marker, the dictionary `/P` and the
   dictionary `/EncryptMetadata` → `ErrInvalidPassword` (ISO 32000-2 Algorithm 13, `validatePerms`).
@@ -368,6 +381,39 @@ settle which cipher width is actually used; see the postcondition guard's commen
   defeated by a one-byte edit. See the `// DIVERGENCE, deliberate:` note on `validatePerms` in
   `crypt.go`.
 * `/EncryptMetadata false` is honoured (metadata streams left in the clear).
+* **The password is text, and the bytes hashed are pdfbox's bytes.** `Options.Password` is the
+  password as UTF-8 — the Go shape of the Java `String` that `Loader.loadPDF(bytes, password)`
+  receives — and `crypt.go`'s `passwordBytes` reproduces the charset step of
+  `StandardSecurityHandler.prepareForDecryption`: `String.getBytes(ISO_8859_1)` for `/R 2`–`/R 4`
+  (a code point above U+00FF becomes one `'?'`, Java's replacement byte; so does a malformed UTF-8
+  sequence, which is what Java makes of an unpaired surrogate), `String.getBytes(UTF_8)` for `/R 5`,
+  and `SaslPrep.saslPrepQuery` then UTF-8 for `/R 6` (PDFBOX-4155). `saslprep.go` ports pdfbox's
+  `SaslPrep` table for table, including its `(char)` truncation of supplementary code points in two
+  of the prohibition checks, because the byte string that has to match is the one pdfbox hashes. A
+  password SASLprep prohibits (a control character, private-use or non-character code point, mixed
+  bidirectional text) is `ErrProhibitedPassword`, the Go shape of the `IllegalArgumentException`
+  pdfbox lets escape there — not `ErrInvalidPassword`, since no retry can help. The encryption side
+  (`prepareDocumentForEncryption`) encodes the same way, with SASLprep's stored-string profile
+  (`saslPrepStored`, which differs only in rejecting unassigned code points), so a document pdfbox
+  protects with `café` opens here with `café`; `testdata/password/` holds pdfbox-generated goldens
+  for `/R 3`, `/R 4` and `/R 6` and `password_kat_test.go` pins them (§5.5). One residue cannot be
+  closed: the bidi step classifies code points by x/text's Unicode tables where pdfbox uses the
+  JDK's, so a code point assigned in one Unicode version and not the other may be judged
+  differently; unassigned code points are treated as Java does (no directionality). Without this
+  step a non-ASCII password on the commonest encryption in the wild (`/V 4 /R 4`) opened in Java
+  DSS and was `ErrInvalidPassword` here.
+* **A `/R 5` password longer than 127 bytes is truncated for the key derivation too.** ISO 32000-2
+  Algorithm 2.A truncates the password to its first 127 bytes for both revisions and at both steps,
+  and so does `computeEncryptionKey`. pdfbox does not: `isUserPassword56`/`isOwnerPassword56`
+  truncate before hashing, but `computeEncryptedKeyRev56` then hands the **untruncated** password to
+  `computeSHA256` for `/R 5`, so a `/R 5` document written to the standard with such a password
+  passes pdfbox's acceptance check and then unwraps garbage from `/UE` or `/OE`. `/R 6` has no such
+  split — `computeHash2A` truncates internally — so this touches `/R 5` alone. **This is a deliberate
+  divergence**, and the only one here that *widens* what opens rather than narrowing it: the
+  affected document opens here and not in pdfbox. It is unreachable below 128 bytes of prepared
+  password, and no `testdata/password/` golden covers it (pdfbox writes `/R 6`, never `/R 5`, so a
+  golden would have to be hand-built). See `computeEncryptionKey`'s `// DIVERGENCE, deliberate:`
+  note in `crypt.go`.
 * **A crypt filter a `/V 4` or `/V 5` document selects and that this handler cannot identify** →
   `ErrUnsupportedSecurityHandler`. "Selects" means named by `/StmF` or `/StrF` and not `/Identity`.
   Each such name must resolve through `/CF` to a `/CFM` of `/V2`, `/AESV2` or `/AESV3`; both selected
@@ -869,6 +915,7 @@ var (
     ErrNotPDF                    = errors.New("pdf: missing %PDF- header")
     ErrBrokenCatalog             = errors.New("pdf: page tree root must be a dictionary")
     ErrInvalidPassword           = errors.New("pdf: invalid password")
+    ErrProhibitedPassword        = errors.New("pdf: password contains characters SASLprep prohibits")
     ErrUnsupportedSecurityHandler = errors.New("pdf: unsupported security handler")
     ErrUnsupportedFilter         = errors.New("pdf: unsupported stream filter")
     ErrLimitExceeded             = errors.New("pdf: resource limit exceeded")
@@ -924,7 +971,8 @@ import (
 )
 
 type Options struct {
-    // Password is tried as the user password, then as the owner password.
+    // Password is the document's password as UTF-8 text, tried as the owner
+    // password, then as the user password; hashed as pdfbox hashes it (§2.6).
     Password []byte
     // Random supplies AES initialisation vectors on write. nil means crypto/rand.
     Random io.Reader
@@ -1389,6 +1437,18 @@ for its rule ID: `TestLenient_H2_NoVersion`, `TestLenient_X2_BruteForce`,
 `TestLenient_S1_MissingLength`, and so on. These are cheap, they document the behaviour better than
 prose, and they are the regression net when pdfbox is bumped. `FormatReal`, `EncodeName`,
 `EncodeString`, `ApplyPredictor` and `FlateDecode` each get an exhaustive table test.
+
+### 5.5 The password-charset goldens
+
+`testdata/password/` is a second, smaller set of goldens with the same contract as §5.1 — produced
+by a Java program run by hand, never from `go test` — but made by pdfbox itself rather than read
+from the DSS corpus: `testdata/password/PasswordFixtures.java` (pdfbox 3.0.6; the charset code is
+the same in 3.0.7) protects one empty page under `StandardProtectionPolicy` with non-ASCII
+passwords for `/R 3`, `/R 4` and `/R 6`, and the PDFs it writes are the goldens.
+`password_kat_test.go`'s `TestPasswordCharsetFixtures` pins them (they are in-module and not in
+`manifest.txt`, since they are the fixtures, not derived records); its README lists each file's
+parameters and passwords. A regenerated golden changes bytes (pdfbox draws fresh `/ID` and salts)
+and needs the same PR justification as any other.
 
 ---
 

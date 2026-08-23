@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"math"
 	"math/big"
+	"unicode/utf8"
 )
 
 // Encryption describes the document's security handler as configured.
@@ -285,10 +286,13 @@ func (d *Document) setupEncryption() error {
 	p := permissionWord(d.Resolve(encDict.GetRaw("P")))
 	id := d.ID()[0]
 
-	password := d.opts.Password
-	// pdfbox tries the OWNER password first (prepareForDecryption); DESIGN.md
-	// §2.6 says "user, then owner". We follow pdfbox, because which one matched
-	// decides Permissions.OwnerAccess and the KAT compares that field.
+	password, err := passwordBytes(d.opts.Password, h.enc.R)
+	if err != nil {
+		return err
+	}
+	// Owner password first, then user, as prepareForDecryption does (DESIGN.md
+	// §2.6): which one matched decides Permissions.OwnerAccess and the KAT
+	// compares that field.
 	switch {
 	case isOwnerPassword(password, u, o, p, id, h.enc.R, keyLenBytes, h.encryptMeta):
 		h.perms = permissionsFrom(p, true)
@@ -568,7 +572,7 @@ func isUserPassword(pw, u, o []byte, p int32, id []byte, r, keyLen int, encMeta 
 		if len(u) < 48 {
 			return false
 		}
-		hash := hash2AOr256(truncate127(saslPrepMaybe(pw, r)), u[32:40], nil, r)
+		hash := hash2AOr256(truncate127(pw), u[32:40], nil, r)
 		return bytes.Equal(hash, u[:32])
 	}
 	computed := computeUserEntry(pw, o, p, id, r, keyLen, encMeta)
@@ -586,7 +590,7 @@ func isOwnerPassword(pw, u, o []byte, p int32, id []byte, r, keyLen int, encMeta
 		if len(o) < 48 || len(u) < 48 {
 			return false
 		}
-		hash := hash2AOr256(truncate127(saslPrepMaybe(pw, r)), o[32:40], u, r)
+		hash := hash2AOr256(truncate127(pw), o[32:40], u, r)
 		return bytes.Equal(hash, o[:32])
 	}
 	user := userPasswordFromOwner(pw, o, r, keyLen)
@@ -680,7 +684,15 @@ func computeEncryptionKey(pw, o, u, oe, ue []byte, p int32, id []byte, r, keyLen
 		return computeKeyRev234(pw, o, p, id, encMeta, keyLen, r), nil
 	}
 	var hash, fileKeyEnc []byte
-	pw = truncate127(saslPrepMaybe(pw, r))
+	// DIVERGENCE, deliberate: for /R 5 pdfbox's computeEncryptedKeyRev56 hashes
+	// the UNtruncated password (computeSHA256(password, ...)), although its
+	// isUserPassword56/isOwnerPassword56 truncate to 127 bytes first, so a
+	// password longer than that passes pdfbox's check and then unwraps garbage
+	// from /UE or /OE. /R 6 truncates in both places (computeHash2A). ISO
+	// 32000-2 Algorithm 2.A truncates for both revisions, and so does this
+	// port: an /R 5 document written to the standard with such a password
+	// opens here and not in pdfbox.
+	pw = truncate127(pw)
 	if ownerPw {
 		if len(oe) == 0 || len(o) < 48 {
 			return nil, fmt.Errorf("%w: /Encrypt /OE entry is missing", ErrUnsupportedSecurityHandler)
@@ -805,21 +817,48 @@ func computeHash2B(input, password, userKey []byte) []byte {
 	return k
 }
 
-// saslPrepMaybe applies SASLprep for R6. Our corpus passwords are ASCII, so the
-// full stringprep profile is not implemented: ASCII input is returned unchanged,
-// which is what saslPrepQuery does for it.
-func saslPrepMaybe(pw []byte, r int) []byte {
-	if r != 6 {
-		return pw
+// passwordBytes is the charset step of StandardSecurityHandler
+// .prepareForDecryption, the one place the password's text becomes the
+// bytes the security handler hashes. Options.Password is the password as
+// UTF-8 text - the Go shape of the Java String pdfbox receives - and pdfbox
+// encodes that String with ISO-8859-1 for /R 2, 3 and 4
+// (String.getBytes(ISO_8859_1)) and with UTF-8 for /R 5 and 6, after
+// SaslPrep.saslPrepQuery for /R 6 (PDFBOX-4155). Java's ISO-8859-1 encoder
+// replaces every code point above U+00FF with a single '?', one per code
+// point, supplementary characters included. A malformed UTF-8 sequence is
+// U+FFFD as text in every arm - '?' under ISO-8859-1, EF BF BD under UTF-8
+// for /R 5, and a SASLprep prohibition for /R 6 - which is also what Java
+// makes of an unpaired surrogate. pdfbox's encryption side
+// (prepareDocumentForEncryption) encodes the same way, with SASLprep's
+// stored-string profile for /R 6, and that is what the testdata/password
+// fixtures were produced by, so a document pdfbox protects with a non-ASCII
+// password opens here with the same text.
+func passwordBytes(pw []byte, r int) ([]byte, error) {
+	switch r {
+	case 5:
+		// String.getBytes(UTF_8): the identity on well-formed UTF-8,
+		// re-encoded rune by rune so a malformed byte becomes U+FFFD.
+		out := make([]byte, 0, len(pw))
+		for _, c := range string(pw) {
+			out = utf8.AppendRune(out, c)
+		}
+		return out, nil
+	case 6:
+		prepared, err := saslPrepQuery(string(pw))
+		if err != nil {
+			return nil, err
+		}
+		return []byte(prepared), nil
 	}
-	for _, c := range pw {
-		if c >= 0x80 {
-			// Non-ASCII password with R6: pass through unmapped. Flagged in
-			// DESIGN notes; no corpus document exercises it.
-			return pw
+	out := make([]byte, 0, len(pw))
+	for _, c := range string(pw) {
+		if c <= 0xFF {
+			out = append(out, byte(c))
+		} else {
+			out = append(out, '?')
 		}
 	}
-	return pw
+	return out, nil
 }
 
 func truncate127(b []byte) []byte {

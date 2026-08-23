@@ -17,6 +17,14 @@ var (
 	ErrBrokenCatalog = errors.New("pdf: page tree root must be a dictionary")
 	// ErrInvalidPassword maps onto upstream InvalidPasswordException.
 	ErrInvalidPassword = errors.New("pdf: invalid password")
+	// ErrProhibitedPassword is the Go shape of the IllegalArgumentException
+	// pdfbox's SaslPrep throws out of StandardSecurityHandler
+	// .prepareForDecryption for an /R 6 password that SASLprep (RFC 4013)
+	// prohibits - a control character, a private-use or non-character code
+	// point, or mixed bidirectional text. It is not ErrInvalidPassword: no
+	// document can be opened with such a password, so retrying is pointless,
+	// and upstream surfaces it as a different exception too.
+	ErrProhibitedPassword = errors.New("pdf: password contains characters SASLprep prohibits")
 	// ErrUnsupportedSecurityHandler is returned for a security handler this
 	// package does not implement: a /Filter other than /Standard, a /V outside
 	// {1, 2, 4, 5}, a /V 5 paired with an /R other than 5 or 6, a crypt filter

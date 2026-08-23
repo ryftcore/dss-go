@@ -23,10 +23,14 @@ validate" for a verdict.
 
   -detached string
     	original document a detached signature covers; repeatable
+  -pdf-pass string
+    	password of an encrypted (password-protected) PDF, as env:VARNAME - the env var name, never the password itself
 `)
 	}
 	var detached stringList
+	var pdfPass string
 	fs.Var(&detached, "detached", "")
+	fs.StringVar(&pdfPass, "pdf-pass", "", "")
 	leading, hadLeading, rest := splitPositional(args)
 	if err := fs.Parse(rest); err != nil {
 		return exitUsage
@@ -52,6 +56,12 @@ validate" for a verdict.
 		}
 		opts.DetachedContents = docs
 	}
+	pdfPassword, err := resolveOptionalPassword(pdfPass)
+	if err != nil {
+		fmt.Fprintf(stderr, "esig inspect: -pdf-pass: %v\n", err)
+		return exitRuntime
+	}
+	opts.PasswordProtection = pdfPassword
 
 	reports, err := dss.Validate(doc, opts)
 	if err != nil {

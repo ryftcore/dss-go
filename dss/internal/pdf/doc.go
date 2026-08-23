@@ -8,8 +8,12 @@
 // (org.apache.pdfbox:pdfbox:3.0.7, driven by dss-pades-pdfbox's
 // PdfBoxDocumentReader / PdfBoxSignatureService) — so, exactly as PORTING.md
 // prescribes for BouncyCastle-replacement machinery, this package has no Java
-// class to mirror one-to-one and therefore lives under internal/. It imports the
-// standard library only and never imports a DSS package.
+// class to mirror one-to-one and therefore lives under internal/. It never
+// imports a DSS package. Beyond the standard library it imports exactly one
+// module, golang.org/x/text, and from one file: saslprep.go needs NFKC
+// normalisation and Unicode bidirectional classes to reproduce what pdfbox's
+// SaslPrep gets from java.text.Normalizer and Character.getDirectionality (see
+// DESIGN.md §2.6). Nothing else here reaches outside the standard library.
 //
 // Everything here is scoped by what dss-pades-pdfbox actually calls; see
 // internal/pdf/DESIGN.md §0.1 for the enumerated contract. It is deliberately not
@@ -38,7 +42,7 @@
 //	pades  (ported Java classes: PAdESUtils, PdfSigDictWrapper, SingleDssDict, ByteRange, …)
 //	  │  imports
 //	  ▼
-//	internal/pdf      ← this package. stdlib only.
+//	internal/pdf      ← this package. stdlib, plus golang.org/x/text in saslprep.go.
 //
 // This package knows nothing about CMS, certificates, OCSP or ETSI; it hands
 // []byte upward. In particular it parses /ByteRange into []int64 and stops there:
