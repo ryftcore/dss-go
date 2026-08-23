@@ -402,6 +402,18 @@ settle which cipher width is actually used; see the postcondition guard's commen
   differently; unassigned code points are treated as Java does (no directionality). Without this
   step a non-ASCII password on the commonest encryption in the wild (`/V 4 /R 4`) opened in Java
   DSS and was `ErrInvalidPassword` here.
+* **A `/R 5` password longer than 127 bytes is truncated for the key derivation too.** ISO 32000-2
+  Algorithm 2.A truncates the password to its first 127 bytes for both revisions and at both steps,
+  and so does `computeEncryptionKey`. pdfbox does not: `isUserPassword56`/`isOwnerPassword56`
+  truncate before hashing, but `computeEncryptedKeyRev56` then hands the **untruncated** password to
+  `computeSHA256` for `/R 5`, so a `/R 5` document written to the standard with such a password
+  passes pdfbox's acceptance check and then unwraps garbage from `/UE` or `/OE`. `/R 6` has no such
+  split — `computeHash2A` truncates internally — so this touches `/R 5` alone. **This is a deliberate
+  divergence**, and the only one here that *widens* what opens rather than narrowing it: the
+  affected document opens here and not in pdfbox. It is unreachable below 128 bytes of prepared
+  password, and no `testdata/password/` golden covers it (pdfbox writes `/R 6`, never `/R 5`, so a
+  golden would have to be hand-built). See `computeEncryptionKey`'s `// DIVERGENCE, deliberate:`
+  note in `crypt.go`.
 * **A crypt filter a `/V 4` or `/V 5` document selects and that this handler cannot identify** →
   `ErrUnsupportedSecurityHandler`. "Selects" means named by `/StmF` or `/StrF` and not `/Identity`.
   Each such name must resolve through `/CF` to a `/CFM` of `/V2`, `/AESV2` or `/AESV3`; both selected
