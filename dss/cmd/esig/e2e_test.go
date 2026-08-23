@@ -341,6 +341,145 @@ func TestPasswordMustBeEnvForm(t *testing.T) {
 	}
 }
 
+// TestSignProtectedPDF covers -pdf-pass end to end on an encrypted
+// (password-protected) PDF - upstream's protected/open_protected.pdf test
+// resource, whose user password is a single space: "sign" at B, "validate"
+// and "inspect" on the result, "extend" to T against testTSAServer, and
+// "validate" again. Every step needs the password; the same steps without it
+// must fail as a runtime error (the document cannot be opened), not as a
+// verdict. The signed and extended outputs stay encrypted, which is what
+// "validate" without the password failing on them demonstrates.
+func TestSignProtectedPDF(t *testing.T) {
+	dir := t.TempDir()
+	t.Setenv("ESIG_TEST_P12_PASSWORD", "testpassword")
+	t.Setenv("ESIG_TEST_PDF_PASSWORD", " ")
+	tsa := testTSAServer(t)
+
+	// Without the password the encrypted PDF cannot be opened for signing.
+	code, _, stderr := runOut(t, "sign", fixture("upstream/protected/open_protected.pdf"),
+		"-format", "pades", "-level", "B",
+		"-p12", fixture("signer_rsa.p12"), "-p12-pass", "env:ESIG_TEST_P12_PASSWORD",
+		"-out", filepath.Join(dir, "unused.pdf"))
+	if code != exitRuntime {
+		t.Errorf("sign without -pdf-pass: exit code = %d, want %d (exitRuntime); stderr:\n%s", code, exitRuntime, stderr)
+	}
+	if !strings.Contains(stderr, "password") {
+		t.Errorf("sign without -pdf-pass stderr = %q, want it to mention the password", stderr)
+	}
+
+	// -pdf-pass takes the env: form only, like -p12-pass.
+	code, _, stderr = runOut(t, "sign", fixture("upstream/protected/open_protected.pdf"),
+		"-format", "pades", "-level", "B",
+		"-p12", fixture("signer_rsa.p12"), "-p12-pass", "env:ESIG_TEST_P12_PASSWORD",
+		"-pdf-pass", " ", "-out", filepath.Join(dir, "unused.pdf"))
+	if code != exitRuntime {
+		t.Errorf("sign with literal -pdf-pass: exit code = %d, want %d (exitRuntime); stderr:\n%s", code, exitRuntime, stderr)
+	}
+	if !strings.Contains(stderr, "env:PDF_PASSWORD") {
+		t.Errorf("sign with literal -pdf-pass stderr = %q, want it to suggest the env:PDF_PASSWORD form", stderr)
+	}
+
+	bPath := filepath.Join(dir, "protected-b.pdf")
+	code, stdout, stderr := runOut(t, "sign", fixture("upstream/protected/open_protected.pdf"),
+		"-format", "pades", "-level", "B",
+		"-p12", fixture("signer_rsa.p12"), "-p12-pass", "env:ESIG_TEST_P12_PASSWORD",
+		"-pdf-pass", "env:ESIG_TEST_PDF_PASSWORD", "-out", bPath)
+	if code != exitOK {
+		t.Fatalf("sign -pdf-pass: exit code = %d, want %d; stderr:\n%s", code, exitOK, stderr)
+	}
+	if !strings.Contains(stdout, bPath) {
+		t.Errorf("sign stdout = %q, want it to name %q", stdout, bPath)
+	}
+
+	// The signed PDF is still encrypted: validating it without the password
+	// cannot even open it.
+	code, _, stderr = runOut(t, "validate", bPath, "-trust", fixture("signer_rsa.cer"))
+	if code != exitRuntime {
+		t.Errorf("validate without -pdf-pass: exit code = %d, want %d (exitRuntime); stderr:\n%s", code, exitRuntime, stderr)
+	}
+
+	code, stdout, stderr = runOut(t, "validate", bPath,
+		"-pdf-pass", "env:ESIG_TEST_PDF_PASSWORD", "-trust", fixture("signer_rsa.cer"))
+	if code != exitOK {
+		t.Fatalf("validate -pdf-pass: exit code = %d, want %d; stdout:\n%s\nstderr:\n%s", code, exitOK, stdout, stderr)
+	}
+	if !strings.Contains(stdout, "TOTAL_PASSED") || !strings.Contains(stdout, "PAdES-BASELINE-B") {
+		t.Errorf("validate -pdf-pass stdout = %q, want TOTAL_PASSED at PAdES-BASELINE-B", stdout)
+	}
+
+	code, stdout, stderr = runOut(t, "inspect", bPath, "-pdf-pass", "env:ESIG_TEST_PDF_PASSWORD")
+	if code != exitOK {
+		t.Fatalf("inspect -pdf-pass: exit code = %d, want %d; stderr:\n%s", code, exitOK, stderr)
+	}
+	if !strings.Contains(stdout, "PAdES-BASELINE-B") {
+		t.Errorf("inspect -pdf-pass stdout = %q, want it to name the signature format", stdout)
+	}
+
+	tPath := filepath.Join(dir, "protected-t.pdf")
+	code, _, stderr = runOut(t, "extend", bPath,
+		"-format", "pades", "-level", "T", "-tsa", tsa.URL,
+		"-out", tPath)
+	if code != exitRuntime {
+		t.Errorf("extend without -pdf-pass: exit code = %d, want %d (exitRuntime); stderr:\n%s", code, exitRuntime, stderr)
+	}
+	code, _, stderr = runOut(t, "extend", bPath,
+		"-format", "pades", "-level", "T", "-tsa", tsa.URL,
+		"-pdf-pass", "env:ESIG_TEST_PDF_PASSWORD", "-out", tPath)
+	if code != exitOK {
+		t.Fatalf("extend -pdf-pass: exit code = %d, want %d; stderr:\n%s", code, exitOK, stderr)
+	}
+
+	code, stdout, stderr = runOut(t, "validate", tPath,
+		"-pdf-pass", "env:ESIG_TEST_PDF_PASSWORD", "-trust", fixture("signer_rsa.cer"))
+	if code != exitOK {
+		t.Fatalf("validate extended -pdf-pass: exit code = %d, want %d; stdout:\n%s\nstderr:\n%s", code, exitOK, stdout, stderr)
+	}
+	if !strings.Contains(stdout, "TOTAL_PASSED") || !strings.Contains(stdout, "PAdES-BASELINE-T") {
+		t.Errorf("validate extended stdout = %q, want TOTAL_PASSED at PAdES-BASELINE-T", stdout)
+	}
+
+	// -pdf-pass on a document that is not a PDF is a runtime error from the
+	// facade, since "validate" detects the format itself and only a PDF can
+	// take a password.
+	xmlPath := filepath.Join(dir, "not-a-pdf.xml")
+	if err := os.WriteFile(xmlPath, []byte("<invoice><total>42</total></invoice>"), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	code, _, stderr = runOut(t, "validate", xmlPath, "-pdf-pass", "env:ESIG_TEST_PDF_PASSWORD")
+	if code != exitRuntime {
+		t.Errorf("validate -pdf-pass on XML: exit code = %d, want %d (exitRuntime); stderr:\n%s", code, exitRuntime, stderr)
+	}
+}
+
+// TestSignProtectedPDFNonASCIIPassword signs and validates an AES-128
+// (/V 4 /R 4) PDF that pdfbox itself protected with the user password "café"
+// (internal/pdf/testdata/password, see its README): the password reaches the
+// CLI as UTF-8 text from the environment and has to be hashed the way pdfbox
+// hashes it - ISO-8859-1 for that revision - for the document to open at all.
+func TestSignProtectedPDFNonASCIIPassword(t *testing.T) {
+	dir := t.TempDir()
+	t.Setenv("ESIG_TEST_P12_PASSWORD", "testpassword")
+	t.Setenv("ESIG_TEST_PDF_PASSWORD", "café")
+	protected := filepath.Join("..", "..", "internal", "pdf", "testdata", "password", "aes128_r4_latin1.pdf")
+
+	signedPath := filepath.Join(dir, "latin1-b.pdf")
+	code, _, stderr := runOut(t, "sign", protected,
+		"-format", "pades", "-level", "B",
+		"-p12", fixture("signer_rsa.p12"), "-p12-pass", "env:ESIG_TEST_P12_PASSWORD",
+		"-pdf-pass", "env:ESIG_TEST_PDF_PASSWORD", "-out", signedPath)
+	if code != exitOK {
+		t.Fatalf("sign -pdf-pass (non-ASCII): exit code = %d, want %d; stderr:\n%s", code, exitOK, stderr)
+	}
+	code, stdout, stderr := runOut(t, "validate", signedPath,
+		"-pdf-pass", "env:ESIG_TEST_PDF_PASSWORD", "-trust", fixture("signer_rsa.cer"))
+	if code != exitOK {
+		t.Fatalf("validate -pdf-pass (non-ASCII): exit code = %d, want %d; stdout:\n%s\nstderr:\n%s", code, exitOK, stdout, stderr)
+	}
+	if !strings.Contains(stdout, "TOTAL_PASSED") {
+		t.Errorf("validate stdout = %q, want TOTAL_PASSED", stdout)
+	}
+}
+
 // TestTLCacheRoundTrip covers the cache format "tl refresh -cache" writes
 // and "validate -tl-cache" reads, without a network fetch: it writes the
 // module's own test certificate through writeTLCache and reads it back

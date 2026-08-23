@@ -28,18 +28,21 @@ is not needed: extension only adds time-stamps and validation data.
     	for -format asice/asics only: the signature format the container carries, cades or xades (default xades)
   -detached string
     	original document a detached signature covers; repeatable
+  -pdf-pass string
+    	for -format pades only: the password of an already encrypted (password-protected) PDF, as env:VARNAME - the env var name, never the password itself; the extended PDF stays protected by the same password (ignored for a PDF that is not encrypted)
   -out string
     	output file; defaults to the extended document's own computed name, written to the current directory
 `)
 	}
 
-	var format, level, tsaURL, asicFormat, out string
+	var format, level, tsaURL, asicFormat, pdfPass, out string
 	var detached stringList
 	fs.StringVar(&format, "format", "", "")
 	fs.StringVar(&level, "level", "", "")
 	fs.StringVar(&tsaURL, "tsa", "", "")
 	fs.StringVar(&asicFormat, "asic-format", "", "")
 	fs.Var(&detached, "detached", "")
+	fs.StringVar(&pdfPass, "pdf-pass", "", "")
 	fs.StringVar(&out, "out", "", "")
 	leading, hadLeading, rest := splitPositional(args)
 	if err := fs.Parse(rest); err != nil {
@@ -79,6 +82,17 @@ is not needed: extension only adds time-stamps and validation data.
 		fs.Usage()
 		return exitUsage
 	}
+	if pdfPass != "" && targetFormat != dss.FormatPAdES {
+		fmt.Fprintf(stderr, "esig extend: -pdf-pass applies to -format pades only\n\n")
+		fs.Usage()
+		return exitUsage
+	}
+
+	pdfPassword, err := resolveOptionalPassword(pdfPass)
+	if err != nil {
+		fmt.Fprintf(stderr, "esig extend: -pdf-pass: %v\n", err)
+		return exitRuntime
+	}
 
 	doc, err := dss.OpenDocument(file)
 	if err != nil {
@@ -95,10 +109,11 @@ is not needed: extension only adds time-stamps and validation data.
 	}
 
 	extended, err := dss.Extend(doc, dss.ExtendOptions{
-		Format:           targetFormat,
-		Level:            lvl,
-		TSPSource:        newHTTPTSPSource(tsaURL),
-		DetachedContents: detachedDocs,
+		Format:             targetFormat,
+		Level:              lvl,
+		TSPSource:          newHTTPTSPSource(tsaURL),
+		DetachedContents:   detachedDocs,
+		PasswordProtection: pdfPassword,
 	})
 	if err != nil {
 		fmt.Fprintf(stderr, "esig extend: %v\n", err)

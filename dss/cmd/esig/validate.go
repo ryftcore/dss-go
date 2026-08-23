@@ -23,6 +23,8 @@ prints a summary, or renders one of the DSS reports.
 
   -detached string
     	original document a detached signature covers; repeatable
+  -pdf-pass string
+    	password of an encrypted (password-protected) PDF, as env:VARNAME - the env var name, never the password itself
   -policy string
     	custom validation policy XML; defaults to the bundled ETSI policy
   -trust string
@@ -41,9 +43,10 @@ usage error, 3 if validation could not run at all.
 `)
 	}
 
-	var policy, tlCache, at, format, out string
+	var pdfPass, policy, tlCache, at, format, out string
 	var detached, trust stringList
 	fs.Var(&detached, "detached", "")
+	fs.StringVar(&pdfPass, "pdf-pass", "", "")
 	fs.StringVar(&policy, "policy", "", "")
 	fs.Var(&trust, "trust", "")
 	fs.StringVar(&tlCache, "tl-cache", "", "")
@@ -71,6 +74,12 @@ usage error, 3 if validation could not run at all.
 		}
 		opts.DetachedContents = docs
 	}
+	pdfPassword, err := resolveOptionalPassword(pdfPass)
+	if err != nil {
+		fmt.Fprintf(stderr, "esig validate: -pdf-pass: %v\n", err)
+		return exitRuntime
+	}
+	opts.PasswordProtection = pdfPassword
 	if policy != "" {
 		doc, err := dss.OpenDocument(policy)
 		if err != nil {

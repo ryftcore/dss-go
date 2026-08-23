@@ -89,6 +89,28 @@ conventions applied throughout.
   became unexported methods. Generic methods declared on Java
   *interfaces* still erase to the constraint's base type: Go forbids type
   parameters on interface methods. See `dss/PORTING.md`.
+- **Password-protected (encrypted) PDFs through the facade and the CLI.**
+  `dss.SignOptions`, `dss.ExtendOptions` and `dss.ValidateOptions` gained a
+  `PasswordProtection` field — the facade's name for upstream's
+  `PAdESSignatureParameters.setPasswordProtection` /
+  `PDFDocumentValidator.setPasswordProtection` — so an encrypted PDF can
+  be signed, extended and validated without dropping to the `pades`
+  package; the signed document stays encrypted under the same password,
+  as upstream's does. Setting it for anything but a PDF returns the new
+  `dss.ErrPasswordProtectionNotApplicable`. The `esig` CLI exposes it as
+  `-pdf-pass env:VARNAME` on `sign`, `extend`, `validate` and `inspect`,
+  with the same env-var-only rule as `-p12-pass`. Encrypting a PDF that
+  is not yet encrypted is, as upstream, not something the library does.
+  Making the password a public contract also fixed how the native PDF
+  engine hashes it: `internal/pdf` now treats the password as UTF-8 text
+  and reproduces pdfbox's charset step (ISO-8859-1 for `/R 2-4`, UTF-8
+  for `/R 5`, SASLprep then UTF-8 for `/R 6` — `SaslPrep` is ported
+  table for table), where it previously hashed the raw bytes, so a
+  non-ASCII password such as `café` on an RC4 or AES-128 document that
+  Java DSS opens was refused as invalid. A password SASLprep prohibits
+  is the new `pdf.ErrProhibitedPassword`, distinct from
+  `ErrInvalidPassword` as upstream's exception is. Pinned by
+  pdfbox-generated goldens under `internal/pdf/testdata/password/`.
 
 ### Changed
 

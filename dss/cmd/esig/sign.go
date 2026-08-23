@@ -35,12 +35,14 @@ Signs <file>, producing a new signed document.
     	shorthand for -packaging detached
   -asic-format string
     	for -format asice/asics only: the signature format the container carries, cades or xades (default xades)
+  -pdf-pass string
+    	for -format pades only: the password of an already encrypted (password-protected) PDF, as env:VARNAME - the env var name, never the password itself; the signed PDF stays protected by the same password (ignored for a PDF that is not encrypted: esig never encrypts a PDF)
   -out string
     	output file; defaults to the signed document's own computed name, written to the current directory
 `)
 	}
 
-	var format, level, p12, p12Pass, tsaURL, digest, packaging, asicFormat, out string
+	var format, level, p12, p12Pass, tsaURL, digest, packaging, asicFormat, pdfPass, out string
 	var detached bool
 	fs.StringVar(&format, "format", "", "")
 	fs.StringVar(&level, "level", "", "")
@@ -51,6 +53,7 @@ Signs <file>, producing a new signed document.
 	fs.StringVar(&packaging, "packaging", "", "")
 	fs.BoolVar(&detached, "detached", false, "")
 	fs.StringVar(&asicFormat, "asic-format", "", "")
+	fs.StringVar(&pdfPass, "pdf-pass", "", "")
 	fs.StringVar(&out, "out", "", "")
 	leading, hadLeading, rest := splitPositional(args)
 	if err := fs.Parse(rest); err != nil {
@@ -109,10 +112,20 @@ Signs <file>, producing a new signed document.
 		fs.Usage()
 		return exitUsage
 	}
+	if pdfPass != "" && sf.format != dss.FormatPAdES {
+		fmt.Fprintf(stderr, "esig sign: -pdf-pass applies to -format pades only\n\n")
+		fs.Usage()
+		return exitUsage
+	}
 
-	password, err := resolvePassword(p12Pass)
+	password, err := resolvePassword(p12Pass, "P12_PASSWORD")
 	if err != nil {
 		fmt.Fprintf(stderr, "esig sign: -p12-pass: %v\n", err)
+		return exitRuntime
+	}
+	pdfPassword, err := resolveOptionalPassword(pdfPass)
+	if err != nil {
+		fmt.Fprintf(stderr, "esig sign: -pdf-pass: %v\n", err)
 		return exitRuntime
 	}
 
@@ -130,11 +143,12 @@ Signs <file>, producing a new signed document.
 	}
 
 	opts := dss.SignOptions{
-		Format:          sf.format,
-		Level:           lvl,
-		DigestAlgorithm: digestAlgorithm,
-		Packaging:       pkg,
-		ContainerType:   sf.container,
+		Format:             sf.format,
+		Level:              lvl,
+		DigestAlgorithm:    digestAlgorithm,
+		Packaging:          pkg,
+		ContainerType:      sf.container,
+		PasswordProtection: pdfPassword,
 	}
 	if lvl.NeedsTimestamp() {
 		opts.TSPSource = newHTTPTSPSource(tsaURL)

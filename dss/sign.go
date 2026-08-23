@@ -71,6 +71,28 @@ type SignOptions struct {
 	// a [spivalidation.NewCommonCertificateVerifierSimple] with no network
 	// access, which is enough for [LevelB] and [LevelT].
 	CertificateVerifier CertificateVerifier
+
+	// PasswordProtection is the password that opens an encrypted
+	// (password-protected) PDF, so that it can be signed: the signature is
+	// appended as an incremental update encrypted under the document's own
+	// security handler, and the result stays protected by the same password.
+	// The owner password bypasses the document's permission (/P) check; the
+	// user password opens the document, but signing then also needs /P to
+	// allow creating or filling a signature field - otherwise it is refused,
+	// as upstream's PdfPermissionsChecker refuses it. The password is UTF-8
+	// text, the characters of upstream's char[], and is hashed the way
+	// pdfbox hashes it for the document's encryption revision (ISO-8859-1
+	// for RC4 and AES-128 documents, UTF-8 for AES-256, after SASLprep for
+	// the current /R 6 revision), so a document that opens with a given
+	// password in Java DSS opens with the same one here. Applies to
+	// [FormatPAdES] only - every other format
+	// returns [ErrPasswordProtectionNotApplicable] when it is set. Leave it
+	// empty for a PDF that is not encrypted; one given for such a PDF is
+	// ignored, as pdfbox ignores it. This is the facade's name for
+	// PAdESSignatureParameters.setPasswordProtection; encrypting a PDF that
+	// is not yet encrypted is not something the library does, upstream or
+	// here.
+	PasswordProtection []byte
 }
 
 // digestAlgorithm returns the configured digest or the facade default.
@@ -128,6 +150,9 @@ func (o SignOptions) validate() error {
 	}
 	if o.Level.NeedsTimestamp() && o.TSPSource == nil {
 		return fmt.Errorf("%w (level %s requested)", ErrTSPSourceRequired, o.Level)
+	}
+	if len(o.PasswordProtection) > 0 && o.Format != FormatPAdES {
+		return fmt.Errorf("%w (format %s)", ErrPasswordProtectionNotApplicable, o.Format)
 	}
 	return nil
 }
@@ -189,6 +214,7 @@ func SignMultiple(docs []Document, signer *Signer, opts SignOptions) (Document, 
 		case FormatPAdES:
 			parameters := pades.NewSignatureParameters()
 			applyCommonParameters(parameters, opts, level, signer)
+			parameters.SetPasswordProtection(opts.PasswordProtection)
 			service := pades.NewService(opts.certificateVerifier())
 			applyTSPSource(service, opts)
 			signed, runErr = signOne(service, parameters, docs[0], signer, opts.digestAlgorithm())
@@ -254,6 +280,12 @@ type ExtendOptions struct {
 	// DetachedContents supplies the documents a detached signature covers,
 	// without which its validation data cannot be collected.
 	DetachedContents []Document
+
+	// PasswordProtection is the password that opens an encrypted
+	// (password-protected) PDF whose signatures are being extended. It
+	// carries the same meaning as [SignOptions.PasswordProtection]: PAdES
+	// only, [ErrPasswordProtectionNotApplicable] for every other format.
+	PasswordProtection []byte
 }
 
 // certificateVerifier returns the configured verifier or an offline default.
@@ -279,6 +311,9 @@ func Extend(doc Document, opts ExtendOptions) (Document, error) {
 	if opts.TSPSource == nil {
 		return nil, fmt.Errorf("%w (level %s requested)", ErrTSPSourceRequired, opts.Level)
 	}
+	if len(opts.PasswordProtection) > 0 && opts.Format != FormatPAdES {
+		return nil, fmt.Errorf("%w (format %s)", ErrPasswordProtectionNotApplicable, opts.Format)
+	}
 
 	var extended Document
 	err = recovered("extend", func() error {
@@ -300,6 +335,7 @@ func Extend(doc Document, opts ExtendOptions) (Document, error) {
 		case FormatPAdES:
 			parameters := pades.NewSignatureParameters()
 			applyExtendParameters(parameters, opts, level)
+			parameters.SetPasswordProtection(opts.PasswordProtection)
 			service := pades.NewService(opts.certificateVerifier())
 			service.SetTspSource(opts.TSPSource)
 			extended = service.ExtendDocument(doc, parameters)

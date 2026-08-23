@@ -20,7 +20,13 @@ import (
 // Options configures Open. The zero value is valid: every limit falls back to
 // its default.
 type Options struct {
-	// Password is tried as the user password, then as the owner password.
+	// Password is the document's password as UTF-8 text - the Go shape of the
+	// Java String pdfbox receives - tried as the owner password, then as the
+	// user password. It is hashed the way pdfbox hashes it: encoded as
+	// ISO-8859-1 for /R 2-4 (a code point above U+00FF becomes '?'), and as
+	// UTF-8 after SASLprep for /R 6 (crypt.go's passwordBytes), so the
+	// document opens with the same text it opens with in pdfbox. nil and
+	// empty are the same password, the empty one pdfbox tries by default.
 	Password []byte
 	// Random supplies AES initialisation vectors on write. nil means crypto/rand.
 	Random io.Reader

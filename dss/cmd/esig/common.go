@@ -25,23 +25,40 @@ func (l *stringList) Set(v string) error {
 	return nil
 }
 
-// resolvePassword resolves a -p12-pass value. Only the "env:VAR" form is
-// accepted - never a literal password - so a keystore password given on the
-// command line does not end up in the shell history or in the process list
-// any longer than it takes to read the environment variable.
-func resolvePassword(spec string) (string, error) {
+// resolvePassword resolves a password flag's value (-p12-pass, -pdf-pass).
+// Only the "env:VAR" form is accepted - never a literal password - so a
+// password given on the command line does not end up in the shell history
+// or in the process list any longer than it takes to read the environment
+// variable. example is the variable name the error messages suggest for
+// the flag at hand.
+func resolvePassword(spec, example string) (string, error) {
 	name, ok := strings.CutPrefix(spec, "env:")
 	if !ok {
-		return "", fmt.Errorf("password must be given as env:VARNAME (e.g. env:P12_PASSWORD), got %q", spec)
+		return "", fmt.Errorf("password must be given as env:VARNAME (e.g. env:%s), got %q", example, spec)
 	}
 	if name == "" {
-		return "", fmt.Errorf("env: form needs a variable name, e.g. env:P12_PASSWORD")
+		return "", fmt.Errorf("env: form needs a variable name, e.g. env:%s", example)
 	}
 	value, ok := os.LookupEnv(name)
 	if !ok {
 		return "", fmt.Errorf("environment variable %s is not set", name)
 	}
 	return value, nil
+}
+
+// resolveOptionalPassword is [resolvePassword] for a flag that need not be
+// given at all (-pdf-pass, which only an encrypted PDF needs): an empty spec
+// means "no password" and resolves to nil, which is what the facade's
+// PasswordProtection fields take for a document that is not encrypted.
+func resolveOptionalPassword(spec string) ([]byte, error) {
+	if spec == "" {
+		return nil, nil
+	}
+	value, err := resolvePassword(spec, "PDF_PASSWORD")
+	if err != nil {
+		return nil, err
+	}
+	return []byte(value), nil
 }
 
 // parseDigestAlgorithm maps the CLI's lower-case digest names onto the
