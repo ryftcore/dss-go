@@ -328,16 +328,36 @@ func TestASiCContainer(t *testing.T) {
 }
 
 // TestPasswordMustBeEnvForm pins that a literal password is refused: only
-// env:VARNAME is accepted (see resolvePassword's doc comment for why).
+// env:VARNAME is accepted (see resolvePassword's doc comment for why). It
+// also pins that the refusal does not echo the literal back - the value is a
+// real password precisely when this path fires, and stderr is logged.
 func TestPasswordMustBeEnvForm(t *testing.T) {
-	code, _, stderr := runOut(t, "sign", fixture("sample.pdf"),
-		"-format", "pades", "-level", "B",
-		"-p12", fixture("signer_rsa.p12"), "-p12-pass", "testpassword")
-	if code != exitRuntime {
-		t.Errorf("exit code = %d, want %d (exitRuntime)", code, exitRuntime)
+	// The literal is deliberately not the keystore's own password, so that
+	// finding it in stderr can only mean the flag value was echoed.
+	const literal = "s3cret-literal-not-env"
+	t.Setenv("ESIG_TEST_P12_PASSWORD", "testpassword")
+	common := []string{"sign", fixture("sample.pdf"), "-format", "pades", "-level", "B",
+		"-p12", fixture("signer_rsa.p12")}
+
+	cases := map[string][]string{
+		// -p12-pass is resolved first, so it fails before -pdf-pass is read.
+		"-p12-pass": append(append([]string{}, common...), "-p12-pass", literal),
+		"-pdf-pass": append(append([]string{}, common...),
+			"-p12-pass", "env:ESIG_TEST_P12_PASSWORD", "-pdf-pass", literal),
 	}
-	if !strings.Contains(stderr, "env:") {
-		t.Errorf("stderr = %q, want it to mention the env: form", stderr)
+	for flag, args := range cases {
+		t.Run(flag, func(t *testing.T) {
+			code, _, stderr := runOut(t, args...)
+			if code != exitRuntime {
+				t.Errorf("exit code = %d, want %d (exitRuntime); stderr:\n%s", code, exitRuntime, stderr)
+			}
+			if !strings.Contains(stderr, "env:") {
+				t.Errorf("stderr = %q, want it to mention the env: form", stderr)
+			}
+			if strings.Contains(stderr, literal) {
+				t.Errorf("stderr = %q, want it NOT to echo the password back", stderr)
+			}
+		})
 	}
 }
 

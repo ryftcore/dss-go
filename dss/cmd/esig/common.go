@@ -31,10 +31,16 @@ func (l *stringList) Set(v string) error {
 // or in the process list any longer than it takes to read the environment
 // variable. example is the variable name the error messages suggest for
 // the flag at hand.
+//
+// The rejection message never quotes spec back. Typing the password where
+// env:VARNAME belongs is the very mistake this form exists to catch, so spec
+// is a secret exactly when the error fires, and every caller prints the error
+// to stderr - which a CI log or a scrollback keeps at least as durably as the
+// shell history and the process list this flag is guarding against.
 func resolvePassword(spec, example string) (string, error) {
 	name, ok := strings.CutPrefix(spec, "env:")
 	if !ok {
-		return "", fmt.Errorf("password must be given as env:VARNAME (e.g. env:%s), got %q", example, spec)
+		return "", fmt.Errorf("password must be given as env:VARNAME (e.g. env:%s), not the password itself", example)
 	}
 	if name == "" {
 		return "", fmt.Errorf("env: form needs a variable name, e.g. env:%s", example)
