@@ -1,5 +1,10 @@
 name: Release
 
+# Release tags come in pairs on the same commit (see RELEASING.md):
+#   vX.Y.Z      -> this workflow: GitHub release + esig binaries
+#   dss/vX.Y.Z  -> the Go module version. The module lives in dss/, so
+#                  `go get github.com/ryftcore/dss-go/dss@vX.Y.Z` resolves
+#                  only the prefixed tag; a bare vX.Y.Z is invisible to Go.
 on:
   push:
     tags:
@@ -21,10 +26,26 @@ jobs:
           go-version-file: dss/go.mod
           cache-dependency-path: dss/go.sum
 
+      - name: Require the matching dss/ module tag
+        run: |
+          tag="${GITHUB_REF_NAME}"
+          want="$(git rev-parse "${tag}^{commit}")"
+          if ! got="$(git rev-parse -q --verify "refs/tags/dss/${tag}^{commit}")"; then
+            echo "::error::tag dss/${tag} is missing; push it on the same commit so the Go module version exists (see RELEASING.md)"
+            exit 1
+          fi
+          if [ "$got" != "$want" ]; then
+            echo "::error::dss/${tag} points at ${got}, ${tag} at ${want}; they must tag the same commit"
+            exit 1
+          fi
+
       - uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94 # v7.2.3
         with:
           distribution: goreleaser
-          version: latest
+          version: "~> v2"
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Both vX.Y.Z and dss/vX.Y.Z sit on this commit; pin the one
+          # GoReleaser can parse as semver instead of letting it pick.
+          GORELEASER_CURRENT_TAG: ${{ github.ref_name }}

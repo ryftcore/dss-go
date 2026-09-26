@@ -3,13 +3,16 @@
 All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project intends to adopt [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
-once tagged releases begin (see `SECURITY.md`'s supported-versions note —
-there is no tagged release yet).
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+While the major version is 0, a minor release may contain source-incompatible
+API changes; each one is listed under **Changed**. Release procedure:
+`RELEASING.md`.
 
 ## [Unreleased]
 
-Initial public port of [esig/dss](https://github.com/esig/dss) (upstream
+## [0.1.0] - 2026-09-26
+
+First tagged release. Initial public port of [esig/dss](https://github.com/esig/dss) (upstream
 baseline: version 6.5.RC1, commit
 `4c2129862948bfd53ca1455832260aa17e183cf8`) to Go, module
 `github.com/ryftcore/dss-go/dss`. See `UPSTREAM.md` for the baseline pin,
@@ -370,4 +373,5 @@ on the documentation site's "Known gaps" page: upstream's REST/SOAP
 remote services and clients, `dss-cookbook`, coverage/BOM modules, and
 evidence-record modules.
 
-[Unreleased]: https://github.com/ryftcore/dss-go/compare/main...HEAD
+[Unreleased]: https://github.com/ryftcore/dss-go/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/ryftcore/dss-go/releases/tag/v0.1.0

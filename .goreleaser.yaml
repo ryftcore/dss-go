@@ -25,8 +25,10 @@ builds:
     goarch:
       - amd64
       - arm64
+    flags:
+      - -trimpath
     ldflags:
-      - -s -w
+      - -s -w -X main.version={{ .Tag }}
 
 archives:
   - id: esig
@@ -37,6 +39,16 @@ archives:
         formats: [zip]
     name_template: >-
       {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}
+    # LGPL-2.1: ship the licence and the upstream attribution with every
+    # binary archive.
+    files:
+      - LICENSE
+      - NOTICE
+      - README.md
+      - CHANGELOG.md
+
+checksum:
+  name_template: "checksums.txt"
 
 # CHANGELOG.md is maintained by hand (Keep a Changelog style); do not let
 # GoReleaser generate a second, competing one from commit messages.

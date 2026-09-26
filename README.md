@@ -26,8 +26,9 @@ direction, at which levels.
 - **A library, a facade and a CLI.** ~314,000 lines of Go across 2,274 source
   files, behind a small top-level API — plus an `esig` command for the shell.
 
-> **Status.** This project has not been released, tagged or independently
-> security-audited, and it has no production track record. Read
+> **Status.** Pre-1.0 (`v0.x`): the API may still change between minor
+> releases. This project has not been independently security-audited, and it
+> has no production track record. Read
 > [What is not here](#what-is-not-here) before you depend on it, and read
 > [SECURITY.md](SECURITY.md) before you report a problem with it.
 
@@ -37,14 +38,15 @@ direction, at which levels.
 go get github.com/ryftcore/dss-go/dss
 ```
 
-Go 1.27 or newer. The CLI, once a version is tagged:
+Go 1.27 or newer. The CLI:
 
 ```sh
 go install github.com/ryftcore/dss-go/dss/cmd/esig@latest
 ```
 
-Until then, build it from a checkout — `cd dss && make cli-build` puts it in
-`dss/bin/`.
+or download a prebuilt binary from the
+[releases page](https://github.com/ryftcore/dss-go/releases), or build it from a
+checkout — `cd dss && make cli-build` puts it in `dss/bin/`.
 
 ## Quick start
 
