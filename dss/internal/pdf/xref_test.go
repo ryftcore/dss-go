@@ -2,6 +2,7 @@ package pdf
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"strings"
 	"testing"
@@ -344,5 +345,31 @@ func TestSectionCapIsBounded(t *testing.T) {
 	d := mustOpen(t, data)
 	if len(d.XRefSections()) > 2 {
 		t.Errorf("cycle guard failed: %d sections", len(d.XRefSections()))
+	}
+}
+
+// An xref stream's /DecodeParms is decoded at Open, before anything else: a
+// /Columns of 2^45 made the predictor allocate a 2^42-byte row and the process
+// died with "out of memory". It is now a hard ErrLimitExceeded.
+func TestXRefStreamHostilePredictorFailsOpen(t *testing.T) {
+	data := buildXRefStreamPDF(t, "/DecodeParms << /Predictor 12 /Columns 35184372088832 >> ")
+	_, err := OpenBytes(data, nil)
+	if !errors.Is(err, ErrLimitExceeded) {
+		t.Fatalf("err = %v, want ErrLimitExceeded", err)
+	}
+}
+
+// Rows decoded from an xref stream are bounded by MaxObjects before they are
+// allocated, not after mergeSections has built a map of them.
+func TestXRefStreamEntriesBoundedByMaxObjects(t *testing.T) {
+	d := &Document{opts: Options{MaxObjects: 10}.withDefaults()}
+	raw := bytes.Repeat([]byte{1, 9}, 100) // /W [1 1 0]: 100 in-use entries
+	dict := DictOf(Name("W"), Array{Integer(1), Integer(1), Integer(0)},
+		Name("Size"), Integer(100))
+	if _, err := d.decodeXRefStream(dict, raw); !errors.Is(err, ErrLimitExceeded) {
+		t.Fatalf("err = %v, want ErrLimitExceeded", err)
+	}
+	if !errors.Is(d.limitErr, ErrLimitExceeded) {
+		t.Error("the guard must be recorded so Open fails instead of repairing around it")
 	}
 }

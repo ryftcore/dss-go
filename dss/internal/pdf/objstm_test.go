@@ -172,3 +172,17 @@ func TestObjectStreamBadFirst(t *testing.T) {
 		t.Error("a /First past the end of the stream must be rejected")
 	}
 }
+
+// /N sized the header slices before anything was parsed: /N 2^50 panicked with
+// "makeslice: cap out of range" (and 2^35 or so exhausted memory instead).
+func TestObjStmHugeNDoesNotPanic(t *testing.T) {
+	var warn []Warning
+	dict := DictOf(Name("N"), Integer(1<<50), Name("First"), Integer(4))
+	nums, offs, err := parseObjStmHeader([]byte("7 0 null"), dict, &warn, ObjectKey{Num: 5})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(nums) != 1 || nums[0] != 7 || offs[0] != 4 {
+		t.Errorf("nums = %v, offs = %v", nums, offs)
+	}
+}

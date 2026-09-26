@@ -9,6 +9,7 @@ package pdf
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"math"
 	"sort"
@@ -84,6 +85,9 @@ func (d *Document) buildXRef() error {
 	if ok {
 		d.startxref = off
 		sections = d.walkChain(off)
+		if d.limitErr != nil {
+			return d.limitErr
+		}
 	} else {
 		// T3: a missing or unparseable startxref triggers full reconstruction.
 		d.addWarning(WarnXRefBruteForce, -1, "no usable startxref; rebuilding by brute force")
@@ -347,8 +351,9 @@ func (d *Document) parseXrefStreamAt(p *parser, off int64, recovered bool) (*raw
 	}}
 	// A cross-reference stream is never encrypted, so decoding needs no key.
 	names, parms := streamFilters(st.Dict, nil)
-	data, err := Decode(st.Raw, names, parms, &d.warnings)
+	data, err := decodeLimited(st.Raw, names, parms, &d.warnings, d.opts.MaxStreamSize)
 	if err != nil {
+		d.noteLimit(err)
 		return nil, err
 	}
 	entries, err := d.decodeXRefStream(st.Dict, data)
@@ -393,6 +398,12 @@ func (d *Document) decodeXRefStream(dict *Dict, data []byte) ([]keyedEntry, erro
 
 	var out []keyedEntry
 	pos := 0
+	// One entry per /W-wide row, so the decoded stream bounds the count; but a
+	// few kilobytes of Flate can decode to a hundred million rows, and every
+	// in-use row costs a keyedEntry here and a map slot in mergeSections. More
+	// in-use entries than MaxObjects fails the same guard OpenBytes applies after
+	// merging, only before the allocation instead of after it.
+	maxEntries := d.opts.MaxObjects
 	read := func(off, n int) int64 {
 		var v int64
 		for i := 0; i < n; i++ {
@@ -415,6 +426,11 @@ func (d *Document) decodeXRefStream(dict *Dict, data []byte) ([]keyedEntry, erro
 			second := read(w[0], w[1])
 			third := read(w[0]+w[1], w[2])
 			pos += total
+			if (typ == 1 || typ == 2) && maxEntries > 0 && len(out) >= maxEntries {
+				err := fmt.Errorf("%w: xref stream has more than %d entries (MaxObjects)", ErrLimitExceeded, maxEntries)
+				d.noteLimit(err)
+				return nil, err
+			}
 			switch typ {
 			case 0:
 				// free: skipped, exactly as PDFXrefStreamParser does
@@ -483,6 +499,16 @@ func (d *Document) putXRef(ke keyedEntry) {
 
 // noteObjectNumber tracks the highest object number seen anywhere, including free
 // entries — R16 needs the maximum over all sections, not just the live entries.
+// noteLimit records the first resource-guard failure met while bootstrapping
+// the xref. The chain walk treats a failed section as a bad offset and repairs
+// around it; a guard must instead fail the whole Open (DESIGN.md §2.7: exceeding
+// a guard is a hard error, never a silent truncation).
+func (d *Document) noteLimit(err error) {
+	if d.limitErr == nil && errors.Is(err, ErrLimitExceeded) {
+		d.limitErr = err
+	}
+}
+
 func (d *Document) noteObjectNumber(num int64) {
 	if num > d.highestObjNum {
 		d.highestObjNum = num

@@ -2,6 +2,7 @@ package pdf
 
 import (
 	"math"
+	"strings"
 	"testing"
 )
 
@@ -261,5 +262,28 @@ func TestDecodeHexDigits(t *testing.T) {
 	}
 	if got := decodeHexDigits([]byte("F")); len(got) != 1 || got[0] != 0xF0 {
 		t.Errorf("odd = %x", got)
+	}
+}
+
+// The lenient-real fallback used to try every prefix of the literal, each with
+// a linear ParseFloat: "1e999…9-" (every prefix out of range) was quadratic,
+// about 5 s for 40 KB. This input would take minutes under the old loop.
+func TestLenientRealIsNotQuadratic(t *testing.T) {
+	lit := "1e" + strings.Repeat("9", 200000) + "-"
+	l := newLexer([]byte(lit+" "), nil)
+	tok := l.next()
+	if tok.kind != tokReal || tok.end != int64(len(lit)) {
+		t.Fatalf("token = %+v", tok.kind)
+	}
+	for _, tc := range []struct {
+		in   string
+		want float64
+	}{
+		{"4.5.6", 4.5}, {"1.-2", 1}, {"-3.5e2.1", -350}, {"1e40e", 10000}, {".5.5", 0.5},
+	} {
+		got, _, _ := parseLenientReal(tc.in)
+		if got != tc.want {
+			t.Errorf("parseLenientReal(%q) = %v, want %v", tc.in, got, tc.want)
+		}
 	}
 }
