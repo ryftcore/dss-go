@@ -99,6 +99,11 @@ func parseDSADomainParameters(der []byte) (p, q, g *big.Int, err error) {
 		if !child.IsUniversal(asn1ber.TagInteger) {
 			return nil, nil, nil, fmt.Errorf("pfx: Dss-Parms component %d is not an INTEGER", i)
 		}
+		// A zero modulus would turn the Y = G^X mod P computation into an unbounded
+		// exponentiation (big.Int#Exp with m == 0 computes G^X in full).
+		if child.Integer().Sign() <= 0 {
+			return nil, nil, nil, fmt.Errorf("pfx: Dss-Parms component %d is not positive", i)
+		}
 	}
 	return children[0].Integer(), children[1].Integer(), children[2].Integer(), nil
 }

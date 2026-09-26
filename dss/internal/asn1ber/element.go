@@ -341,9 +341,29 @@ func (e *Element) berEncoded(root bool) []byte {
 	return WriteIndefiniteTLV(e.identifierOctets(true), body)
 }
 
+// MaxNestingDepth bounds how deeply Parse lets constructed elements nest.
+//
+// BouncyCastle's ASN1InputStream sets no explicit limit - the JVM thread stack does, raising
+// a StackOverflowError after a few thousand levels. Without a bound the Go parser would
+// recurse until the runtime aborts the whole process ("goroutine stack exceeds limit", not
+// recoverable) on a hostile input of a few tens of megabytes, and every re-encoding
+// (DEREncoded, DLEncoded, BEREncoded) costs O(depth x size), so a few hundred kilobytes of
+// nested "30 80" already take minutes. Genuine CMS, X.509, CRL, OCSP and PKCS#12 structures
+// nest a few dozen levels at most, nested timestamps and counter-signatures included.
+const MaxNestingDepth = 512
+
 // Parse reads one ASN.1 element from the front of the input, supporting both the definite and
-// the indefinite length forms, and returns it together with the remaining bytes.
+// the indefinite length forms, and returns it together with the remaining bytes. An input
+// whose constructed elements nest deeper than MaxNestingDepth is rejected.
 func Parse(input []byte) (*Element, []byte, error) {
+	return parse(input, 0)
+}
+
+// parse is Parse at the given nesting depth.
+func parse(input []byte, depth int) (*Element, []byte, error) {
+	if depth > MaxNestingDepth {
+		return nil, nil, errors.New("ASN.1 elements nested too deeply")
+	}
 	if len(input) < 2 {
 		return nil, nil, errors.New("truncated ASN.1 element")
 	}
@@ -362,8 +382,10 @@ func Parse(input []byte) (*Element, []byte, error) {
 			}
 			b := input[cursor]
 			cursor++
-			if tagNumber > (1<<56)-1 {
-				return nil, nil, errors.New("ASN.1 tag number overflow")
+			// ASN1InputStream#readTagNumber's bound: a tag number takes at most 31 bits,
+			// so it always fits the int the callers convert it to.
+			if tagNumber>>24 != 0 {
+				return nil, nil, errors.New("ASN.1 tag number more than 31 bits")
 			}
 			tagNumber = tagNumber<<7 | uint64(b&0x7F)
 			if b&0x80 == 0 {
@@ -392,7 +414,7 @@ func Parse(input []byte) (*Element, []byte, error) {
 				rest = rest[2:]
 				break
 			}
-			child, remaining, err := Parse(rest)
+			child, remaining, err := parse(rest, depth+1)
 			if err != nil {
 				return nil, nil, err
 			}
@@ -430,7 +452,7 @@ func Parse(input []byte) (*Element, []byte, error) {
 	if element.constructed {
 		rest := body
 		for len(rest) > 0 {
-			child, remaining, err := Parse(rest)
+			child, remaining, err := parse(rest, depth+1)
 			if err != nil {
 				return nil, nil, err
 			}

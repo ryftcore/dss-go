@@ -93,6 +93,27 @@ func TestCrlUtilsParseIssuingDistributionPoint_NotSequence(t *testing.T) {
 	}
 }
 
+// TestCrlUtilsParseIssuingDistributionPoint_InvalidReasonPadBits: an onlySomeReasons BIT
+// STRING declaring more than 7 unused bits, or unused bits with no octet, used to be accepted
+// with a negative BitLength; BouncyCastle rejects both ("invalid pad bits detected").
+func TestCrlUtilsParseIssuingDistributionPoint_InvalidReasonPadBits(t *testing.T) {
+	for _, der := range [][]byte{
+		{0x30, 0x04, 0x83, 0x02, 0x09, 0x80}, // 9 unused bits
+		{0x30, 0x03, 0x83, 0x01, 0x03},       // unused bits, no octet
+	} {
+		if _, err := crlUtilsParseIssuingDistributionPoint(der); err == nil {
+			t.Errorf("% x: expected an error", der)
+		}
+	}
+	idp, err := crlUtilsParseIssuingDistributionPoint([]byte{0x30, 0x04, 0x83, 0x02, 0x01, 0x80})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if idp.onlySomeReasonFlags == nil || idp.onlySomeReasonFlags.BitLength != 7 {
+		t.Fatalf("onlySomeReasonFlags = %+v, want a 7-bit string", idp.onlySomeReasonFlags)
+	}
+}
+
 // TestCrlUtilsExtractIssuingDistributionPointBinary_Nil checks the "extension absent" path,
 // which upstream logs and otherwise ignores (no error, IDP fields left unset).
 func TestCrlUtilsExtractIssuingDistributionPointBinary_Nil(t *testing.T) {

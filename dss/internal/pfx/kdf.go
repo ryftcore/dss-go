@@ -6,6 +6,7 @@ import (
 	"crypto/sha512"
 	"encoding/asn1"
 	"errors"
+	"fmt"
 	"hash"
 	"math/big"
 )
@@ -45,6 +46,25 @@ func bmpStringPassword(password string) ([]byte, error) {
 
 // errPasswordNotBMP reports a password character outside the Basic Multilingual Plane, which
 // RFC 7292's BMPString password encoding cannot represent.
+// maxIterationCount is the iteration count above which the JDK's PKCS12 key store
+// (sun.security.pkcs12.PKCS12KeyStore#MAX_ITERATION_COUNT) refuses a MAC or a PBE scheme. The
+// count comes from the file itself, so without a bound a crafted PFX keeps the key derivation
+// busy for as long as it likes.
+const maxIterationCount = 5000000
+
+// checkIterationCount rejects an iteration count the JDK's PKCS12 key store refuses: one above
+// maxIterationCount ("... iteration count too large"), or one that is not positive, which its
+// PBE key derivations reject ("IterationCount must be a positive number").
+func checkIterationCount(count int, what string) error {
+	if count <= 0 {
+		return fmt.Errorf("pfx: %s iteration count %d is not positive", what, count)
+	}
+	if count > maxIterationCount {
+		return fmt.Errorf("pfx: %s iteration count too large: %d", what, count)
+	}
+	return nil
+}
+
 var errPasswordNotBMP = errors.New("pfx: password contains a character outside the Basic Multilingual Plane")
 
 // fillWithRepeats returns v-byte-block-aligned repeats of pattern, RFC 7292 Appendix B.2 steps 2

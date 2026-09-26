@@ -21,27 +21,46 @@ func ValueToString(element *Element) string {
 		buffer = append(buffer, []rune(hexLower(element.DEREncoded()))...)
 	}
 
+	// The escaping below produces exactly what IETFUtils' in-place StringBuffer#insert loops
+	// do, but in linear time: inserting one rune at a time made a value of a few hundred
+	// thousand specials or spaces cost minutes.
 	index := 0
 	if len(buffer) >= 2 && buffer[0] == '\\' && buffer[1] == '#' {
 		index += 2
 	}
-	for ; index < len(buffer); index++ {
-		switch buffer[index] {
+	escaped := make([]rune, 0, len(buffer)+len(buffer)/4+4)
+	escaped = append(escaped, buffer[:index]...)
+	for _, r := range buffer[index:] {
+		switch r {
 		case ',', '"', '\\', '+', '=', '<', '>', ';':
-			buffer = append(buffer[:index], append([]rune{'\\'}, buffer[index:]...)...)
-			index++
+			escaped = append(escaped, '\\')
 		}
+		escaped = append(escaped, r)
 	}
+	buffer = escaped
 
-	start := 0
-	for start < len(buffer) && buffer[start] == ' ' {
-		buffer = append(buffer[:start], append([]rune{'\\'}, buffer[start:]...)...)
-		start += 2
+	// Every leading space is escaped, then every space of the trailing run of the result.
+	leading := 0
+	for leading < len(buffer) && buffer[leading] == ' ' {
+		leading++
 	}
-	end := len(buffer) - 1
-	for end >= 0 && buffer[end] == ' ' {
-		buffer = append(buffer[:end], append([]rune{'\\'}, buffer[end:]...)...)
-		end--
+	if leading > 0 {
+		escaped = make([]rune, 0, len(buffer)+leading)
+		for range leading {
+			escaped = append(escaped, '\\', ' ')
+		}
+		buffer = append(escaped, buffer[leading:]...)
+	}
+	trailing := 0
+	for trailing < len(buffer) && buffer[len(buffer)-1-trailing] == ' ' {
+		trailing++
+	}
+	if trailing > 0 {
+		escaped = append(make([]rune, 0, len(buffer)+trailing), buffer[:len(buffer)-trailing]...)
+		for range trailing {
+			escaped = append(escaped, '\\', ' ')
+		}
+		buffer = escaped
 	}
 	return string(buffer)
 }

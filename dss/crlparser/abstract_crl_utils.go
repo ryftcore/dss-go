@@ -191,6 +191,11 @@ func crlUtilsParseIssuingDistributionPoint(der []byte) (crlUtilsIssuingDistribut
 		}
 		unusedBits := int(reasonsContent[0])
 		dataBytes := []byte(reasonsContent[1:])
+		// ASN1BitString#createPrimitive refuses these ("invalid pad bits detected"); taken
+		// as they come they made BitLength negative.
+		if unusedBits > 7 || (unusedBits > 0 && len(dataBytes) == 0) {
+			return result, errors.New("invalid IssuingDistributionPoint: invalid onlySomeReasons pad bits")
+		}
 		result.onlySomeReasonFlags = &encoding_asn1.BitString{
 			Bytes:     dataBytes,
 			BitLength: len(dataBytes)*8 - unusedBits,

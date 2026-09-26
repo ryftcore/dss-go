@@ -354,7 +354,14 @@ func parseMacData(element *asn1ber.Element) (*macData, error) {
 		if !children[2].IsUniversal(asn1ber.TagInteger) {
 			return nil, errors.New("pfx: MacData.iterations is not an INTEGER")
 		}
-		iterations = int(children[2].Integer().Int64())
+		count := children[2].Integer()
+		if !count.IsInt64() {
+			return nil, errors.New("pfx: MacData.iterations is out of range")
+		}
+		iterations = int(count.Int64())
+	}
+	if err := checkIterationCount(iterations, "MAC"); err != nil {
+		return nil, err
 	}
 	return &macData{
 		digestAlgorithm: algorithm.Algorithm,
