@@ -115,6 +115,15 @@ conventions applied throughout.
   `ErrInvalidPassword` as upstream's exception is. Pinned by
   pdfbox-generated goldens under `internal/pdf/testdata/password/`.
 
+### Fixed
+
+- `esig <subcommand> -h` exits 0, like `esig -h`, instead of 2.
+- The facade no longer panics on nil input.
+  - `LoadCertificateBytes(nil)` returns an error.
+  - `NewDocument(name, nil)` is an empty document.
+  - `Sign` with a zero `Signer` returns a clear error.
+  - `(*Signer)(nil).Close()` is a no-op.
+
 ### Changed
 
 - **Exported type and function names no longer repeat their package name.**
@@ -182,6 +191,46 @@ conventions applied throughout.
   `Test*`/`Example*` function names keep their underscores (idiomatic Go).
 
 ### Security
+
+- **`esig`'s RFC 3161 client now checks the token it receives against its
+  request.** The message-imprint algorithm and digest must match, and the
+  nonce must be echoed (RFC 3161 §2.4.2) — the checks BouncyCastle's
+  `TimeStampResponse.validate` performs for upstream's `OnlineTSPSource`.
+  Previously a TSA, or anyone on the path, could return a token for other
+  data or replay an old one and it was embedded in the signature. A
+  password in the `-tsa` URL no longer appears in error messages, and
+  `esig tl` downloads are capped at 64 MiB.
+- **Hostile input can no longer crash the process or exhaust its memory
+  or CPU in the native engines.** Each of the following was a fatal stack
+  overflow, an out-of-memory abort or a hang that `recover` cannot catch.
+  Each now returns an error.
+  - `internal/asn1ber`: nesting is capped at 512 levels. Tag numbers are
+    bounded to 31 bits, as in BouncyCastle; a 2^64-1 tag had wrapped to -1
+    and been read as a plain certificate. `ValueToString` escaping is now
+    linear.
+  - `internal/pfx` (PKCS#12): an IV of the wrong size used to panic.
+    PBKDF2 key lengths above 32 are refused; they caused a multi-GiB
+    allocation. Iteration counts must be within the JDK's
+    1–5,000,000. Non-positive DSA domain parameters are refused; `P = 0`
+    hung.
+  - `internal/pdf`: decoded stream size, including filter chains, is
+    bounded by `MaxStreamSize`, and so is the predictor row. The number of
+    xref-stream rows is bounded by `MaxObjects`. A huge object-stream `/N`
+    no longer panics. Two quadratic paths are now linear: lenient-real
+    lexing and the scan for unterminated streams. The incremental writer
+    refuses object-number overflow instead of writing negative object
+    numbers.
+  - `internal/xpath10`, `internal/jose`: expression and JSON nesting are
+    capped at 1000.
+  - `internal/xmldsig`: a cycle among Manifest references, when manifests
+    are followed, returns `ErrManifestCycle`.
+  - `crlparser`: `onlySomeReasons` with invalid unused bits is refused, as
+    BouncyCastle does.
+
+  Where Java would instead throw `StackOverflowError`, run out of heap or
+  accept the input, the divergence is documented in
+  `internal/pdf/DESIGN.md` §2.7, `internal/xmldom/DESIGN.md` §6.5 and
+  `internal/jose/doc.go`.
 
 - **An encrypted PDF's `/Encrypt /Perms` block is now verified for `/R 5`
   and `/R 6`, so a byte-edited `/P` no longer grants permissions.** For
