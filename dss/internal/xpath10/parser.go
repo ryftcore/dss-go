@@ -1,6 +1,9 @@
 package xpath10
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // parser turns a token stream into the AST of ast.go.
 //
@@ -28,7 +31,23 @@ type parser struct {
 	// transform widens the grammar to the XML-DSig transform subset; see transform.go. It is
 	// false for Compile, which keeps the inventory subset exactly as documented.
 	transform bool
+
+	// depth bounds the height of the AST being built; see maxExprDepth.
+	depth int
 }
+
+// maxExprDepth caps how deeply an expression may nest - through not(...), predicates and
+// function arguments - plus how long a chain of binary operators may grow, since "a or a or
+// ..." is a left-deep tree. Both the parser and the evaluator recurse once per level, and an
+// XPath transform's text is attacker-supplied: "a[not(not(not(...)))]" a few megabytes long
+// otherwise exhausts the goroutine stack, which Go reports as a fatal error no recover()
+// can catch. No expression DSS writes, and no transform in the corpus, comes near the cap.
+//
+// DIVERGENCE, deliberate: javax.xml.xpath (Xalan's XPathParser / FunctionTable) has no such
+// cap; it recurses until the JVM throws StackOverflowError, which Santuario's
+// TransformXPath.enginePerformTransform does not catch either, so the transform fails upstream
+// too - here it fails with an ordinary *UnsupportedError instead of killing the process.
+const maxExprDepth = 1000
 
 // parse compiles expression to an AST, resolving prefixes against ns.
 //
@@ -75,7 +94,25 @@ func (p *parser) unsupportedAt(pos int, construct string) error {
 
 // ------------------------------------------------------------------ expressions
 
-func (p *parser) parseExpr() (node, error) { return p.parseOr() }
+func (p *parser) parseExpr() (node, error) {
+	saved := p.depth
+	defer func() { p.depth = saved }()
+	if err := p.deeper(); err != nil {
+		return nil, err
+	}
+	return p.parseOr()
+}
+
+// deeper records one more level of AST height and refuses the expression past maxExprDepth.
+// parseExpr restores the level on return; a binary-operator loop calls it once per operator,
+// because every operator adds a level to the left-deep tree it builds.
+func (p *parser) deeper() error {
+	p.depth++
+	if p.depth > maxExprDepth {
+		return p.unsupported(fmt.Sprintf("an expression nested more than %d levels deep", maxExprDepth))
+	}
+	return nil
+}
 
 func (p *parser) parseOr() (node, error) {
 	lhs, err := p.parseEquality()
@@ -84,6 +121,9 @@ func (p *parser) parseOr() (node, error) {
 	}
 	for p.at(tokOr) {
 		p.next()
+		if err := p.deeper(); err != nil {
+			return nil, err
+		}
 		rhs, err := p.parseEquality()
 		if err != nil {
 			return nil, err
@@ -111,6 +151,9 @@ func (p *parser) parseUnion() (node, error) {
 	}
 	for p.at(tokOperator) && p.peek().text == "|" {
 		p.next()
+		if err := p.deeper(); err != nil {
+			return nil, err
+		}
 		rhs, err := p.parseOperand()
 		if err != nil {
 			return nil, err
@@ -131,6 +174,9 @@ func (p *parser) parseEquality() (node, error) {
 	}
 	for p.at(tokEq) {
 		p.next()
+		if err := p.deeper(); err != nil {
+			return nil, err
+		}
 		rhs, err := operand()
 		if err != nil {
 			return nil, err

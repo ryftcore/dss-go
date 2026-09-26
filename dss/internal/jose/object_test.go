@@ -2,6 +2,7 @@ package jose
 
 import (
 	"encoding/base64"
+	"errors"
 	"strings"
 	"testing"
 )
@@ -182,5 +183,41 @@ func TestJavaStringHashCode(t *testing.T) {
 		if got := JavaStringHashCode(input); got != want {
 			t.Errorf("JavaStringHashCode(%q) = %d, want %d", input, got, want)
 		}
+	}
+}
+
+// TestParseJSONRefusesDeepNesting pins MaxJSONDepth. Before the cap, 20,000,000 nested '['
+// in a protected header overflowed the goroutine stack in materialize - a fatal error, not a
+// panic. The inputs here are smaller, to keep the test fast, but far past the cap; a document
+// exactly at the cap still parses and round-trips.
+func TestParseJSONRefusesDeepNesting(t *testing.T) {
+	const levels = 100_000
+	for name, doc := range map[string]string{
+		"arrays":           `{"a":` + strings.Repeat("[", levels) + strings.Repeat("]", levels) + `}`,
+		"objects":          strings.Repeat(`{"a":`, levels) + "1" + strings.Repeat("}", levels),
+		"arrays of object": strings.Repeat(`[{"a":`, levels) + "1" + strings.Repeat("}]", levels),
+	} {
+		_, err := ParseJSON(doc)
+		var perr *ParseError
+		if !errors.As(err, &perr) || !strings.Contains(perr.Message, "nested more than") {
+			t.Errorf("%s: ParseJSON error = %v, want the nesting-depth refusal", name, err)
+		}
+		if _, err := ParseJSONAny(doc); !errors.As(err, &perr) {
+			t.Errorf("%s: ParseJSONAny error = %v, want a *ParseError", name, err)
+		}
+	}
+
+	atCap := `{"a":` + strings.Repeat("[", MaxJSONDepth-1) + strings.Repeat("]", MaxJSONDepth-1) + `}`
+	o, err := ParseJSON(atCap)
+	if err != nil {
+		t.Fatalf("a document nested exactly %d deep was refused: %v", MaxJSONDepth, err)
+	}
+	if got := JSON(o); got != atCap {
+		t.Fatalf("round trip changed a document nested %d deep", MaxJSONDepth)
+	}
+	// Closing brackets give the depth back: many shallow siblings are not deep.
+	wide := `{"a":[` + strings.Repeat("[[]],", 5*MaxJSONDepth) + `[]]}`
+	if _, err := ParseJSON(wide); err != nil {
+		t.Fatalf("wide, shallow document refused: %v", err)
 	}
 }
