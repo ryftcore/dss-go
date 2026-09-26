@@ -33,7 +33,7 @@ validate" for a verdict.
 	fs.StringVar(&pdfPass, "pdf-pass", "", "")
 	leading, hadLeading, rest := splitPositional(args)
 	if err := fs.Parse(rest); err != nil {
-		return exitUsage
+		return parseErrorCode(err)
 	}
 	file, ok := resolveOnePositional(fs, hadLeading, leading)
 	if !ok {

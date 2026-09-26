@@ -179,8 +179,8 @@ func SignMultiple(docs []Document, signer *Signer, opts SignOptions) (Document, 
 	if len(docs) == 0 {
 		return nil, ErrNoDocument
 	}
-	if signer == nil {
-		return nil, fmt.Errorf("dss: a Signer is required")
+	if signer == nil || signer.conn == nil || signer.key == nil {
+		return nil, fmt.Errorf("dss: a Signer is required (use OpenPKCS12, OpenPKCS12Bytes or NewSigner)")
 	}
 	if err := opts.validate(); err != nil {
 		return nil, err

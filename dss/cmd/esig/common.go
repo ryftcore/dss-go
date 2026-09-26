@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"os"
@@ -23,6 +24,17 @@ func (l *stringList) String() string {
 func (l *stringList) Set(v string) error {
 	*l = append(*l, v)
 	return nil
+}
+
+// parseErrorCode is the exit code for a subcommand whose flag.FlagSet.Parse
+// failed: -h/-help is a request for the usage text the FlagSet has just
+// printed, not a usage error, so it exits 0 as "esig -h" and "esig tl -h"
+// do; anything else is a command line that could not be parsed.
+func parseErrorCode(err error) int {
+	if errors.Is(err, flag.ErrHelp) {
+		return exitOK
+	}
+	return exitUsage
 }
 
 // resolvePassword resolves a password flag's value (-p12-pass, -pdf-pass).

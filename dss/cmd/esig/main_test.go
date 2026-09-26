@@ -6,6 +6,9 @@ package main
 
 import (
 	"bytes"
+	"io"
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 )
@@ -121,4 +124,43 @@ func TestTLHelp(t *testing.T) {
 	if !strings.Contains(stdout, "esig tl refresh") {
 		t.Errorf("stdout = %q, want it to mention \"esig tl refresh\"", stdout)
 	}
+}
+
+// TestSubcommandHelp pins that every subcommand's -h exits 0, as "esig -h"
+// and "esig tl -h" do: asking for the usage text is not a usage error.
+func TestSubcommandHelp(t *testing.T) {
+	for _, args := range [][]string{
+		{"validate", "-h"}, {"sign", "-h"}, {"extend", "-help"}, {"report", "-h"},
+		{"inspect", "-h"}, {"tl", "refresh", "-h"}, {"version", "-h"}, {"validate", "a.pdf", "-h"},
+	} {
+		code, _, stderr := runOut(t, args...)
+		if code != exitOK {
+			t.Errorf("%v: exit code = %d, want %d (exitOK)", args, code, exitOK)
+		}
+		if !strings.Contains(stderr, "Usage: esig") {
+			t.Errorf("%v: stderr = %q, want the usage text", args, stderr)
+		}
+	}
+}
+
+// TestHTTPFileLoaderBoundsResponseSize pins that "tl refresh" downloads are
+// size-bounded: a server streaming more than tlMaxDocumentBytes is cut off
+// with an error rather than read into memory until it runs out.
+func TestHTTPFileLoaderBoundsResponseSize(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		io.CopyN(w, zeroReader{}, tlMaxDocumentBytes+1)
+	}))
+	defer server.Close()
+
+	if _, err := newHTTPFileLoader().GetDocument(server.URL); err == nil {
+		t.Fatal("expected an error for a response larger than tlMaxDocumentBytes")
+	}
+}
+
+// zeroReader is an endless stream of zero bytes.
+type zeroReader struct{}
+
+func (zeroReader) Read(p []byte) (int, error) {
+	clear(p)
+	return len(p), nil
 }

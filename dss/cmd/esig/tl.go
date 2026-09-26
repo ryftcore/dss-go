@@ -65,7 +65,7 @@ tsl package doc for the trust chain a production deployment needs to supply.
 	fs.StringVar(&cacheDir, "cache", "", "")
 	fs.Var(&lotlCerts, "lotl-cert", "")
 	if err := fs.Parse(args); err != nil {
-		return exitUsage
+		return parseErrorCode(err)
 	}
 	if cacheDir == "" {
 		fmt.Fprintf(stderr, "esig tl refresh: -cache is required\n\n")
@@ -147,6 +147,13 @@ func cacheInfoStatus(r cacheInfoRecord) string {
 // command indefinitely.
 const tlFetchTimeoutMillis = 30_000
 
+// tlMaxDocumentBytes bounds each LOTL/TL download. The largest EU trusted
+// lists are a few MB; without a bound (NativeHTTPDataLoader's zero value
+// has none) a hostile or broken server - the LOTL points at URLs this
+// command follows unvetted - could stream until memory runs out, a timeout
+// only capping how long it gets to try.
+const tlMaxDocumentBytes = 64 << 20
+
 // httpFileLoader adapts [dsshttp.NativeHTTPDataLoader] to
 // [dsshttp.DSSFileLoader], the interface [tsl.TLValidationJob.SetOnlineDataLoader]
 // takes: a real network fetch, wrapped as a [model.DSSDocument].
@@ -155,12 +162,13 @@ type httpFileLoader struct {
 }
 
 // newHTTPFileLoader returns an httpFileLoader with bounded connect/read
-// timeouts (the zero value has none - see NativeHTTPDataLoader's own doc
-// comments).
+// timeouts and a bounded response size (the zero value has neither - see
+// NativeHTTPDataLoader's own doc comments).
 func newHTTPFileLoader() *httpFileLoader {
 	l := &httpFileLoader{}
 	l.native.SetConnectTimeout(tlFetchTimeoutMillis)
 	l.native.SetReadTimeout(tlFetchTimeoutMillis)
+	l.native.SetMaxInputSize(tlMaxDocumentBytes)
 	return l
 }
 

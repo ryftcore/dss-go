@@ -219,8 +219,15 @@ func LoadCertificate(path string) (*CertificateToken, error) {
 // LoadCertificateBytes reads an X.509 certificate, DER or PEM encoded, from
 // memory. Delegates to
 // [github.com/ryftcore/dss-go/dss/spi.DSSUtilsLoadCertificateFromBinary].
-func LoadCertificateBytes(der []byte) (*CertificateToken, error) {
-	return spi.DSSUtilsLoadCertificateFromBinary(der)
+func LoadCertificateBytes(der []byte) (certificate *CertificateToken, err error) {
+	err = recovered("load certificate", func() error {
+		certificate, err = spi.DSSUtilsLoadCertificateFromBinary(der)
+		return err
+	})
+	if err != nil {
+		return nil, err
+	}
+	return certificate, nil
 }
 
 // TrustStore builds a trusted [CertificateSource] holding the given

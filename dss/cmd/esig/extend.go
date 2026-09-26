@@ -46,7 +46,7 @@ is not needed: extension only adds time-stamps and validation data.
 	fs.StringVar(&out, "out", "", "")
 	leading, hadLeading, rest := splitPositional(args)
 	if err := fs.Parse(rest); err != nil {
-		return exitUsage
+		return parseErrorCode(err)
 	}
 	file, ok := resolveOnePositional(fs, hadLeading, leading)
 	if !ok {

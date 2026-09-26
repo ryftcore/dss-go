@@ -57,7 +57,7 @@ Signs <file>, producing a new signed document.
 	fs.StringVar(&out, "out", "", "")
 	leading, hadLeading, rest := splitPositional(args)
 	if err := fs.Parse(rest); err != nil {
-		return exitUsage
+		return parseErrorCode(err)
 	}
 	file, ok := resolveOnePositional(fs, hadLeading, leading)
 	if !ok {

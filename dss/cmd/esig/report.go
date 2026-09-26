@@ -27,7 +27,7 @@ it - as the same human summary "esig validate" prints by default.
 	fs.BoolVar(&renderFlag, "render", false, "")
 	leading, hadLeading, rest := splitPositional(args)
 	if err := fs.Parse(rest); err != nil {
-		return exitUsage
+		return parseErrorCode(err)
 	}
 	file, ok := resolveOnePositional(fs, hadLeading, leading)
 	if !ok {

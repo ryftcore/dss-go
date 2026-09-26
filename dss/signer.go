@@ -110,7 +110,7 @@ func (s *Signer) Token() token.SignatureTokenConnection { return s.conn }
 // Close releases the key store connection when this Signer opened it. It is a
 // no-op for a Signer built with [NewSigner], whose connection the caller owns.
 func (s *Signer) Close() {
-	if s.owned && s.conn != nil {
+	if s != nil && s.owned && s.conn != nil {
 		s.conn.Close()
 	}
 }
