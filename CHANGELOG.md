@@ -221,7 +221,10 @@ conventions applied throughout.
     1–5,000,000. Non-positive DSA domain parameters are refused; `P = 0`
     hung.
   - `internal/pdf`: decoded stream size, including filter chains, is
-    bounded by `MaxStreamSize`, and so is the predictor row. The number of
+    bounded by `MaxStreamSize`, and so is the predictor row; refusing
+    over-size output holds about the bound, not twice it. An xref stream
+    decodes to at most four times what its declared rows occupy (a 4 MB
+    Flate bomb as the xref stream took 2 GB and 11 s to refuse). The number of
     xref-stream rows is bounded by `MaxObjects`. A huge object-stream `/N`
     no longer panics. Two quadratic paths are now linear: lenient-real
     lexing and the scan for unterminated streams. The incremental writer

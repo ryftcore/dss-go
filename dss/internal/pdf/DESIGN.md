@@ -544,7 +544,14 @@ What the guards cover, precisely (each is a deliberate divergence: pdfbox has no
   is refused before its row buffer is allocated (a `/Columns 2^45` used to kill the process with
   "out of memory"). `Document.StreamData` and xref-stream decoding return `ErrLimitExceeded`;
   the exported `Decode` uses the default bound, and the exported `ApplyPredictor` (no error return)
-  warns and returns its input unchanged.
+  warns and returns its input unchanged. Flate, LZW and RunLength output fills 1 MiB chunks
+  (`boundedBuffer`), so refusing output over the bound holds about the bound, not the twice-the-bound
+  a doubling `bytes.Buffer` reached (a 4 MB Flate bomb peaked at 2 GiB under the 512 MiB default).
+* **xref-stream decoded size.** An xref stream is decoded to at most four times what its declared
+  rows can occupy (`/Index` counts or `/Size`, at most 2 × `MaxObjects` rows, each `/W` sum + 1
+  predictor tag byte) plus 64 KiB, and never more than `MaxStreamSize`; past that it is
+  `ErrLimitExceeded` (`xrefStreamDecodeLimit`). `decodeXRefStream` never reads past the declared rows,
+  so only an xref stream padded with megabytes of unread data is refused.
 * **xref-stream rows.** More in-use rows than `MaxObjects` in one xref stream is `ErrLimitExceeded`
   while decoding, instead of after `mergeSections` has built the map. A guard met during the
   `/Prev` walk fails `Open`; it is not "repaired" by brute force like an ordinary bad section.
@@ -558,8 +565,10 @@ What the guards cover, precisely (each is a deliberate divergence: pdfbox has no
 
 Two non-guards that keep work linear without changing any result: stream bodies are views of the
 source (`Stream.Raw` is capacity-capped; `StreamData` copies when no filter ran), and the `endstream`
-recovery scan (S1) uses a per-document index of `endstream`/`endobj` offsets, so a file of N
-unterminated streams no longer costs O(N × size) time and memory.
+recovery scan (S1) searches forward as pdfbox does until those searches have together covered the
+file's size, then builds a per-document index of `endstream`/`endobj` offsets, so a file of N
+unterminated streams no longer costs O(N × size) time and memory, while the common case (every
+`/Length 0` stream is rescanned, S5, and its marker is a few bytes on) never pays for an index.
 
 ### 2.8 Revisions and `/ByteRange` (`revision.go`)
 

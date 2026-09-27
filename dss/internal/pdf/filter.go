@@ -17,6 +17,7 @@ import (
 	"bytes"
 	"compress/flate"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"hash/adler32"
 	"io"
@@ -95,7 +96,7 @@ func decodeLimited(raw []byte, filters []Name, parms []*Dict, warn *[]Warning, l
 }
 
 func errDecodedTooLarge(f Name, limit int64) error {
-	return fmt.Errorf("%w: /%s output exceeds MaxStreamSize (%d bytes)", ErrLimitExceeded, f, limit)
+	return fmt.Errorf("%w: /%s output exceeds %d bytes (MaxStreamSize, or a smaller bound for an xref stream)", ErrLimitExceeded, f, limit)
 }
 
 func decodeOne(raw []byte, f Name, parm *Dict, warn *[]Warning, limit int64) ([]byte, error) {
@@ -186,13 +187,9 @@ func flateDecodeLimited(raw []byte, warn *[]Warning, limit int64) ([]byte, error
 	}
 	r := flate.NewReader(bytes.NewReader(raw[2:]))
 	defer r.Close()
-	var src io.Reader = r
-	if limit < math.MaxInt64 {
-		src = io.LimitReader(r, limit+1)
-	}
-	var buf bytes.Buffer
-	_, err := io.Copy(&buf, src)
-	if int64(buf.Len()) > limit {
+	buf := boundedBuffer{limit: limit}
+	_, err := buf.ReadFrom(r)
+	if err == errBoundExceeded {
 		return nil, errDecodedTooLarge(FilterFlate, limit)
 	}
 	if err != nil {
@@ -200,6 +197,102 @@ func flateDecodeLimited(raw []byte, warn *[]Warning, limit int64) ([]byte, error
 			"premature end of flate stream: "+err.Error())
 	}
 	return buf.Bytes(), nil
+}
+
+// errBoundExceeded is boundedBuffer's refusal to hold more than its limit.
+var errBoundExceeded = errors.New("pdf: bounded buffer full")
+
+// boundedChunk is the largest single allocation boundedBuffer makes while
+// filling; past it, output accumulates in chunks of this size.
+const boundedChunk = 1 << 20
+
+// boundedBuffer collects a decoder's output and refuses to hold more than
+// limit bytes. A bytes.Buffer (or append) doubles its backing array, so output
+// that ends up just over the limit briefly holds about twice the limit, all of
+// it cleared memory: a 4 MB Flate bomb under the 512 MiB default peaked at
+// 2 GiB and took seconds before failing. Filling fixed-size chunks keeps the
+// peak at the limit plus one chunk; only a result over one chunk is copied
+// once, into an exactly sized slice, by Bytes.
+type boundedBuffer struct {
+	limit int64
+	n     int64    // bytes held
+	full  [][]byte // filled chunks, each boundedChunk long
+	cur   []byte   // the chunk being filled
+}
+
+// room makes the current chunk non-full and returns its free capacity.
+func (b *boundedBuffer) room() int {
+	if len(b.cur) == cap(b.cur) {
+		switch {
+		case cap(b.cur) == 0:
+			b.cur = make([]byte, 0, 512)
+		case cap(b.cur) < boundedChunk:
+			// Small outputs stay in one doubling slice, as with bytes.Buffer.
+			b.cur = append(make([]byte, 0, min(2*cap(b.cur), boundedChunk)), b.cur...)
+		default:
+			b.full = append(b.full, b.cur)
+			b.cur = make([]byte, 0, boundedChunk)
+		}
+	}
+	return cap(b.cur) - len(b.cur)
+}
+
+// ReadFrom reads r to EOF. It stops with errBoundExceeded once more than limit
+// bytes have been read (it reads at most one byte past the limit), and returns
+// any other read error with the bytes read before it kept.
+func (b *boundedBuffer) ReadFrom(r io.Reader) (int64, error) {
+	var total int64
+	for {
+		room := b.room()
+		if left := b.limit - b.n; int64(room) > left {
+			room = int(left) + 1
+		}
+		n, err := r.Read(b.cur[len(b.cur) : len(b.cur)+room])
+		b.cur = b.cur[:len(b.cur)+n]
+		b.n += int64(n)
+		total += int64(n)
+		if b.n > b.limit {
+			return total, errBoundExceeded
+		}
+		if err == io.EOF {
+			return total, nil
+		}
+		if err != nil {
+			return total, err
+		}
+	}
+}
+
+// Write appends p, or nothing and errBoundExceeded when that would take the
+// buffer past its limit.
+func (b *boundedBuffer) Write(p []byte) (int, error) {
+	if int64(len(p)) > b.limit-b.n {
+		return 0, errBoundExceeded
+	}
+	written := len(p)
+	for len(p) > 0 {
+		room := b.room() // may replace b.cur: call it before slicing b.cur
+		k := copy(b.cur[len(b.cur):len(b.cur)+min(room, len(p))], p)
+		b.cur = b.cur[:len(b.cur)+k]
+		p = p[k:]
+	}
+	b.n += int64(written)
+	return written, nil
+}
+
+// Len is the number of bytes held.
+func (b *boundedBuffer) Len() int64 { return b.n }
+
+// Bytes returns everything written, nil when nothing was.
+func (b *boundedBuffer) Bytes() []byte {
+	if len(b.full) == 0 {
+		return b.cur
+	}
+	out := make([]byte, 0, b.n)
+	for _, c := range b.full {
+		out = append(out, c...)
+	}
+	return append(out, b.cur...)
 }
 
 // FlateEncode produces zlib-wrapped DEFLATE at the fixed compression level 6.
@@ -287,7 +380,10 @@ func applyPredictor(data []byte, predictor, colors, bpc, columns int, warn *[]Wa
 		return tiffPredictor(data, colors, bpc, columns, rowLen), nil
 	}
 	bpp := (colors*bpc + 7) / 8
-	var out []byte
+	// Sized up front: appending row by row regrew the output past its final
+	// size, holding up to twice it, on top of the input.
+	rows := (len(data) + rowLen) / (rowLen + 1)
+	out := make([]byte, 0, rows*rowLen)
 	prev := make([]byte, rowLen)
 	cur := make([]byte, rowLen)
 	pos := 0
@@ -515,22 +611,21 @@ func runLengthDecode(raw []byte) []byte {
 // runLengthDecodeLimited is runLengthDecode with a bound on the output: each
 // two-byte run can expand to 128 bytes.
 func runLengthDecodeLimited(raw []byte, limit int64) ([]byte, error) {
-	var out []byte
+	out := boundedBuffer{limit: limit}
+	var run [128]byte
 	for i := 0; i < len(raw); {
-		if int64(len(out)) > limit {
-			return nil, errDecodedTooLarge(FilterRunLength, limit)
-		}
 		l := int(raw[i])
 		i++
 		if l == 128 {
 			break
 		}
+		var err error
 		if l < 128 {
 			n := l + 1
 			if i+n > len(raw) {
 				n = len(raw) - i
 			}
-			out = append(out, raw[i:i+n]...)
+			_, err = out.Write(raw[i : i+n])
 			i += n
 		} else {
 			if i >= len(raw) {
@@ -538,15 +633,17 @@ func runLengthDecodeLimited(raw []byte, limit int64) ([]byte, error) {
 			}
 			b := raw[i]
 			i++
-			for j := 0; j < 257-l; j++ {
-				out = append(out, b)
+			n := 257 - l
+			for j := range n {
+				run[j] = b
 			}
+			_, err = out.Write(run[:n])
+		}
+		if err != nil {
+			return nil, errDecodedTooLarge(FilterRunLength, limit)
 		}
 	}
-	if int64(len(out)) > limit {
-		return nil, errDecodedTooLarge(FilterRunLength, limit)
-	}
-	return out, nil
+	return out.Bytes(), nil
 }
 
 // lzwDecode implements LZWDecode (LZWFilter). earlyChange defaults to 1.
@@ -561,7 +658,7 @@ func lzwDecodeLimited(raw []byte, earlyChange int, warn *[]Warning, limit int64)
 	if earlyChange != 0 {
 		earlyChange = 1
 	}
-	var out []byte
+	out := boundedBuffer{limit: limit}
 	table := make([][]byte, 0, 4096)
 	reset := func() {
 		table = table[:0]
@@ -606,12 +703,11 @@ func lzwDecodeLimited(raw []byte, earlyChange int, warn *[]Warning, limit int64)
 			entry = append(append([]byte{}, prev...), prev[0])
 		default:
 			addWarning(warn, WarnFlateTruncated, -1, "invalid LZW code")
-			return out, nil
+			return out.Bytes(), nil
 		}
-		if int64(len(out))+int64(len(entry)) > limit {
+		if _, err := out.Write(entry); err != nil {
 			return nil, errDecodedTooLarge(FilterLZW, limit)
 		}
-		out = append(out, entry...)
 		if prev != nil {
 			table = append(table, append(append([]byte{}, prev...), entry[0]))
 		}
@@ -630,7 +726,7 @@ func lzwDecodeLimited(raw []byte, earlyChange int, warn *[]Warning, limit int64)
 			prev = nil
 		}
 	}
-	return out, nil
+	return out.Bytes(), nil
 }
 
 // streamFilters extracts the filter chain and its parameters from a stream

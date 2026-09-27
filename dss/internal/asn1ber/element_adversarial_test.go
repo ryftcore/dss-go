@@ -95,3 +95,22 @@ func TestParseBoundsTagNumbers(t *testing.T) {
 		}
 	}
 }
+
+// TestValueToStringPlainValueDoesNotCopy: the linear-time escaping must not cost the common
+// case - a name with nothing to escape - an extra copy of its runes (ValueToString runs for
+// every RDN of every certificate DN rendered).
+func TestValueToStringPlainValueDoesNotCopy(t *testing.T) {
+	element, _, err := Parse(WriteTLV(TagUTF8String, []byte("Belgium Root CA4 Signing Authority")))
+	if err != nil {
+		t.Fatal(err)
+	}
+	withSpecial, _, err := Parse(WriteTLV(TagUTF8String, []byte("Belgium Root CA4, Signing Authority")))
+	if err != nil {
+		t.Fatal(err)
+	}
+	plain := testing.AllocsPerRun(100, func() { ValueToString(element) })
+	escaped := testing.AllocsPerRun(100, func() { ValueToString(withSpecial) })
+	if plain >= escaped {
+		t.Errorf("a plain value costs %v allocations, one with a comma %v: the plain one must skip the escaping copy", plain, escaped)
+	}
+}

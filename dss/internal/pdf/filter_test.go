@@ -5,6 +5,7 @@ import (
 	"compress/flate"
 	"errors"
 	"math"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -435,5 +436,53 @@ func TestStreamDataDoesNotAliasTheSource(t *testing.T) {
 	}
 	if cap(s.Raw) != len(s.Raw) {
 		t.Errorf("Raw has spare capacity %d: an append would overwrite the source", cap(s.Raw)-len(s.Raw))
+	}
+}
+
+// Output that runs past the limit must not first grow a buffer to twice it:
+// bytes.Buffer's doubling held 1 GiB (and cleared it) to refuse 512 MiB.
+func TestDecodeLimitPeakMemory(t *testing.T) {
+	const limit = 16 << 20
+	bomb := FlateEncode(make([]byte, 4*limit))
+	rlBomb := bytes.Repeat([]byte{129, 'x'}, 4*limit/128) // RunLength: 2 bytes -> 128
+	for name, run := range map[string]func() error{
+		"flate": func() error {
+			_, err := decodeLimited(bomb, []Name{FilterFlate}, nil, nil, limit)
+			return err
+		},
+		"runlength": func() error {
+			_, err := decodeLimited(rlBomb, []Name{FilterRunLength}, nil, nil, limit)
+			return err
+		},
+	} {
+		var before, after runtime.MemStats
+		runtime.GC()
+		runtime.ReadMemStats(&before)
+		err := run()
+		runtime.ReadMemStats(&after)
+		if !errors.Is(err, ErrLimitExceeded) {
+			t.Fatalf("%s: err = %v, want ErrLimitExceeded", name, err)
+		}
+		if got := after.TotalAlloc - before.TotalAlloc; got > limit+limit/4 {
+			t.Errorf("%s: allocated %d MiB to refuse output over %d MiB", name, got>>20, limit>>20)
+		}
+	}
+
+	// Output within the limit is unchanged, across chunk boundaries too.
+	want := make([]byte, 3*boundedChunk+12345)
+	for i := range want {
+		want[i] = byte(i * 7)
+	}
+	got, err := decodeLimited(FlateEncode(want), []Name{FilterFlate}, nil, nil, limit)
+	if err != nil || !bytes.Equal(got, want) {
+		t.Fatalf("round trip: %d bytes, %v", len(got), err)
+	}
+	var rl []byte
+	for i := 0; i < len(want); i += 128 {
+		n := min(128, len(want)-i)
+		rl = append(append(rl, byte(n-1)), want[i:i+n]...)
+	}
+	if got, err := decodeLimited(rl, []Name{FilterRunLength}, nil, nil, limit); err != nil || !bytes.Equal(got, want) {
+		t.Fatalf("runlength round trip: %d bytes, %v", len(got), err)
 	}
 }

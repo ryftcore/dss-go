@@ -1,6 +1,9 @@
 package asn1ber
 
-import "strings"
+import (
+	"slices"
+	"strings"
+)
 
 // ValueToString ports org.bouncycastle.asn1.x500.style.IETFUtils#valueToString: it renders an
 // X.500 attribute value the way RFC 4514 wants it, escaping the specials and hash-encoding
@@ -28,16 +31,19 @@ func ValueToString(element *Element) string {
 	if len(buffer) >= 2 && buffer[0] == '\\' && buffer[1] == '#' {
 		index += 2
 	}
-	escaped := make([]rune, 0, len(buffer)+len(buffer)/4+4)
-	escaped = append(escaped, buffer[:index]...)
-	for _, r := range buffer[index:] {
-		switch r {
-		case ',', '"', '\\', '+', '=', '<', '>', ';':
-			escaped = append(escaped, '\\')
+	var escaped []rune
+	// Most values (every plain name) have nothing to escape: copy only when one does.
+	if slices.ContainsFunc(buffer[index:], isRFC4514Special) {
+		escaped = make([]rune, 0, len(buffer)+len(buffer)/4+4)
+		escaped = append(escaped, buffer[:index]...)
+		for _, r := range buffer[index:] {
+			if isRFC4514Special(r) {
+				escaped = append(escaped, '\\')
+			}
+			escaped = append(escaped, r)
 		}
-		escaped = append(escaped, r)
+		buffer = escaped
 	}
-	buffer = escaped
 
 	// Every leading space is escaped, then every space of the trailing run of the result.
 	leading := 0
@@ -63,6 +69,15 @@ func ValueToString(element *Element) string {
 		buffer = escaped
 	}
 	return string(buffer)
+}
+
+// isRFC4514Special reports whether IETFUtils#valueToString backslash-escapes r.
+func isRFC4514Special(r rune) bool {
+	switch r {
+	case ',', '"', '\\', '+', '=', '<', '>', ';':
+		return true
+	}
+	return false
 }
 
 // ASN1ToString reproduces ASN1Primitive#toString for the value types an X.500 attribute can
