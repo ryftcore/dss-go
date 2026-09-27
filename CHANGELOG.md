@@ -192,6 +192,13 @@ conventions applied throughout.
 
 ### Security
 
+- **Dependencies and toolchain on their latest security patches.**
+  `golang.org/x/crypto` v0.57.0, `golang.org/x/text` v0.42.0 and
+  `golang.org/x/sys` v0.48.0. `dss/go.mod` now sets `toolchain go1.27.1`,
+  so CI and release binaries are built with the patched standard library.
+  The minimum Go version for library users stays 1.27.0. CI runs
+  `govulncheck` on the default and `eaa` builds and fails on any
+  reachable known vulnerability.
 - **`esig`'s RFC 3161 client now checks the token it receives against its
   request.** The message-imprint algorithm and digest must match, and the
   nonce must be echoed (RFC 3161 §2.4.2) — the checks BouncyCastle's

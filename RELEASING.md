@@ -24,6 +24,8 @@ Both must point at the same commit. The release workflow refuses to publish if
      `## [X.Y.Z] - YYYY-MM-DD` heading, leave an empty `[Unreleased]`, and
      update the compare links at the bottom.
    - If a compatibility claim changed, `docs/compatibility/` is current.
+   - The `govulncheck` CI job is green, and `dss/go.mod`'s `toolchain` line
+     names the latest Go patch release.
 2. Run the full gate from `dss/` (see `CLAUDE.md` → Commands), including
    `go test ./... -count=1 -timeout 40m` with `corpus/` present.
 3. Optionally dry-run the release locally from the repo root:
