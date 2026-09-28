@@ -8,11 +8,13 @@ import (
 	"io"
 	"math/big"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
 	"github.com/ryftcore/dss-go/dss/model"
 )
 
@@ -30,6 +32,18 @@ import (
 type httpTSPSource struct {
 	url    string
 	client *http.Client
+}
+
+// displayURL is the TSA URL as error messages show it: with any password in
+// its userinfo (https://user:secret@tsa.example/, which net/http turns into
+// HTTP Basic credentials) replaced by "xxxxx", so that a failure printed to
+// stderr never discloses the TSA credentials.
+func (t *httpTSPSource) displayURL() string {
+	u, err := url.Parse(t.url)
+	if err != nil {
+		return "the TSA"
+	}
+	return u.Redacted()
 }
 
 // newHTTPTSPSource returns a TSPSource that requests a time-stamp token from
@@ -124,35 +138,66 @@ func (t *httpTSPSource) TimeStampResponse(digestAlgorithm enumerations.DigestAlg
 
 	httpReq, err := http.NewRequest(http.MethodPost, t.url, bytes.NewReader(reqBytes))
 	if err != nil {
-		return nil, fmt.Errorf("tsa: building the HTTP request: %w", err)
+		return nil, fmt.Errorf("tsa: building the HTTP request for %s: invalid TSA URL", t.displayURL())
 	}
 	httpReq.Header.Set("Content-Type", tsaRequestContentType)
 
+	// net/http redacts the URL password in the errors Do returns.
 	httpResp, err := t.client.Do(httpReq)
 	if err != nil {
-		return nil, fmt.Errorf("tsa: requesting a time-stamp from %s: %w", t.url, err)
+		return nil, fmt.Errorf("tsa: requesting a time-stamp: %w", err)
 	}
 	defer httpResp.Body.Close()
 
 	respBytes, err := io.ReadAll(io.LimitReader(httpResp.Body, tsaMaxResponseBytes))
 	if err != nil {
-		return nil, fmt.Errorf("tsa: reading the response from %s: %w", t.url, err)
+		return nil, fmt.Errorf("tsa: reading the response from %s: %w", t.displayURL(), err)
 	}
 	if httpResp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("tsa: %s returned HTTP %d", t.url, httpResp.StatusCode)
+		return nil, fmt.Errorf("tsa: %s returned HTTP %d", t.displayURL(), httpResp.StatusCode)
 	}
 
 	var resp tsaResponse
 	if _, err := asn1.Unmarshal(respBytes, &resp); err != nil {
-		return nil, fmt.Errorf("tsa: parsing the response from %s: %w", t.url, err)
+		return nil, fmt.Errorf("tsa: parsing the response from %s: %w", t.displayURL(), err)
 	}
 	if resp.Status.Status != pkiStatusGranted && resp.Status.Status != pkiStatusGrantedWithMods {
-		return nil, fmt.Errorf("tsa: %s refused the request (PKIStatus %d)", t.url, resp.Status.Status)
+		return nil, fmt.Errorf("tsa: %s refused the request (PKIStatus %d)", t.displayURL(), resp.Status.Status)
 	}
 	if len(resp.Token.FullBytes) == 0 {
-		return nil, fmt.Errorf("tsa: %s reported success but returned no time-stamp token", t.url)
+		return nil, fmt.Errorf("tsa: %s reported success but returned no time-stamp token", t.displayURL())
+	}
+	if err := checkTimeStampToken(resp.Token.FullBytes, oid, digest, nonce); err != nil {
+		return nil, fmt.Errorf("tsa: %s: %w", t.displayURL(), err)
 	}
 	return model.NewTimestampBinary(resp.Token.FullBytes), nil
+}
+
+// checkTimeStampToken matches the token a TSA returned against the request it
+// answers, the checks BouncyCastle's TimeStampResponse.validate(request) runs
+// for Java DSS's OnlineTSPSource: the token must be a TimeStampToken whose
+// TSTInfo covers exactly the requested message imprint (hash algorithm and
+// digest) and echoes the request's nonce (RFC 3161 section 2.4.2: the nonce
+// "MUST be present if the nonce field was present in the TimeStampReq").
+// Without it a token for other data - or a replayed one - would be embedded
+// in the signature as if it time-stamped this one.
+func checkTimeStampToken(token []byte, oid asn1.ObjectIdentifier, digest []byte, nonce *big.Int) error {
+	parsed, err := cmscore.ParseTimeStampToken(token)
+	if err != nil {
+		return fmt.Errorf("the returned time-stamp token cannot be parsed: %w", err)
+	}
+	info := parsed.TSTInfo()
+	imprint := info.MessageImprint
+	if imprint == nil || imprint.HashAlgorithm == nil || !imprint.HashAlgorithm.Algorithm.Equal(oid) {
+		return fmt.Errorf("the time-stamp token is for a different message imprint algorithm")
+	}
+	if !bytes.Equal(imprint.HashedMessage, digest) {
+		return fmt.Errorf("the time-stamp token is for a different message imprint digest")
+	}
+	if info.Nonce == nil || info.Nonce.Cmp(nonce) != 0 {
+		return fmt.Errorf("the time-stamp token carries the wrong nonce value")
+	}
+	return nil
 }
 
 // parseOID parses a dotted-decimal OID string, e.g. "2.16.840.1.101.3.4.2.1",

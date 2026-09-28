@@ -71,6 +71,9 @@ type Document struct {
 	loading map[ObjectKey]bool
 	objStms map[int64]*objStm
 	brute   bruteForce
+	ends    endMarkers // scanForEndstream's index over data
+
+	limitErr error // first ErrLimitExceeded met while building the xref
 
 	encryptRef ObjectKey
 	sec        *securityHandler
@@ -167,6 +170,7 @@ func (d *Document) Warnings() []Warning {
 func (d *Document) newParser() *parser {
 	p := newParser(d.data, &d.warnings, d.opts.MaxDepth, d.opts.MaxStreamSize)
 	p.resolveLength = d.lengthResolver()
+	p.ends = &d.ends
 	return p
 }
 
@@ -730,11 +734,13 @@ func (d *Document) StreamData(s *Stream) ([]byte, error) {
 		return nil, err
 	}
 	names, parms := streamFilters(s.Dict, d.Resolve)
-	return Decode(raw, names, parms, &d.warnings)
+	return decodeLimited(raw, names, parms, &d.warnings, d.opts.MaxStreamSize)
 }
 
 // RawStreamData returns the decrypted but still encoded stream bytes. This is
-// what DefaultPdfObjectModificationsFinder.compareDictStreams compares.
+// what DefaultPdfObjectModificationsFinder.compareDictStreams compares. For an
+// unencrypted document the slice is a view of the document's own bytes, as
+// pdfbox's stream is a view of its RandomAccessRead; callers must not modify it.
 func (d *Document) RawStreamData(s *Stream) ([]byte, error) {
 	if s == nil {
 		return nil, nil

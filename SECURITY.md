@@ -45,16 +45,15 @@ team or a formal SLA; response times are best-effort.
 
 ## Supported versions
 
-esig has not yet made a tagged `v1.0.0` (or later) release. Until a
-first tagged release is published, security fixes are made against the
-`main` branch only.
+esig is pre-1.0. Security fixes are made on `main` and shipped in the
+next release of the latest minor version; older minor versions are not
+patched.
 
-| Version         | Supported          |
-| ---------------- | ------------------ |
-| `main` (pre-1.0)  | :white_check_mark: |
-
-This table will be updated with concrete version ranges once tagged
-releases begin.
+| Version                    | Supported          |
+| -------------------------- | ------------------ |
+| latest `v0.x` release      | :white_check_mark: |
+| `main`                     | :white_check_mark: |
+| older `v0.x` releases      | :x:                |
 
 ## Scope notes
 

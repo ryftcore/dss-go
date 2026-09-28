@@ -1,6 +1,7 @@
 package xmldsig_test
 
 import (
+	"encoding/base64"
 	"errors"
 	"strings"
 	"testing"
@@ -485,5 +486,81 @@ func TestSecureValidationCapsTheTransformChain(t *testing.T) {
 	_, err := xmldsig.PerformTransforms(in, doc.DocumentElement(), "", true, xmldsig.DefaultRegistry())
 	if err == nil || !strings.Contains(err.Error(), "at most") {
 		t.Fatalf("want the transform-count cap, got %v", err)
+	}
+}
+
+// TestFollowManifestsRefusesACycle: a ds:Reference of type Manifest can digest the very
+// ds:Manifest it sits in - the XPath transform leaves its own ds:DigestValue out, so the digest
+// is computable - and following manifests then recursed without end, growing the goroutine
+// stack until the process died. The cycle is now an error; a genuine nested manifest is still
+// followed.
+func TestFollowManifestsRefusesACycle(t *testing.T) {
+	const ref = `<ds:Reference URI="#%s" Type="http://www.w3.org/2000/09/xmldsig#Manifest">` +
+		`<ds:Transforms><ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116">` +
+		`<ds:XPath>not(ancestor-or-self::ds:DigestValue)</ds:XPath></ds:Transform></ds:Transforms>` +
+		`<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>` +
+		`<ds:DigestValue>AA==</ds:DigestValue></ds:Reference>`
+	for _, tc := range []struct {
+		name      string
+		src       string
+		wantCycle bool
+	}{
+		{"self", `<r xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:Manifest Id="a">` +
+			strings.ReplaceAll(ref, "%s", "a") + `</ds:Manifest></r>`, true},
+		{"mutual", `<r xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:Manifest Id="a">` +
+			strings.ReplaceAll(ref, "%s", "b") + `</ds:Manifest><ds:Manifest Id="b">` +
+			strings.ReplaceAll(ref, "%s", "a") + `</ds:Manifest></r>`, true},
+		{"chain", `<r xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:Manifest Id="a">` +
+			strings.ReplaceAll(ref, "%s", "b") + `</ds:Manifest><ds:Manifest Id="b">` +
+			`<ds:Reference URI="#c"><ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>` +
+			`<ds:DigestValue>AA==</ds:DigestValue></ds:Reference></ds:Manifest><c Id="c">x</c></r>`, false},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			doc := parse(t, tc.src)
+			doc.RegisterIDs()
+			manifests := doc.DocumentElement().Elements()
+			// Fix up every ds:DigestValue, innermost manifest last, so each reference verifies:
+			// the XPath transform keeps the values themselves out of every digest.
+			for _, el := range manifests {
+				if el.Name.Local != "Manifest" {
+					continue
+				}
+				m, err := xmldsig.NewManifest(el, nil)
+				if err != nil {
+					t.Fatal(err)
+				}
+				refs, err := m.References()
+				if err != nil {
+					t.Fatal(err)
+				}
+				for _, r := range refs {
+					d, err := r.CalculateDigest()
+					if err != nil {
+						t.Fatal(err)
+					}
+					r.Element().LastChild.FirstChild.Value = base64.StdEncoding.EncodeToString(d)
+				}
+			}
+			m, err := xmldsig.NewManifest(manifests[0], nil)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if ok, err := m.VerifyReferences(false); !ok || err != nil {
+				t.Fatalf("VerifyReferences(false) = %v, %v; want true, nil", ok, err)
+			}
+			ok, err := m.VerifyReferences(true)
+			if tc.wantCycle {
+				if !errors.Is(err, xmldsig.ErrManifestCycle) {
+					t.Fatalf("VerifyReferences(true) = %v, %v; want ErrManifestCycle", ok, err)
+				}
+				return
+			}
+			if !ok || err != nil {
+				t.Fatalf("VerifyReferences(true) = %v, %v; want true, nil", ok, err)
+			}
+			if got := m.VerificationResults(); len(got) != 1 || len(got[0].ManifestReferences) != 1 {
+				t.Fatalf("nested manifest not followed: %+v", got)
+			}
+		})
 	}
 }

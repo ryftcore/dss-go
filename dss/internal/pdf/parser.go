@@ -9,8 +9,10 @@
 package pdf
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"sort"
 )
 
 // parser turns bytes into objects. It carries no document state beyond the
@@ -26,7 +28,78 @@ type parser struct {
 	maxStreamSize int64
 	depth         int
 	err           error // set for hard errors (resource guards) only
+	// ends, when set, indexes every `endstream`/`endobj` in lex.data so the
+	// recovery scan is a binary search. It is shared by every parser over the
+	// same document bytes.
+	ends *endMarkers
 }
+
+// endMarkers finds, for scanForEndstream, the first `endstream` or `endobj`
+// at or after an offset. It is shared by every parser over one document.
+//
+// Most documents reach the scan only for their empty streams (/Length 0 is
+// always rescanned, S5), whose marker is a few bytes on, so a plain forward
+// search is cheapest. A hostile file can instead make every scan run to EOF;
+// once the forward searches have together covered as many bytes as the file
+// holds, a sorted index of every marker is built and each later lookup is a
+// binary search. The total work stays O(size) either way.
+type endMarkers struct {
+	scanned int   // bytes the forward searches have covered so far
+	built   bool  // pos is valid
+	pos     []int // every marker offset, ascending
+}
+
+// next returns the first marker offset at or after start, or -1.
+func (m *endMarkers) next(data []byte, start int) int {
+	if !m.built {
+		budget := len(data) - m.scanned
+		if budget > 0 {
+			limit := start + budget
+			if limit > len(data) || limit < start {
+				limit = len(data)
+			}
+			if at := nextEndMarker(data, start, limit); at >= 0 {
+				m.scanned += at - start
+				return at
+			}
+			if limit == len(data) {
+				// Searched to EOF within budget: there is no marker.
+				m.scanned += limit - start
+				return -1
+			}
+		}
+		m.built = true
+		for at := nextEndMarker(data, 0, len(data)); at >= 0; at = nextEndMarker(data, at+1, len(data)) {
+			m.pos = append(m.pos, at)
+		}
+	}
+	k := sort.SearchInts(m.pos, start)
+	if k == len(m.pos) {
+		return -1
+	}
+	return m.pos[k]
+}
+
+// nextEndMarker returns the first offset i in [from, limit) at which data holds
+// `endstream` or `endobj`, or -1. bytes.Index jumps from one "end" to the next.
+func nextEndMarker(data []byte, from, limit int) int {
+	// Only an "end" that starts before limit can begin a match, so the search
+	// never reads further than that: the budgeted caller relies on it.
+	window := min(limit+len(endMarkerPrefix)-1, len(data))
+	for i := from; i < limit; i++ {
+		k := bytes.Index(data[i:window], endMarkerPrefix)
+		if k < 0 {
+			return -1
+		}
+		i += k
+		if hasPrefixAt(data, i, "endstream") || hasPrefixAt(data, i, "endobj") {
+			return i
+		}
+	}
+	return -1
+}
+
+var endMarkerPrefix = []byte("end")
 
 func newParser(data []byte, warn *[]Warning, maxDepth int, maxStreamSize int64) *parser {
 	return &parser{
@@ -283,8 +356,13 @@ func (p *parser) parseStreamBody(dict *Dict) *Stream {
 		p.lex.pos = save
 	}
 
-	raw := make([]byte, length)
-	copy(raw, p.lex.data[start:min64(start+length, int64(len(p.lex.data)))])
+	// Raw is a view of the source, capped so an append cannot write into the
+	// bytes that follow — the way pdfbox's COSStream is a view of its
+	// RandomAccessRead. Copying here made memory quadratic in the file size: a
+	// run of streams that all lack `endstream` each owned a copy of the rest of
+	// the file, and the object cache kept every copy alive.
+	end := min64(start+length, int64(len(p.lex.data)))
+	raw := p.lex.data[start:end:end]
 	return &Stream{Dict: dict, Raw: raw, Offset: start, Length: length}
 }
 
@@ -343,8 +421,20 @@ func hasPrefixAt(data []byte, pos int, s string) bool {
 // matched `end`), then drop a trailing CRLF or LF — but keep a lone CR, and keep
 // the trailing EOL entirely when the first ten bytes look like ASCII text
 // (PDFBOX-2120).
+//
+// Every stream that lacks a usable /Length runs this scan, and pdfbox's scan
+// is linear per stream, so a file of N such streams costs O(N x size) — seconds
+// for a few hundred kilobytes. Document parsers share an endMarkers, which finds
+// the same first match in amortised O(log n).
 func (p *parser) scanForEndstream(start int64) int64 {
 	data := p.lex.data
+	if p.ends != nil {
+		end := p.ends.next(data, int(start))
+		if end < 0 {
+			end = len(data)
+		}
+		return int64(len(trimStreamTrailer(data[start:end])))
+	}
 	i := int(start)
 	end := -1
 	for i < len(data) {

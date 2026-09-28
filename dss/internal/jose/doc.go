@@ -53,4 +53,10 @@
 // Nothing in this package may be re-routed through encoding/json for convenience. TestKnownAnswers
 // in writer_test.go pins every rule above against testdata/jose4j_oracle.tsv, which was produced
 // by running jose4j 0.9.6 itself (the generator is recorded in testdata/README.md).
+//
+// # Deliberate divergences
+//
+// ParseJSON and ParseJSONAny refuse objects and arrays nested more than MaxJSONDepth (1000)
+// deep. json_simple has no limit, but this package recurses once per level after parsing, and
+// a Go stack overflow is fatal rather than recoverable; see the DIVERGENCE note on MaxJSONDepth.
 package jose

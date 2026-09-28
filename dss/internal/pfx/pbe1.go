@@ -63,6 +63,9 @@ func decryptLegacyPBE(algorithm *asn1ber.AlgorithmIdentifier, password, cipherte
 	if _, err := asn1.Unmarshal(algorithm.Parameters, &params); err != nil {
 		return nil, fmt.Errorf("pfx: invalid PBEParameter: %w", err)
 	}
+	if err := checkIterationCount(params.Iterations, "PBE"); err != nil {
+		return nil, err
+	}
 
 	if keyLen, ok := legacyPBEStreamKeyLen[algorithm.Algorithm.String()]; ok {
 		key := deriveKeyMaterial(pfxHashSHA1, 1, params.Salt, password, params.Iterations, keyLen)

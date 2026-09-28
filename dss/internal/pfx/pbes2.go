@@ -70,6 +70,9 @@ func decryptPBES2(algorithm *asn1ber.AlgorithmIdentifier, password, ciphertext [
 	if _, err := asn1.Unmarshal(params.KeyDerivationFunc.Parameters.FullBytes, &kdfParams); err != nil {
 		return nil, fmt.Errorf("pfx: invalid PBKDF2-params: %w", err)
 	}
+	if err := checkIterationCount(kdfParams.IterationCount, "PBKDF2"); err != nil {
+		return nil, err
+	}
 
 	scheme, ok := pbes2EncryptionSchemes[params.EncryptionScheme.Algorithm.String()]
 	if !ok {
@@ -87,6 +90,15 @@ func decryptPBES2(algorithm *asn1ber.AlgorithmIdentifier, password, ciphertext [
 	if kdfParams.KeyLength > 0 {
 		keyLen = kdfParams.KeyLength
 	}
+	// The key length comes from the file: check the cipher accepts it before deriving that
+	// many bytes, so a crafted keyLength cannot make PBKDF2 allocate gigabytes.
+	// (Every supported scheme's key is at most 32 bytes long.)
+	if keyLen > 32 {
+		return nil, fmt.Errorf("pfx: unsupported PBKDF2 key length %d", keyLen)
+	}
+	if _, err := scheme.block(make([]byte, keyLen)); err != nil {
+		return nil, fmt.Errorf("pfx: unsupported PBKDF2 key length %d: %w", keyLen, err)
+	}
 	key, err := derivePBKDF2Key(kdfParams, password, keyLen)
 	if err != nil {
 		return nil, err
@@ -95,6 +107,10 @@ func decryptPBES2(algorithm *asn1ber.AlgorithmIdentifier, password, ciphertext [
 	block, err := scheme.block(key)
 	if err != nil {
 		return nil, err
+	}
+	// cipher.NewCBCDecrypter panics on an IV whose length is not the block size.
+	if len(iv.Bytes) != block.BlockSize() {
+		return nil, fmt.Errorf("pfx: PBES2 IV is %d bytes, %d expected", len(iv.Bytes), block.BlockSize())
 	}
 	return cbcDecryptAndUnpad(block, iv.Bytes, ciphertext)
 }

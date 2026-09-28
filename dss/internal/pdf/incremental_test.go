@@ -447,3 +447,29 @@ func TestCatalogIsScheduledOnce(t *testing.T) {
 		t.Errorf("catalog edit missing:\n%s", inc)
 	}
 }
+
+// /Size 2^63-1 makes HighestObjectNumber 2^63-2; allocating past it wrapped to
+// "-9223372036854775808 0 obj" and "/Size -9223372036854775808" in the signed
+// increment. The updater now refuses instead.
+func TestUpdaterRefusesObjectNumberOverflow(t *testing.T) {
+	data := buildReaderPDF("%PDF-1.4\n", catalogObjs(), "/Size 9223372036854775807\n")
+	data = bytes.Replace(data, []byte("/Size 4\n"), nil, 1)
+	d := mustOpen(t, data)
+	if d.HighestObjectNumber() != 9223372036854775806 {
+		t.Fatalf("highest = %d", d.HighestObjectNumber())
+	}
+	if _, err := NewUpdater(d); !errors.Is(err, ErrLimitExceeded) {
+		t.Fatalf("NewUpdater err = %v, want ErrLimitExceeded", err)
+	}
+
+	data = bytes.Replace(data, []byte("/Size 9223372036854775807"), []byte("/Size 9223372036854775805"), 1)
+	u, err := NewUpdater(mustOpen(t, data))
+	if err != nil {
+		t.Fatal(err)
+	}
+	u.Add(DictOf(Name("Type"), Name("X")))
+	u.Add(DictOf(Name("Type"), Name("Y")))
+	if _, err := u.Write(); !errors.Is(err, ErrLimitExceeded) {
+		t.Fatalf("Write err = %v, want ErrLimitExceeded", err)
+	}
+}

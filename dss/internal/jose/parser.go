@@ -53,6 +53,18 @@ func ParseJSON(s string) (*Object, error) {
 	return object, nil
 }
 
+// MaxJSONDepth is how deeply objects and arrays may nest in a document ParseJSON or
+// ParseJSONAny accepts. The parser itself keeps its stack on the heap, as json_simple's does,
+// but materialize and the writer recurse once per level, and a JAdES header is attacker
+// input: 20,000,000 '[' (40 MB) overflowed the goroutine stack in materialize, a fatal error
+// no recover() can catch. A real JOSE header nests a handful of levels.
+//
+// DIVERGENCE, deliberate: json_simple's JSONParser.parse (driven by JsonUtil.parseJson) has
+// no nesting limit, so jose4j parses such a document and only a later recursive consumer -
+// JSONValue.toJSONString, say - dies of StackOverflowError. Here the parse fails with an
+// ordinary *ParseError instead.
+const MaxJSONDepth = 1000
+
 // ParseJSONAny parses any JSON value - object, array, string, number, boolean or null. Port of
 // `new JSONParser().parse(String)` with no container factory, which DSSJsonUtils.parseJsonString
 // and parseBase64UrlEncoded use.
@@ -100,10 +112,19 @@ func parseJSONValue(s string, hashOrdered bool) (any, error) {
 	var statusStack []int
 	var valueStack []any
 	status := sInit
+	depth := 0 // open objects and arrays
 
 	push := func(st int, v any) {
 		statusStack = append(statusStack, st)
 		valueStack = append(valueStack, v)
+	}
+	// open is called for every '{' and '['; see MaxJSONDepth.
+	open := func(tok jsonToken) error {
+		depth++
+		if depth > MaxJSONDepth {
+			return &ParseError{Position: tok.pos, Message: fmt.Sprintf("objects and arrays nested more than %d deep", MaxJSONDepth)}
+		}
+		return nil
 	}
 	popStatus := func() {
 		statusStack = statusStack[:len(statusStack)-1]
@@ -138,9 +159,15 @@ func parseJSONValue(s string, hashOrdered bool) (any, error) {
 				status = sInFinishedValue
 				push(status, tok.value)
 			case tokenLeftBrace:
+				if err := open(tok); err != nil {
+					return nil, err
+				}
 				status = sInObject
 				push(status, newObject())
 			case tokenLeftSquare:
+				if err := open(tok); err != nil {
+					return nil, err
+				}
 				status = sInArray
 				push(status, &jsonArray{})
 			default:
@@ -165,6 +192,7 @@ func parseJSONValue(s string, hashOrdered bool) (any, error) {
 				push(sPassedPairKey, key)
 				status = sPassedPairKey
 			case tokenRightBrace:
+				depth--
 				if len(valueStack) > 1 {
 					popStatus()
 					popValue()
@@ -188,6 +216,9 @@ func parseJSONValue(s string, hashOrdered bool) (any, error) {
 				}
 				status = peekStatus()
 			case tokenLeftSquare:
+				if err := open(tok); err != nil {
+					return nil, err
+				}
 				popStatus()
 				key := popValue().(string)
 				array := &jsonArray{}
@@ -197,6 +228,9 @@ func parseJSONValue(s string, hashOrdered bool) (any, error) {
 				status = sInArray
 				push(status, array)
 			case tokenLeftBrace:
+				if err := open(tok); err != nil {
+					return nil, err
+				}
 				popStatus()
 				key := popValue().(string)
 				object := newObject()
@@ -217,6 +251,7 @@ func parseJSONValue(s string, hashOrdered bool) (any, error) {
 				array := peekValue().(*jsonArray)
 				array.items = append(array.items, tok.value)
 			case tokenRightSquare:
+				depth--
 				if len(valueStack) > 1 {
 					popStatus()
 					popValue()
@@ -225,12 +260,18 @@ func parseJSONValue(s string, hashOrdered bool) (any, error) {
 					status = sInFinishedValue
 				}
 			case tokenLeftBrace:
+				if err := open(tok); err != nil {
+					return nil, err
+				}
 				array := peekValue().(*jsonArray)
 				object := newObject()
 				array.items = append(array.items, object)
 				status = sInObject
 				push(status, object)
 			case tokenLeftSquare:
+				if err := open(tok); err != nil {
+					return nil, err
+				}
 				array := peekValue().(*jsonArray)
 				inner := &jsonArray{}
 				array.items = append(array.items, inner)

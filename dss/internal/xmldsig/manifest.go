@@ -40,6 +40,10 @@ type Manifest struct {
 
 	references          []*Reference
 	verificationResults []VerifiedReference
+
+	// followedFrom is the manifest whose followManifests pass created this one, nil for a
+	// manifest the caller built. The chain is what followManifest checks for a cycle.
+	followedFrom *Manifest
 }
 
 // ManifestOptions carries the knobs that are constructor arguments or setters upstream.
@@ -136,6 +140,10 @@ type VerifiedReference struct {
 	ManifestReferences []VerifiedReference
 }
 
+// ErrManifestCycle reports a ds:Manifest reached again while following manifests from
+// itself. See followManifest.
+var ErrManifestCycle = errors.New("xmldsig: following nested manifests leads back to a manifest already being verified")
+
 // ErrNoReferences is Santuario's XMLSecurityException("empty", "References are empty").
 var ErrNoReferences = errors.New("xmldsig: the manifest contains no ds:Reference")
 
@@ -212,6 +220,16 @@ func (m *Manifest) followManifest(ref *Reference) ([]VerifiedReference, error) {
 		if n.Kind != xmldom.Element || n.Name.Space != NamespaceDSig || n.Name.Local != "Manifest" {
 			continue
 		}
+		// DIVERGENCE, deliberate: Manifest#verifyReferences follows a ds:Manifest that
+		// (directly or through other manifests) references itself until the JVM throws
+		// StackOverflowError. A reference can digest its own enclosing manifest - an XPath
+		// transform only has to leave out the ds:DigestValue - so the cycle is attacker-made,
+		// and in Go it grows the stack until the process dies. It is an error here instead.
+		for f := m; f != nil; f = f.followedFrom {
+			if f.element == n {
+				return nil, fmt.Errorf("%w: reference %q", ErrManifestCycle, ref.URI())
+			}
+		}
 		nested, err := NewManifest(n, &ManifestOptions{
 			BaseURI:          out.SourceURI(),
 			SecureValidation: m.secureValidation,
@@ -222,6 +240,7 @@ func (m *Manifest) followManifest(ref *Reference) ([]VerifiedReference, error) {
 			return nil, err
 		}
 		nested.perManifestResolvers = m.perManifestResolvers
+		nested.followedFrom = m
 		if _, err := nested.VerifyReferences(true); err != nil {
 			return nil, err
 		}

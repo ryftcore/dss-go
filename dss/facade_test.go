@@ -454,3 +454,22 @@ func TestBaselineLevelTable(t *testing.T) {
 		}
 	}
 }
+
+// TestFacadeEntryPointsDoNotPanic pins that inputs the ported code asserts
+// on - a nil certificate buffer, nil document content, a zero Signer - come
+// back as errors (or, for Close, as a no-op) rather than as a panic escaping
+// the facade.
+func TestFacadeEntryPointsDoNotPanic(t *testing.T) {
+	if _, err := dss.LoadCertificateBytes(nil); err == nil {
+		t.Error("LoadCertificateBytes(nil): expected an error")
+	}
+	if _, err := dss.Validate(dss.NewDocument("empty.bin", nil), dss.ValidateOptions{}); err == nil {
+		t.Error("Validate of an empty document: expected an error")
+	}
+	document := dss.NewDocument("payload.xml", []byte("<a/>"))
+	if _, err := dss.Sign(document, &dss.Signer{}, dss.SignOptions{Format: dss.FormatXAdES, Level: dss.LevelB}); err == nil {
+		t.Error("Sign with a zero Signer: expected an error")
+	}
+	var signer *dss.Signer
+	signer.Close()
+}

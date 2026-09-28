@@ -1,6 +1,9 @@
 package asn1ber
 
-import "strings"
+import (
+	"slices"
+	"strings"
+)
 
 // ValueToString ports org.bouncycastle.asn1.x500.style.IETFUtils#valueToString: it renders an
 // X.500 attribute value the way RFC 4514 wants it, escaping the specials and hash-encoding
@@ -21,29 +24,60 @@ func ValueToString(element *Element) string {
 		buffer = append(buffer, []rune(hexLower(element.DEREncoded()))...)
 	}
 
+	// The escaping below produces exactly what IETFUtils' in-place StringBuffer#insert loops
+	// do, but in linear time: inserting one rune at a time made a value of a few hundred
+	// thousand specials or spaces cost minutes.
 	index := 0
 	if len(buffer) >= 2 && buffer[0] == '\\' && buffer[1] == '#' {
 		index += 2
 	}
-	for ; index < len(buffer); index++ {
-		switch buffer[index] {
-		case ',', '"', '\\', '+', '=', '<', '>', ';':
-			buffer = append(buffer[:index], append([]rune{'\\'}, buffer[index:]...)...)
-			index++
+	var escaped []rune
+	// Most values (every plain name) have nothing to escape: copy only when one does.
+	if slices.ContainsFunc(buffer[index:], isRFC4514Special) {
+		escaped = make([]rune, 0, len(buffer)+len(buffer)/4+4)
+		escaped = append(escaped, buffer[:index]...)
+		for _, r := range buffer[index:] {
+			if isRFC4514Special(r) {
+				escaped = append(escaped, '\\')
+			}
+			escaped = append(escaped, r)
 		}
+		buffer = escaped
 	}
 
-	start := 0
-	for start < len(buffer) && buffer[start] == ' ' {
-		buffer = append(buffer[:start], append([]rune{'\\'}, buffer[start:]...)...)
-		start += 2
+	// Every leading space is escaped, then every space of the trailing run of the result.
+	leading := 0
+	for leading < len(buffer) && buffer[leading] == ' ' {
+		leading++
 	}
-	end := len(buffer) - 1
-	for end >= 0 && buffer[end] == ' ' {
-		buffer = append(buffer[:end], append([]rune{'\\'}, buffer[end:]...)...)
-		end--
+	if leading > 0 {
+		escaped = make([]rune, 0, len(buffer)+leading)
+		for range leading {
+			escaped = append(escaped, '\\', ' ')
+		}
+		buffer = append(escaped, buffer[leading:]...)
+	}
+	trailing := 0
+	for trailing < len(buffer) && buffer[len(buffer)-1-trailing] == ' ' {
+		trailing++
+	}
+	if trailing > 0 {
+		escaped = append(make([]rune, 0, len(buffer)+trailing), buffer[:len(buffer)-trailing]...)
+		for range trailing {
+			escaped = append(escaped, '\\', ' ')
+		}
+		buffer = escaped
 	}
 	return string(buffer)
+}
+
+// isRFC4514Special reports whether IETFUtils#valueToString backslash-escapes r.
+func isRFC4514Special(r rune) bool {
+	switch r {
+	case ',', '"', '\\', '+', '=', '<', '>', ';':
+		return true
+	}
+	return false
 }
 
 // ASN1ToString reproduces ASN1Primitive#toString for the value types an X.500 attribute can

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -389,4 +390,92 @@ func warningsContain(warn []Warning, code WarningCode) bool {
 		}
 	}
 	return false
+}
+
+// scanForEndstream's marker index must find exactly what the linear scan finds.
+func TestEndstreamIndexMatchesLinearScan(t *testing.T) {
+	inputs := []string{
+		"stream\nabc\nendstream",
+		"stream\nabc\r\nendobj",
+		"stream\n\x00\x01binary\nendstreamendobj",
+		"stream\nno end at all",
+		"stream\neendstream en endo endobj",
+		"stream\nendstream",
+	}
+	for _, in := range inputs {
+		data := []byte(in)
+		for start := 0; start <= len(data); start++ {
+			lin := newParser(data, nil, 64, 1<<20)
+			idx := newParser(data, nil, 64, 1<<20)
+			idx.ends = &endMarkers{}
+			if a, b := lin.scanForEndstream(int64(start)), idx.scanForEndstream(int64(start)); a != b {
+				t.Errorf("%q from %d: linear %d, indexed %d", in, start, a, b)
+			}
+		}
+	}
+}
+
+// Streams without a usable /Length or `endstream` each ran to the end of the
+// file. Each used to own a copy of that tail (kept alive by the object cache):
+// 4000 such streams in 150 KB allocated over 600 MiB and took seconds.
+func TestUnterminatedStreamsAreNotQuadratic(t *testing.T) {
+	var b bytes.Buffer
+	b.WriteString("%PDF-1.4\n1 0 obj<</Type/Catalog/Pages 2 0 R>>endobj 2 0 obj<</Type/Pages/Kids[]/Count 0>>endobj\n")
+	for i := 3; i < 4000; i++ {
+		fmt.Fprintf(&b, "%d 0 obj<<>>stream\nXXXXXXXXXXXXXXXX\n", i)
+	}
+	var before, after runtime.MemStats
+	runtime.ReadMemStats(&before)
+	d, err := OpenBytes(b.Bytes(), nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, k := range d.ObjectKeys() {
+		_, _ = d.Object(k)
+	}
+	runtime.ReadMemStats(&after)
+	if got := after.TotalAlloc - before.TotalAlloc; got > 100<<20 {
+		t.Errorf("allocated %d MiB for a %d-byte file", got>>20, b.Len())
+	}
+}
+
+// The same, with the marker index already built (the forward search's budget
+// spent), so both of endMarkers' paths are pinned against the linear scan.
+func TestEndstreamIndexBuiltMatchesLinearScan(t *testing.T) {
+	data := []byte("stream\n\x00\x01binary\nendstreamendobj stream\nabc\r\nendobj stream\neendstream en endo endobj x")
+	ends := &endMarkers{scanned: len(data)}
+	for start := 0; start <= len(data); start++ {
+		lin := newParser(data, nil, 64, 1<<20)
+		idx := newParser(data, nil, 64, 1<<20)
+		idx.ends = ends
+		if a, b := lin.scanForEndstream(int64(start)), idx.scanForEndstream(int64(start)); a != b {
+			t.Errorf("from %d: linear %d, indexed %d", start, a, b)
+		}
+	}
+	if !ends.built {
+		t.Error("an exhausted budget must build the index")
+	}
+}
+
+// Well-formed files reach scanForEndstream for every /Length 0 stream (S5), and
+// the marker is right there: that must stay a short forward search. Building
+// the whole-file index for it cost a tenth of Open on signed PDFs.
+func TestEmptyStreamsDoNotIndexTheWholeFile(t *testing.T) {
+	var objs []rdrObj
+	for i := 0; i < 50; i++ {
+		objs = append(objs, rdrObj{num: int64(4 + i), body: "<< /Length 0 >>\nstream\n\nendstream"})
+	}
+	objs = append(objs, rdrObj{num: 60, body: "<< /Length 20000 >>\nstream\n" + strings.Repeat("x", 20000) + "\nendstream"})
+	d := mustOpen(t, buildReaderPDF("%PDF-1.4\n", catalogObjs(objs...), ""))
+	for _, k := range d.ObjectKeys() {
+		if _, err := d.Object(k); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if d.ends.built {
+		t.Error("the marker index was built for a file whose scans all end a few bytes on")
+	}
+	if d.ends.scanned == 0 || d.ends.scanned > 1000 {
+		t.Errorf("forward searches covered %d bytes, want a few per empty stream", d.ends.scanned)
+	}
 }

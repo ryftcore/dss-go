@@ -1,6 +1,7 @@
 package xpath10
 
 import (
+	"errors"
 	"strings"
 	"testing"
 
@@ -181,4 +182,43 @@ func advAttr(n *xmldom.Node, qname string) *xmldom.Node {
 		}
 	}
 	return nil
+}
+
+// TestAdversarialDeepExpressionIsRefused pins the maxExprDepth cap. Without it both inputs
+// below - an XPath transform's text is attacker-controlled - recurse once per level in the
+// parser or the evaluator and overflow the goroutine stack, a fatal error that no recover()
+// can catch (3,000,000 levels of not() - a 12 MB expression - did so before the cap). The
+// inputs here are smaller, to keep the test fast, but far past the cap, which is what is
+// pinned. Nesting and a left-deep operator chain are capped alike; an expression under the
+// cap still compiles and evaluates.
+func TestAdversarialDeepExpressionIsRefused(t *testing.T) {
+	const levels = 100_000
+	for name, expr := range map[string]string{
+		"nested not()": "a[" + strings.Repeat("not(", levels) + "b" + strings.Repeat(")", levels) + "]",
+		"predicates":   strings.Repeat("a[", levels) + "b" + strings.Repeat("]", levels),
+		"or chain":     "a[b" + strings.Repeat(" or b", levels) + "]",
+		"union chain":  "id('x')" + strings.Repeat("|id('x')", levels),
+	} {
+		_, err := CompileTransform(expr, nil)
+		var unsupported *UnsupportedError
+		if !errors.As(err, &unsupported) || !strings.Contains(unsupported.Construct, "nested more than") {
+			t.Errorf("%s: CompileTransform error = %v, want the nesting-depth refusal", name, err)
+		}
+	}
+	if _, err := Compile(strings.Repeat("a[", levels)+"b"+strings.Repeat("]", levels), nil); err == nil {
+		t.Error("Compile accepted a 100,000-level predicate nesting")
+	}
+
+	doc, err := xmldom.Parse([]byte(`<a><b/></a>`), nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	const ok = maxExprDepth / 2
+	e, err := CompileTransform("self::a[b"+strings.Repeat(" or b", ok)+"]", nil)
+	if err != nil {
+		t.Fatalf("a %d-operator chain was refused: %v", ok, err)
+	}
+	if got, err := e.EvaluateBoolean(doc.DocumentElement()); err != nil || !got {
+		t.Fatalf("EvaluateBoolean = %v, %v; want true", got, err)
+	}
 }

@@ -11,17 +11,27 @@ package main
 
 import (
 	"bytes"
+	"crypto"
+	"crypto/ecdsa"
+	"crypto/rand"
+	"crypto/sha256"
+	"crypto/x509"
 	"encoding/asn1"
 	"io"
+	"math/big"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/ryftcore/dss-go/dss"
-	spivalidation "github.com/ryftcore/dss-go/dss/spi/validation"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
+	"github.com/ryftcore/dss-go/dss/internal/cmscore"
+	"github.com/ryftcore/dss-go/dss/spi"
+	"golang.org/x/crypto/pkcs12"
 )
 
 // fixture resolves a path under the dss module's own testdata/ directory -
@@ -33,22 +43,23 @@ func fixture(name string) string {
 
 // testTSAServer starts an httptest.Server that speaks just enough RFC 3161
 // to answer this client's tsa.go: it decodes the incoming TimeStampReq with
-// this package's own tsaRequest type and issues a real token with
-// [spivalidation.KeyEntityTSPSource] - the same offline, self-hosted TSA the
-// facade's own tests use (dss/facade_test.go's testTSA) - keyed to always
-// answer as SHA-256, which is what every sign/extend call in this file asks
-// for. It is a test double for a real TSA's HTTP transport, not for the
-// library: the token itself is genuine, produced by the same code path
-// dss.SignOptions.TSPSource drives in production.
+// this package's own tsaRequest type and issues a genuine token, signed with
+// the tsa_ec.p12 fixture's key, over the requested message imprint and
+// echoing the request's nonce - which tsa.go insists on, and which
+// spi/validation.KeyEntityTSPSource (upstream never sets a nonce) cannot
+// produce. It is a test double for a real TSA, not for the library.
 func testTSAServer(t *testing.T) *httptest.Server {
 	t.Helper()
-	tsa, err := spivalidation.NewKeyEntityTSPSourceFromKeyStorePath(
-		fixture("tsa_ec.p12"), "PKCS12", "testpassword", "", "testpassword")
-	if err != nil {
-		t.Fatalf("KeyEntityTSPSource: %v", err)
-	}
-	tsa.SetTsaPolicy("1.2.3.4.5.6.7.8.9")
+	tsa := newTestTSA(t)
+	return testTSAServerWith(t, func(req tsaRequest) []byte {
+		return tsa.token(t, req.MessageImprint.HashAlgorithm.Algorithm, req.MessageImprint.HashedMessage, req.Nonce)
+	})
+}
 
+// testTSAServerWith is testTSAServer with the token issuance supplied by the
+// caller, so a test can answer with a token that does not match the request.
+func testTSAServerWith(t *testing.T, issue func(req tsaRequest) []byte) *httptest.Server {
+	t.Helper()
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		body, err := io.ReadAll(r.Body)
 		if err != nil {
@@ -60,14 +71,9 @@ func testTSAServer(t *testing.T) *httptest.Server {
 			http.Error(w, "bad request: "+err.Error(), http.StatusBadRequest)
 			return
 		}
-		token, err := tsa.TimeStampResponse(dss.DigestSHA256, req.MessageImprint.HashedMessage)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
 		respBytes, err := asn1.Marshal(tsaResponse{
 			Status: tsaPKIStatusInfo{Status: pkiStatusGranted},
-			Token:  asn1.RawValue{FullBytes: token.Bytes()},
+			Token:  asn1.RawValue{FullBytes: issue(req)},
 		})
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -77,6 +83,108 @@ func testTSAServer(t *testing.T) *httptest.Server {
 	}))
 	t.Cleanup(server.Close)
 	return server
+}
+
+// testTSA issues RFC 3161 time-stamp tokens from the tsa_ec.p12 fixture.
+type testTSA struct {
+	key   *ecdsa.PrivateKey
+	chain []*x509.Certificate
+}
+
+func newTestTSA(t *testing.T) *testTSA {
+	t.Helper()
+	store, err := os.ReadFile(fixture("tsa_ec.p12"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	blocks, err := pkcs12.ToPEM(store, "testpassword")
+	if err != nil {
+		t.Fatalf("tsa_ec.p12: %v", err)
+	}
+	tsa := &testTSA{}
+	for _, block := range blocks {
+		switch block.Type {
+		case "CERTIFICATE":
+			cert, err := x509.ParseCertificate(block.Bytes)
+			if err != nil {
+				t.Fatal(err)
+			}
+			tsa.chain = append(tsa.chain, cert)
+		case "PRIVATE KEY":
+			if tsa.key, err = x509.ParseECPrivateKey(block.Bytes); err != nil {
+				t.Fatal(err)
+			}
+		}
+	}
+	if tsa.key == nil || len(tsa.chain) == 0 {
+		t.Fatal("tsa_ec.p12: no key entry")
+	}
+	return tsa
+}
+
+// token issues a TimeStampToken over the given message imprint, carrying
+// nonce in its TSTInfo when nonce is not nil.
+func (tsa *testTSA) token(t *testing.T, hashAlgorithm asn1.ObjectIdentifier, digest []byte, nonce *big.Int) []byte {
+	t.Helper()
+	now := time.Now().UTC().Truncate(time.Second)
+	tstInfo, err := asn1.Marshal(struct {
+		Version        int
+		Policy         asn1.ObjectIdentifier
+		MessageImprint tsaMessageImprint
+		SerialNumber   *big.Int
+		GenTime        time.Time `asn1:"generalized"`
+		Nonce          *big.Int  `asn1:"optional"`
+	}{1, asn1.ObjectIdentifier{1, 2, 3, 4, 5, 6, 7, 8, 9},
+		tsaMessageImprint{tsaAlgorithmIdentifier{hashAlgorithm}, digest},
+		big.NewInt(now.UnixNano()), now, nonce})
+	if err != nil {
+		t.Fatal(err)
+	}
+	mustMarshal := func(v any) []byte {
+		der, err := asn1.Marshal(v)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return der
+	}
+	tstDigest := sha256.Sum256(tstInfo)
+	certHash := sha256.Sum256(tsa.chain[0].Raw)
+	type essCertIDv2 struct{ CertHash []byte }
+	type signingCertificateV2 struct{ Certs []essCertIDv2 }
+	sha256OID := asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4, 2, 1}
+	builder := &cmscore.SignerInfoBuilder{
+		SID:             cmscore.NewIssuerAndSerialNumberSID(tsa.chain[0].RawIssuer, tsa.chain[0].SerialNumber),
+		DigestAlgorithm: asn1ber.NewAlgorithmIdentifier(sha256OID),
+		SignedAttributes: cmscore.Attributes{
+			cmscore.NewAttribute(cmscore.OIDContentType, mustMarshal(cmscore.OIDCTTSTInfo)),
+			cmscore.NewAttribute(cmscore.OIDSigningTime, mustMarshal(now)),
+			cmscore.NewAttribute(spi.OIDIdAaSigningCertificateV2,
+				mustMarshal(signingCertificateV2{[]essCertIDv2{{certHash[:]}}})),
+			cmscore.NewAttribute(cmscore.OIDMessageDigest, mustMarshal(tstDigest[:])),
+		},
+		SignatureAlgorithm: asn1ber.NewAlgorithmIdentifier(asn1.ObjectIdentifier{1, 2, 840, 10045, 4, 3, 2}),
+	}
+	toBeSigned := sha256.Sum256(builder.SignedAttributesDER())
+	if builder.Signature, err = tsa.key.Sign(rand.Reader, toBeSigned[:], crypto.SHA256); err != nil {
+		t.Fatal(err)
+	}
+	signerInfo, err := builder.Build()
+	if err != nil {
+		t.Fatal(err)
+	}
+	certificates := make([]cmscore.CertificateChoice, 0, len(tsa.chain))
+	for _, cert := range tsa.chain {
+		certificates = append(certificates, cmscore.NewCertificateChoice(cert.Raw))
+	}
+	cms, err := (&cmscore.SignedDataBuilder{
+		EncapContentInfo: cmscore.NewEncapsulatedContentInfo(cmscore.OIDCTTSTInfo, tstInfo),
+		Certificates:     certificates,
+		SignerInfos:      []*cmscore.SignerInfo{signerInfo},
+	}).BuildCMS()
+	if err != nil {
+		t.Fatal(err)
+	}
+	return cms.DEREncoded()
 }
 
 // TestHTTPTSPSourceRoundTrip exercises the client half of tsa.go directly
@@ -123,6 +231,72 @@ func TestHTTPTSPSourceRejectsRefusal(t *testing.T) {
 	client := newHTTPTSPSource(server.URL)
 	if _, err := client.TimeStampResponse(dss.DigestSHA256, make([]byte, 32)); err == nil {
 		t.Fatal("expected an error for a PKIStatus rejection")
+	}
+}
+
+// TestHTTPTSPSourceRejectsMismatchedToken pins the request/response matching
+// tsa.go does (BouncyCastle's TimeStampResponse.validate for upstream's
+// OnlineTSPSource): a granted token over another digest, with another nonce
+// or with no nonce at all is refused rather than embedded in a signature.
+func TestHTTPTSPSourceRejectsMismatchedToken(t *testing.T) {
+	tsa := newTestTSA(t)
+	cases := []struct {
+		name  string
+		issue func(req tsaRequest) []byte
+		want  string
+	}{
+		{"other digest", func(req tsaRequest) []byte {
+			return tsa.token(t, req.MessageImprint.HashAlgorithm.Algorithm, make([]byte, 32), req.Nonce)
+		}, "message imprint digest"},
+		{"other algorithm", func(req tsaRequest) []byte {
+			return tsa.token(t, asn1.ObjectIdentifier{2, 16, 840, 1, 101, 3, 4, 2, 3}, req.MessageImprint.HashedMessage, req.Nonce)
+		}, "message imprint algorithm"},
+		{"wrong nonce", func(req tsaRequest) []byte {
+			return tsa.token(t, req.MessageImprint.HashAlgorithm.Algorithm, req.MessageImprint.HashedMessage,
+				new(big.Int).Add(req.Nonce, big.NewInt(1)))
+		}, "nonce"},
+		{"no nonce", func(req tsaRequest) []byte {
+			return tsa.token(t, req.MessageImprint.HashAlgorithm.Algorithm, req.MessageImprint.HashedMessage, nil)
+		}, "nonce"},
+		{"not a token", func(req tsaRequest) []byte {
+			der, _ := asn1.Marshal(42)
+			return der
+		}, "cannot be parsed"},
+	}
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			server := testTSAServerWith(t, tc.issue)
+			digest := bytes.Repeat([]byte{0xA5}, 32)
+			_, err := newHTTPTSPSource(server.URL).TimeStampResponse(dss.DigestSHA256, digest)
+			if err == nil || !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("err = %v, want one mentioning %q", err, tc.want)
+			}
+		})
+	}
+}
+
+// TestHTTPTSPSourceRedactsURLPassword pins that a TSA URL carrying HTTP
+// Basic credentials (https://user:secret@host/) never has its password
+// echoed into an error message, which the CLI prints to stderr.
+func TestHTTPTSPSourceRedactsURLPassword(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, "no", http.StatusServiceUnavailable)
+	}))
+	defer server.Close()
+
+	const secret = "s3cr3t-tsa-password"
+	for _, rawURL := range []string{
+		strings.Replace(server.URL, "http://", "http://user:"+secret+"@", 1), // non-200 response
+		"http://user:" + secret + "@127.0.0.1:1/",                            // connection refused
+		"http://user:" + secret + "@[::1",                                    // unparsable URL
+	} {
+		_, err := newHTTPTSPSource(rawURL).TimeStampResponse(dss.DigestSHA256, make([]byte, 32))
+		if err == nil {
+			t.Fatalf("%s: expected an error", rawURL)
+		}
+		if strings.Contains(err.Error(), secret) {
+			t.Errorf("error discloses the TSA password: %v", err)
+		}
 	}
 }
 

@@ -2,7 +2,9 @@ package pdf
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -344,5 +346,82 @@ func TestSectionCapIsBounded(t *testing.T) {
 	d := mustOpen(t, data)
 	if len(d.XRefSections()) > 2 {
 		t.Errorf("cycle guard failed: %d sections", len(d.XRefSections()))
+	}
+}
+
+// An xref stream's /DecodeParms is decoded at Open, before anything else: a
+// /Columns of 2^45 made the predictor allocate a 2^42-byte row and the process
+// died with "out of memory". It is now a hard ErrLimitExceeded.
+func TestXRefStreamHostilePredictorFailsOpen(t *testing.T) {
+	data := buildXRefStreamPDF(t, "/DecodeParms << /Predictor 12 /Columns 35184372088832 >> ")
+	_, err := OpenBytes(data, nil)
+	if !errors.Is(err, ErrLimitExceeded) {
+		t.Fatalf("err = %v, want ErrLimitExceeded", err)
+	}
+}
+
+// Rows decoded from an xref stream are bounded by MaxObjects before they are
+// allocated, not after mergeSections has built a map of them.
+func TestXRefStreamEntriesBoundedByMaxObjects(t *testing.T) {
+	d := &Document{opts: Options{MaxObjects: 10}.withDefaults()}
+	raw := bytes.Repeat([]byte{1, 9}, 100) // /W [1 1 0]: 100 in-use entries
+	dict := DictOf(Name("W"), Array{Integer(1), Integer(1), Integer(0)},
+		Name("Size"), Integer(100))
+	if _, err := d.decodeXRefStream(dict, raw); !errors.Is(err, ErrLimitExceeded) {
+		t.Fatalf("err = %v, want ErrLimitExceeded", err)
+	}
+	if !errors.Is(d.limitErr, ErrLimitExceeded) {
+		t.Error("the guard must be recorded so Open fails instead of repairing around it")
+	}
+}
+
+// buildXRefStreamPDFWithTail is buildXRefStreamPDF with tail appended to the
+// xref stream's decoded rows (bytes decodeXRefStream never reads).
+func buildXRefStreamPDFWithTail(t *testing.T, tail int) []byte {
+	t.Helper()
+	var buf bytes.Buffer
+	buf.WriteString("%PDF-1.5\n")
+	offsets := map[int64]int{}
+	for num, body := range []string{"", "<< /Type /Catalog /Pages 2 0 R >>",
+		"<< /Type /Pages /Kids [3 0 R] /Count 1 >>", "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 100 200] >>"} {
+		if num == 0 {
+			continue
+		}
+		offsets[int64(num)] = buf.Len()
+		fmt.Fprintf(&buf, "%d 0 obj\n%s\nendobj\n", num, body)
+	}
+	xrefOff := buf.Len()
+	raw := []byte{0, 0, 0, 0, 0, 0xff, 0xff}
+	for _, off := range []int{offsets[1], offsets[2], offsets[3], xrefOff} {
+		raw = append(raw, 1, byte(off>>24), byte(off>>16), byte(off>>8), byte(off), 0, 0)
+	}
+	raw = append(raw, make([]byte, tail)...)
+	enc := FlateEncode(raw)
+	fmt.Fprintf(&buf, "4 0 obj\n<< /Type /XRef /Size 5 /W [1 4 2] /Root 1 0 R /Filter /FlateDecode /Length %d >>\nstream\n", len(enc))
+	buf.Write(enc)
+	fmt.Fprintf(&buf, "\nendstream\nendobj\nstartxref\n%d\n%%%%EOF\n", xrefOff)
+	return buf.Bytes()
+}
+
+// An xref stream is decoded only as far as its declared rows can reach. A 4 MB
+// Flate bomb as the /Type /XRef stream used to inflate to MaxStreamSize (512
+// MiB, in a buffer that doubled to 1 GiB) before Open failed: 2 GB and 11 s.
+func TestXRefStreamFlateBombFailsFast(t *testing.T) {
+	data := buildXRefStreamPDFWithTail(t, 64<<20)
+	var before, after runtime.MemStats
+	runtime.ReadMemStats(&before)
+	_, err := OpenBytes(data, nil)
+	runtime.ReadMemStats(&after)
+	if !errors.Is(err, ErrLimitExceeded) {
+		t.Fatalf("err = %v, want ErrLimitExceeded", err)
+	}
+	if got := after.TotalAlloc - before.TotalAlloc; got > 4<<20 {
+		t.Errorf("allocated %d KiB refusing a %d-byte file", got>>10, len(data))
+	}
+
+	// Slack past the declared rows that a sloppy writer might leave is still fine.
+	d := mustOpen(t, buildXRefStreamPDFWithTail(t, 4096))
+	if got := len(d.ObjectKeys()); got != 4 {
+		t.Errorf("objects = %d, want 4", got)
 	}
 }

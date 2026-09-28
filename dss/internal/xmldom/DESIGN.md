@@ -1301,3 +1301,21 @@ character canonicalization writes out as UTF-8.
 
 `windows-1252` and XML 1.1 remain fail-closed refusals at `Parse` (D4 for 1.1). No upstream
 fixture uses either; both are refusals, never wrong answers.
+
+### 6.5 Hostile-input refusals in the layers above (`xpath10`, `xmldsig`)
+
+Two inputs made Java throw `StackOverflowError` and made this port die outright, since a Go
+stack overflow is a fatal error that no `recover()` catches. Both are now ordinary errors, each
+marked `// DIVERGENCE, deliberate:` at the check:
+
+- **Deeply nested XPath** (`internal/xpath10/parser.go`, `maxExprDepth` = 1000). The parser
+  and evaluator recurse once per level of `not(...)`, predicate or function argument, and once
+  per operator of an `or`/`=`/`|` chain (a left-deep tree). A `ds:XPath` or `xpf:XPath`
+  transform is attacker text; 3,000,000 nested `not(` overflowed the 1 GB stack. Xalan has no
+  cap and fails with `StackOverflowError`; here it is an `*UnsupportedError`. No DSS-written
+  expression and no corpus transform comes near the cap.
+- **A ds:Manifest cycle under followManifests** (`internal/xmldsig/manifest.go`,
+  `ErrManifestCycle`). A `Type="…#Manifest"` reference can digest its own enclosing manifest
+  (an XPath transform only has to leave out the `ds:DigestValue`), and
+  `Manifest#verifyReferences(true)` then follows it forever. DSS itself verifies with
+  `followManifests` off, so only a caller that opts in could reach it.

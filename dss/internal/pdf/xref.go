@@ -9,6 +9,7 @@ package pdf
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"math"
 	"sort"
@@ -84,6 +85,9 @@ func (d *Document) buildXRef() error {
 	if ok {
 		d.startxref = off
 		sections = d.walkChain(off)
+		if d.limitErr != nil {
+			return d.limitErr
+		}
 	} else {
 		// T3: a missing or unparseable startxref triggers full reconstruction.
 		d.addWarning(WarnXRefBruteForce, -1, "no usable startxref; rebuilding by brute force")
@@ -328,6 +332,75 @@ func (d *Document) readSubsectionHeader(l *lexer) (int64, int64, bool) {
 	return first, count, true
 }
 
+// xrefStreamWidths returns an xref stream's /W field widths and their sum, or
+// false when /W is not three non-negative integers summing to 1..20.
+func xrefStreamWidths(dict *Dict) (w [3]int, total int, ok bool) {
+	wArr, ok := dict.GetRaw("W").(Array)
+	if !ok || len(wArr) != 3 {
+		return w, 0, false
+	}
+	for i := 0; i < 3; i++ {
+		v, ok := wArr[i].(Integer)
+		if !ok || v < 0 {
+			return w, 0, false
+		}
+		w[i] = int(v)
+		total += w[i]
+	}
+	if total == 0 || total > 20 { // PDFBOX-6037
+		return w, 0, false
+	}
+	return w, total, true
+}
+
+// xrefStreamIndex returns an xref stream's /Index as (first, count) pairs,
+// [0 /Size] when it has none.
+func xrefStreamIndex(dict *Dict) []int64 {
+	var index []int64
+	if arr, ok := dict.GetRaw("Index").(Array); ok && len(arr) > 0 && len(arr)%2 == 0 {
+		for _, e := range arr {
+			v, _ := e.(Integer)
+			index = append(index, int64(v))
+		}
+	} else {
+		size := dictInt(dict, "Size", 0)
+		index = []int64{0, size}
+	}
+	return index
+}
+
+// xrefStreamDecodeLimit bounds an xref stream's decoded size (DESIGN.md §2.7).
+// decodeXRefStream reads one /W-wide row per entry /Index (or /Size) declares
+// and ignores the rest, so a few kilobytes of Flate that inflate to MaxStreamSize
+// bytes of rows nobody reads - which then also go through the predictor - buy
+// an attacker half a gigabyte, twice, on Open. The bound is four times what the
+// declared rows can occupy, one PNG predictor tag byte per row included - room
+// for a predictor /Columns that does not match /W and for ASCII filters earlier
+// in the chain - plus 64 KiB, with the rows counted at most 2 x MaxObjects
+// (more in-use rows than MaxObjects already fail Open).
+//
+// DIVERGENCE, deliberate: pdfbox's PDFXrefStreamParser decodes the stream with
+// no bound but the heap; an xref stream decoding past this bound is
+// ErrLimitExceeded here.
+func (d *Document) xrefStreamDecodeLimit(dict *Dict) int64 {
+	limit := d.opts.MaxStreamSize
+	_, width, ok := xrefStreamWidths(dict)
+	if !ok {
+		return limit // decodeXRefStream refuses it anyway
+	}
+	maxRows := 2 * int64(d.opts.MaxObjects)
+	index := xrefStreamIndex(dict)
+	var rows int64
+	for r := 0; r+1 < len(index) && rows < maxRows; r += 2 {
+		if c := index[r+1]; c > 0 {
+			rows += min64(c, maxRows)
+		}
+	}
+	rows = min64(rows, maxRows)
+	bound := 4*rows*int64(width+1) + 64<<10
+	return min64(bound, limit)
+}
+
 // parseXrefStreamAt parses an `N G obj << /Type /XRef … >> stream` section.
 func (d *Document) parseXrefStreamAt(p *parser, off int64, recovered bool) (*rawSection, error) {
 	obj, _, ok := p.parseIndirectAt(off, ObjectKey{})
@@ -347,8 +420,9 @@ func (d *Document) parseXrefStreamAt(p *parser, off int64, recovered bool) (*raw
 	}}
 	// A cross-reference stream is never encrypted, so decoding needs no key.
 	names, parms := streamFilters(st.Dict, nil)
-	data, err := Decode(st.Raw, names, parms, &d.warnings)
+	data, err := decodeLimited(st.Raw, names, parms, &d.warnings, d.xrefStreamDecodeLimit(st.Dict))
 	if err != nil {
+		d.noteLimit(err)
 		return nil, err
 	}
 	entries, err := d.decodeXRefStream(st.Dict, data)
@@ -363,36 +437,20 @@ func (d *Document) parseXrefStreamAt(p *parser, off int64, recovered bool) (*raw
 
 // decodeXRefStream reads /W-wide big-endian fields over the /Index ranges.
 func (d *Document) decodeXRefStream(dict *Dict, data []byte) ([]keyedEntry, error) {
-	wArr, ok := dict.GetRaw("W").(Array)
-	if !ok || len(wArr) != 3 {
+	w, total, ok := xrefStreamWidths(dict)
+	if !ok {
 		return nil, fmt.Errorf("pdf: bad /W array in xref stream")
 	}
-	var w [3]int
-	total := 0
-	for i := 0; i < 3; i++ {
-		v, ok := wArr[i].(Integer)
-		if !ok || v < 0 {
-			return nil, fmt.Errorf("pdf: bad /W array in xref stream")
-		}
-		w[i] = int(v)
-		total += w[i]
-	}
-	if total == 0 || total > 20 { // PDFBOX-6037
-		return nil, fmt.Errorf("pdf: bad /W array in xref stream")
-	}
-	var index []int64
-	if arr, ok := dict.GetRaw("Index").(Array); ok && len(arr) > 0 && len(arr)%2 == 0 {
-		for _, e := range arr {
-			v, _ := e.(Integer)
-			index = append(index, int64(v))
-		}
-	} else {
-		size := dictInt(dict, "Size", 0)
-		index = []int64{0, size}
-	}
+	index := xrefStreamIndex(dict)
 
 	var out []keyedEntry
 	pos := 0
+	// One entry per /W-wide row, so the decoded stream bounds the count; but a
+	// few kilobytes of Flate can decode to a hundred million rows, and every
+	// in-use row costs a keyedEntry here and a map slot in mergeSections. More
+	// in-use entries than MaxObjects fails the same guard OpenBytes applies after
+	// merging, only before the allocation instead of after it.
+	maxEntries := d.opts.MaxObjects
 	read := func(off, n int) int64 {
 		var v int64
 		for i := 0; i < n; i++ {
@@ -415,6 +473,11 @@ func (d *Document) decodeXRefStream(dict *Dict, data []byte) ([]keyedEntry, erro
 			second := read(w[0], w[1])
 			third := read(w[0]+w[1], w[2])
 			pos += total
+			if (typ == 1 || typ == 2) && maxEntries > 0 && len(out) >= maxEntries {
+				err := fmt.Errorf("%w: xref stream has more than %d entries (MaxObjects)", ErrLimitExceeded, maxEntries)
+				d.noteLimit(err)
+				return nil, err
+			}
 			switch typ {
 			case 0:
 				// free: skipped, exactly as PDFXrefStreamParser does
@@ -483,6 +546,16 @@ func (d *Document) putXRef(ke keyedEntry) {
 
 // noteObjectNumber tracks the highest object number seen anywhere, including free
 // entries — R16 needs the maximum over all sections, not just the live entries.
+// noteLimit records the first resource-guard failure met while bootstrapping
+// the xref. The chain walk treats a failed section as a bad offset and repairs
+// around it; a guard must instead fail the whole Open (DESIGN.md §2.7: exceeding
+// a guard is a hard error, never a silent truncation).
+func (d *Document) noteLimit(err error) {
+	if d.limitErr == nil && errors.Is(err, ErrLimitExceeded) {
+		d.limitErr = err
+	}
+}
+
 func (d *Document) noteObjectNumber(num int64) {
 	if num > d.highestObjNum {
 		d.highestObjNum = num

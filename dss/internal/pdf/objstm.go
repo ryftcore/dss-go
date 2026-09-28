@@ -36,8 +36,14 @@ func parseObjStmHeader(data []byte, dict *Dict, warn *[]Warning, key ObjectKey) 
 		return nil, nil, fmt.Errorf("pdf: object stream %s has a bad /N or /First", key)
 	}
 	l := newLexer(data[:first], warn)
-	nums := make([]int64, 0, n)
-	offs := make([]int64, 0, n)
+	// /N is untrusted: size the slices by what the header can actually hold
+	// (each pair is at least "d d " — four bytes), not by the declared count.
+	capHint := n
+	if maxPairs := first/4 + 1; capHint > maxPairs {
+		capHint = maxPairs
+	}
+	nums := make([]int64, 0, capHint)
+	offs := make([]int64, 0, capHint)
 	for i := int64(0); i < n; i++ {
 		t1 := l.next()
 		t2 := l.next()

@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"compress/flate"
 	"errors"
+	"math"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -317,5 +319,170 @@ func TestStreamFiltersReadsAbbreviationsAndArrays(t *testing.T) {
 	names, parms = streamFilters(d, nil)
 	if len(names) != 2 || len(parms) != 2 || parms[0] != nil || parms[1] == nil {
 		t.Errorf("array filter/parms = %v %v", names, parms)
+	}
+}
+
+// A hostile /Columns used to size a predictor row of 2^42 bytes before looking
+// at the data: an unrecoverable "out of memory" crash from a few bytes of input.
+// With /Colors and /BitsPerComponent it could also overflow int and wrap.
+func TestPredictorHostileRowLengthIsRefused(t *testing.T) {
+	var warn []Warning
+	data := []byte{0, 1, 2}
+	for _, p := range []struct{ colors, bpc, columns int }{
+		{1, 8, 1 << 45},             // row of 2^42 bytes
+		{1 << 32, 1 << 32, 1 << 32}, // product overflows int64
+		{3, 1 << 62, 3},             // wraps to a small positive row length
+	} {
+		got := ApplyPredictor(data, 12, p.colors, p.bpc, p.columns, &warn)
+		if !bytes.Equal(got, data) {
+			t.Errorf("ApplyPredictor(%v) = %x, want the input unchanged", p, got)
+		}
+	}
+	if len(warn) == 0 {
+		t.Error("a refused predictor must be warned about")
+	}
+
+	parms := DictOf(Name("Predictor"), Integer(12), Name("Columns"), Integer(1<<45))
+	_, err := Decode(FlateEncode([]byte{0, 1, 2}), []Name{FilterFlate}, []*Dict{parms}, &warn)
+	if !errors.Is(err, ErrLimitExceeded) {
+		t.Errorf("Decode err = %v, want ErrLimitExceeded", err)
+	}
+}
+
+// Decoded output is bounded: Flate (about 1000:1), LZW and RunLength (128:1)
+// amplify, and chaining filters multiplies the ratios.
+func TestDecodeOutputIsBounded(t *testing.T) {
+	const limit = 1 << 20
+	var warn []Warning
+	bomb := FlateEncode(make([]byte, 8<<20))
+	if _, err := decodeLimited(bomb, []Name{FilterFlate}, nil, &warn, limit); !errors.Is(err, ErrLimitExceeded) {
+		t.Errorf("flate: err = %v, want ErrLimitExceeded", err)
+	}
+	// Within the limit the result is unchanged.
+	small := FlateEncode(bytes.Repeat([]byte("ab"), 1000))
+	if got, err := decodeLimited(small, []Name{FilterFlate}, nil, &warn, limit); err != nil || len(got) != 2000 {
+		t.Errorf("flate within limit: %d bytes, %v", len(got), err)
+	}
+
+	rl := bytes.Repeat([]byte{129, 'x'}, (limit/128)+16) // each pair -> 128 bytes
+	if _, err := decodeLimited(rl, []Name{FilterRunLength}, nil, &warn, limit); !errors.Is(err, ErrLimitExceeded) {
+		t.Errorf("runlength: err = %v, want ErrLimitExceeded", err)
+	}
+
+	// Every doc-level decode goes through Options.MaxStreamSize.
+	d := &Document{opts: Options{MaxStreamSize: limit}.withDefaults()}
+	s := &Stream{Dict: DictOf(Name("Filter"), Name("FlateDecode")), Raw: bomb}
+	if _, err := d.StreamData(s); !errors.Is(err, ErrLimitExceeded) {
+		t.Errorf("StreamData: err = %v, want ErrLimitExceeded", err)
+	}
+}
+
+func TestLZWOutputIsBounded(t *testing.T) {
+	// Codes 0,258,259,260,... each extend the previous entry by one byte, so
+	// output grows quadratically in the number of codes.
+	var bits []int
+	push := func(v, n int) {
+		for i := n - 1; i >= 0; i-- {
+			bits = append(bits, (v>>uint(i))&1)
+		}
+	}
+	push(0, 9)
+	next, width := 258, 9
+	for i := 0; i < 1500; i++ {
+		push(next, width)
+		next++
+		switch next + 1 {
+		case 512:
+			width = 10
+		case 1024:
+			width = 11
+		case 2048:
+			width = 12
+		}
+	}
+	raw := make([]byte, (len(bits)+7)/8)
+	for i, b := range bits {
+		raw[i/8] |= byte(b << uint(7-i%8))
+	}
+	var warn []Warning
+	full, err := lzwDecodeLimited(raw, 1, &warn, math.MaxInt64)
+	if err != nil || len(full) < 1<<20 {
+		t.Fatalf("unbounded decode: %d bytes, %v", len(full), err)
+	}
+	if _, err := lzwDecodeLimited(raw, 1, &warn, 1<<16); !errors.Is(err, ErrLimitExceeded) {
+		t.Errorf("err = %v, want ErrLimitExceeded", err)
+	}
+}
+
+// StreamData must not hand out the document's own bytes: stream bodies are
+// views of the source now, and a caller mutating decoded data must not be able
+// to corrupt what the writer later copies verbatim.
+func TestStreamDataDoesNotAliasTheSource(t *testing.T) {
+	data := buildReaderPDF("%PDF-1.4\n", catalogObjs(rdrObj{num: 4,
+		body: "<< /Length 5 >>\nstream\nhello\nendstream"}), "")
+	d := mustOpen(t, data)
+	obj, err := d.Object(ObjectKey{Num: 4})
+	if err != nil {
+		t.Fatal(err)
+	}
+	s := obj.(*Stream)
+	got, err := d.StreamData(s)
+	if err != nil || string(got) != "hello" {
+		t.Fatalf("StreamData = %q, %v", got, err)
+	}
+	got[0] = 'J'
+	if bytes.Contains(data, []byte("Jello")) || string(s.Raw) != "hello" {
+		t.Error("mutating StreamData's result changed the document")
+	}
+	if cap(s.Raw) != len(s.Raw) {
+		t.Errorf("Raw has spare capacity %d: an append would overwrite the source", cap(s.Raw)-len(s.Raw))
+	}
+}
+
+// Output that runs past the limit must not first grow a buffer to twice it:
+// bytes.Buffer's doubling held 1 GiB (and cleared it) to refuse 512 MiB.
+func TestDecodeLimitPeakMemory(t *testing.T) {
+	const limit = 16 << 20
+	bomb := FlateEncode(make([]byte, 4*limit))
+	rlBomb := bytes.Repeat([]byte{129, 'x'}, 4*limit/128) // RunLength: 2 bytes -> 128
+	for name, run := range map[string]func() error{
+		"flate": func() error {
+			_, err := decodeLimited(bomb, []Name{FilterFlate}, nil, nil, limit)
+			return err
+		},
+		"runlength": func() error {
+			_, err := decodeLimited(rlBomb, []Name{FilterRunLength}, nil, nil, limit)
+			return err
+		},
+	} {
+		var before, after runtime.MemStats
+		runtime.GC()
+		runtime.ReadMemStats(&before)
+		err := run()
+		runtime.ReadMemStats(&after)
+		if !errors.Is(err, ErrLimitExceeded) {
+			t.Fatalf("%s: err = %v, want ErrLimitExceeded", name, err)
+		}
+		if got := after.TotalAlloc - before.TotalAlloc; got > limit+limit/4 {
+			t.Errorf("%s: allocated %d MiB to refuse output over %d MiB", name, got>>20, limit>>20)
+		}
+	}
+
+	// Output within the limit is unchanged, across chunk boundaries too.
+	want := make([]byte, 3*boundedChunk+12345)
+	for i := range want {
+		want[i] = byte(i * 7)
+	}
+	got, err := decodeLimited(FlateEncode(want), []Name{FilterFlate}, nil, nil, limit)
+	if err != nil || !bytes.Equal(got, want) {
+		t.Fatalf("round trip: %d bytes, %v", len(got), err)
+	}
+	var rl []byte
+	for i := 0; i < len(want); i += 128 {
+		n := min(128, len(want)-i)
+		rl = append(append(rl, byte(n-1)), want[i:i+n]...)
+	}
+	if got, err := decodeLimited(rl, []Name{FilterRunLength}, nil, nil, limit); err != nil || !bytes.Equal(got, want) {
+		t.Fatalf("runlength round trip: %d bytes, %v", len(got), err)
 	}
 }

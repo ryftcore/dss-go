@@ -317,8 +317,13 @@ func OpenDocument(path string) (Document, error) {
 // NewDocument wraps content as an in-memory [Document] carrying the given
 // name. The name matters: it ends up in the ASiC container entries and in the
 // report's document filename. Delegates to
-// [model.NewInMemoryDocumentWithName].
+// [model.NewInMemoryDocumentWithName]; a nil content is an empty document,
+// as a nil slice is an empty slice in Go, where the delegate - following
+// Java's InMemoryDocument(null) assertion - would panic.
 func NewDocument(name string, content []byte) Document {
+	if content == nil {
+		content = []byte{}
+	}
 	return model.NewInMemoryDocumentWithName(content, name)
 }
 

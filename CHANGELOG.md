@@ -3,13 +3,16 @@
 All notable changes to this project are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project intends to adopt [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
-once tagged releases begin (see `SECURITY.md`'s supported-versions note —
-there is no tagged release yet).
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+While the major version is 0, a minor release may contain source-incompatible
+API changes; each one is listed under **Changed**. Release procedure:
+`RELEASING.md`.
 
 ## [Unreleased]
 
-Initial public port of [esig/dss](https://github.com/esig/dss) (upstream
+## [0.1.0] - 2026-09-26
+
+First tagged release. Initial public port of [esig/dss](https://github.com/esig/dss) (upstream
 baseline: version 6.5.RC1, commit
 `4c2129862948bfd53ca1455832260aa17e183cf8`) to Go, module
 `github.com/ryftcore/dss-go/dss`. See `UPSTREAM.md` for the baseline pin,
@@ -112,6 +115,15 @@ conventions applied throughout.
   `ErrInvalidPassword` as upstream's exception is. Pinned by
   pdfbox-generated goldens under `internal/pdf/testdata/password/`.
 
+### Fixed
+
+- `esig <subcommand> -h` exits 0, like `esig -h`, instead of 2.
+- The facade no longer panics on nil input.
+  - `LoadCertificateBytes(nil)` returns an error.
+  - `NewDocument(name, nil)` is an empty document.
+  - `Sign` with a zero `Signer` returns a clear error.
+  - `(*Signer)(nil).Close()` is a no-op.
+
 ### Changed
 
 - **Exported type and function names no longer repeat their package name.**
@@ -179,6 +191,56 @@ conventions applied throughout.
   `Test*`/`Example*` function names keep their underscores (idiomatic Go).
 
 ### Security
+
+- **Dependencies and toolchain on their latest security patches.**
+  `golang.org/x/crypto` v0.57.0, `golang.org/x/text` v0.42.0 and
+  `golang.org/x/sys` v0.48.0. `dss/go.mod` now sets `toolchain go1.27.1`,
+  so CI and release binaries are built with the patched standard library.
+  The minimum Go version for library users stays 1.27.0. CI runs
+  `govulncheck` on the default and `eaa` builds and fails on any
+  reachable known vulnerability.
+- **`esig`'s RFC 3161 client now checks the token it receives against its
+  request.** The message-imprint algorithm and digest must match, and the
+  nonce must be echoed (RFC 3161 §2.4.2) — the checks BouncyCastle's
+  `TimeStampResponse.validate` performs for upstream's `OnlineTSPSource`.
+  Previously a TSA, or anyone on the path, could return a token for other
+  data or replay an old one and it was embedded in the signature. A
+  password in the `-tsa` URL no longer appears in error messages, and
+  `esig tl` downloads are capped at 64 MiB.
+- **Hostile input can no longer crash the process or exhaust its memory
+  or CPU in the native engines.** Each of the following was a fatal stack
+  overflow, an out-of-memory abort or a hang that `recover` cannot catch.
+  Each now returns an error.
+  - `internal/asn1ber`: nesting is capped at 512 levels. Tag numbers are
+    bounded to 31 bits, as in BouncyCastle; a 2^64-1 tag had wrapped to -1
+    and been read as a plain certificate. `ValueToString` escaping is now
+    linear.
+  - `internal/pfx` (PKCS#12): an IV of the wrong size used to panic.
+    PBKDF2 key lengths above 32 are refused; they caused a multi-GiB
+    allocation. Iteration counts must be within the JDK's
+    1–5,000,000. Non-positive DSA domain parameters are refused; `P = 0`
+    hung.
+  - `internal/pdf`: decoded stream size, including filter chains, is
+    bounded by `MaxStreamSize`, and so is the predictor row; refusing
+    over-size output holds about the bound, not twice it. An xref stream
+    decodes to at most four times what its declared rows occupy (a 4 MB
+    Flate bomb as the xref stream took 2 GB and 11 s to refuse). The number of
+    xref-stream rows is bounded by `MaxObjects`. A huge object-stream `/N`
+    no longer panics. Two quadratic paths are now linear: lenient-real
+    lexing and the scan for unterminated streams. The incremental writer
+    refuses object-number overflow instead of writing negative object
+    numbers.
+  - `internal/xpath10`, `internal/jose`: expression and JSON nesting are
+    capped at 1000.
+  - `internal/xmldsig`: a cycle among Manifest references, when manifests
+    are followed, returns `ErrManifestCycle`.
+  - `crlparser`: `onlySomeReasons` with invalid unused bits is refused, as
+    BouncyCastle does.
+
+  Where Java would instead throw `StackOverflowError`, run out of heap or
+  accept the input, the divergence is documented in
+  `internal/pdf/DESIGN.md` §2.7, `internal/xmldom/DESIGN.md` §6.5 and
+  `internal/jose/doc.go`.
 
 - **An encrypted PDF's `/Encrypt /Perms` block is now verified for `/R 5`
   and `/R 6`, so a byte-edited `/P` no longer grants permissions.** For
@@ -370,4 +432,5 @@ on the documentation site's "Known gaps" page: upstream's REST/SOAP
 remote services and clients, `dss-cookbook`, coverage/BOM modules, and
 evidence-record modules.
 
-[Unreleased]: https://github.com/ryftcore/dss-go/compare/main...HEAD
+[Unreleased]: https://github.com/ryftcore/dss-go/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/ryftcore/dss-go/releases/tag/v0.1.0

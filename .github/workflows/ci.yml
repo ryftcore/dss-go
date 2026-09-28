@@ -68,6 +68,26 @@ jobs:
           working-directory: dss
           args: --config=../.github/.golangci.yml --default=none --enable=revive
 
+  # Blocking: fails when code reachable from this module calls a function
+  # with a known vulnerability, in a dependency or in the Go standard
+  # library of the toolchain go.mod selects.
+  govulncheck:
+    name: govulncheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: dss/go.mod
+          cache-dependency-path: dss/go.sum
+
+      - name: govulncheck (default + eaa)
+        working-directory: dss
+        run: |
+          go run golang.org/x/vuln/cmd/govulncheck@v1.8.0 ./...
+          go run golang.org/x/vuln/cmd/govulncheck@v1.8.0 -tags eaa ./...
+
   build:
     name: build (${{ matrix.os }})
     strategy:

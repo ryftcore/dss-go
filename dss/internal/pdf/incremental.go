@@ -23,12 +23,23 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math"
 	"sort"
 )
 
 // errCatalogNotIndirect is returned when /Root is a direct dictionary, which
 // leaves an incremental update no slot to rewrite.
 var errCatalogNotIndirect = errors.New("pdf: /Root is not an indirect reference; cannot update incrementally")
+
+// errObjectNumberRange is returned when the source's highest object number (it
+// includes /Size - 1, which a hostile trailer can set to 2^63-1) leaves no room
+// to allocate the increment's objects and still write /Size = highest+1.
+// Allocating past it wrapped to negative object numbers and a negative /Size.
+var errObjectNumberRange = fmt.Errorf("%w: object numbers exhausted; cannot update incrementally", ErrLimitExceeded)
+
+// maxObjectNumber is the largest object number the writer allocates: /Size is
+// written as highest+1 and must not overflow.
+const maxObjectNumber = math.MaxInt64 - 1
 
 // writerEncryptHook encrypts one string or stream payload of the increment with
 // the source document's existing handler and key (R20). It is a variable so
@@ -126,6 +137,8 @@ type Updater struct {
 	sigAdded bool
 	sig      *signaturePlan
 
+	allocErr error // set once Alloc runs out of object numbers
+
 	documentID []byte
 }
 
@@ -147,6 +160,11 @@ func NewUpdater(d *Document) (*Updater, error) {
 	orig, err := d.Bytes()
 	if err != nil {
 		return nil, err
+	}
+	if d.HighestObjectNumber() >= maxObjectNumber {
+		// DIVERGENCE, deliberate: pdfbox's COSWriter would wrap the long and
+		// write negative object numbers; we refuse (DESIGN.md §2.7).
+		return nil, errObjectNumberRange
 	}
 	u := &Updater{
 		doc:     d,
@@ -170,6 +188,12 @@ func NewUpdater(d *Document) (*Updater, error) {
 // Alloc reserves the next object number (R16) without writing anything.
 func (u *Updater) Alloc() ObjectKey {
 	k := ObjectKey{Num: u.nextNum, Gen: 0}
+	if u.nextNum >= maxObjectNumber {
+		// Out of numbers: Write fails with allocErr rather than emitting a
+		// wrapped (negative) object number or a duplicate key.
+		u.allocErr = errObjectNumberRange
+		return k
+	}
 	u.nextNum++
 	return k
 }
@@ -284,6 +308,9 @@ type Result struct {
 // so nothing about validity changes. We also never emit an object stream on
 // write — every new object is a plain "N G obj".
 func (u *Updater) Write() (*Result, error) {
+	if u.allocErr != nil {
+		return nil, u.allocErr
+	}
 	var buf bytes.Buffer
 	w := newWriterAt(&buf, u.origLen)
 	if u.sig != nil {
@@ -313,6 +340,9 @@ func (u *Updater) Write() (*Result, error) {
 		// The xref stream object is allocated last, exactly as pdfbox does, so
 		// that /Size is highest+2 (§3.4).
 		xrefKey := u.Alloc()
+		if u.allocErr != nil {
+			return nil, u.allocErr
+		}
 		startxref = w.Pos()
 		entries = append(entries, freeHeadEntry())
 		// Unlike pdfbox we list the xref stream object in its own table: the

@@ -494,12 +494,63 @@ func parseLenientReal(lit string) (val float64, raw string, ok bool) {
 	}
 	// Longest parseable prefix. pdfbox throws here; we are the network-facing
 	// side and a hard error on "4.5.6" would fail documents pdfbox never sees.
-	for n := len(lit); n > 0; n-- {
+	//
+	// Only prefixes of the longest syntactically valid float are candidates,
+	// and only maxLenientPrefixTries of them are tried: each ParseFloat is
+	// linear in its input, so trying every prefix of a literal such as
+	// "1e999…9-" (every prefix out of range) was quadratic — 40 KB of digits
+	// took seconds, a megabyte hours.
+	tries := 0
+	for n := floatSyntaxPrefix(lit); n > 0 && tries < maxLenientPrefixTries; n-- {
+		tries++
 		if f, err := strconv.ParseFloat(lit[:n], 32); err == nil {
 			return coerceFloat(f), "", false
 		}
 	}
 	return 0, "", false
+}
+
+// maxLenientPrefixTries bounds parseLenientReal's prefix search.
+const maxLenientPrefixTries = 64
+
+// floatSyntaxPrefix returns the length of the longest prefix of s matching
+// [+-]?digits*(.digits*)?([eE][+-]?digits+)? with at least one mantissa digit,
+// or 0. No longer prefix of s can be accepted by strconv.ParseFloat, given the
+// lexer's number alphabet (digits, sign, '.', 'e', 'E').
+func floatSyntaxPrefix(s string) int {
+	i := 0
+	if i < len(s) && (s[i] == '+' || s[i] == '-') {
+		i++
+	}
+	digits := 0
+	for i < len(s) && isDigit(s[i]) {
+		i++
+		digits++
+	}
+	if i < len(s) && s[i] == '.' {
+		i++
+		for i < len(s) && isDigit(s[i]) {
+			i++
+			digits++
+		}
+	}
+	if digits == 0 {
+		return 0
+	}
+	if i < len(s) && (s[i] == 'e' || s[i] == 'E') {
+		j := i + 1
+		if j < len(s) && (s[j] == '+' || s[j] == '-') {
+			j++
+		}
+		k := j
+		for k < len(s) && isDigit(s[k]) {
+			k++
+		}
+		if k > j {
+			i = k
+		}
+	}
+	return i
 }
 
 // coerceFloat is COSFloat.coerce: NaN and +-Inf become 0.
