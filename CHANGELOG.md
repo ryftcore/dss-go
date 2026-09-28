@@ -10,7 +10,7 @@ API changes; each one is listed under **Changed**. Release procedure:
 
 ## [Unreleased]
 
-## [0.1.0] - 2026-09-26
+## [0.1.0] - 2026-09-28
 
 First tagged release. Initial public port of [esig/dss](https://github.com/esig/dss) (upstream
 baseline: version 6.5.RC1, commit
