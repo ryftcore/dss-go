@@ -1432,10 +1432,16 @@ func (b *ETSIValidationReportBuilder) buildCertIDListType(relatedCerts []*diagno
 	// gain access to it), this component shall have one CertID child.
 
 	if len(orphanCerts) > 0 {
-		allOrphanCertificates := b.diagnosticData.AllOrphanCertificateObjects()
+		// Membership is by id only (Java's List.contains over OrphanTokenWrapper compares
+		// getId()), so index the ids once instead of scanning the list for every orphan.
+		allOrphanCertificateIds := map[string]struct{}{}
+		for _, token := range b.diagnosticData.AllOrphanCertificateObjects() {
+			allOrphanCertificateIds[token.Id()] = struct{}{}
+		}
 		for _, orphanCert := range orphanCerts {
 			if orphanCert != nil {
-				if len(orphanCert.References()) > 0 && !containsOrphanCertificateId(allOrphanCertificates, orphanCert.Id()) {
+				_, listed := allOrphanCertificateIds[orphanCert.Id()]
+				if len(orphanCert.References()) > 0 && !listed {
 					for _, certRef := range orphanCert.References() {
 						certIdList.CertID = append(certIdList.CertID,
 							b.buildCertIDType(certRef.DigestAlgoAndValue(), certRef.IssuerSerial()))
