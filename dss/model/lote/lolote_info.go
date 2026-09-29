@@ -9,10 +9,11 @@ import (
 // LoLoTEInfo computes a summary for a TS 119 602 List of Lists of Trusted Entities processing
 // result.
 //
-// Implements the assumed job.DocumentListInfo[LoLoTEInfo, Info] interface
+// Mirrors the shape of the job.DocumentListInfo[LoLoTEInfo, Info] interface
 // (getChildrenInfos, ported as ChildrenInfos()) on top of the fields/behaviour Info already
-// provides for job.DocumentInfo. See the JUDGMENT CALL note on Info for the
-// AbstractDocumentInfo flattening this depends on.
+// provides for the job.DocumentInfo shape. See the JUDGMENT CALL note on Info for the
+// AbstractDocumentInfo flattening this depends on, and its warning about calling DSSID through
+// the embedded Info.
 type LoLoTEInfo struct {
 	Info
 

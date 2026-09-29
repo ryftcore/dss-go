@@ -8,6 +8,13 @@ import (
 
 // TrustedPropertiesCertificateSource contains trusted certificates and related trusted
 // properties.
+//
+// The maps taken by SetTrustedPropertiesByCertificates and SetTrustedTimeByCertificates are
+// keyed by *model.CertificateToken, i.e. by pointer identity, where Java's Map keyed by
+// CertificateToken uses its equals/hashCode (content). Callers must reuse the same
+// *model.CertificateToken instances for the same certificate (two separately parsed copies
+// become two keys); the implementation in spi/lote re-keys by the certificate's entity key, so
+// lookups by an equal certificate still succeed.
 type TrustedPropertiesCertificateSource interface {
 	tsl.TrustedCertificateSourceWithTime
 
