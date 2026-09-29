@@ -412,16 +412,43 @@ func isPdfDictOrArray(object PdfObject) bool {
 // standing in for Java's LinkedHashSet<ObjectModification>; see this file's header.
 type objectModificationSet struct {
 	items []ObjectModification
+
+	// buckets indexes items, standing in for the hash table of Java's LinkedHashSet: equal
+	// modifications (ObjectModification.Equals) always share a bucket, so Add only has to compare
+	// against the few entries of one bucket instead of every entry already collected.
+	buckets map[objectModificationBucket][]int
+}
+
+// objectModificationBucket is the coarse key equal ObjectModifications share: the modification
+// type and the rendered object tree. It is the part of Java's hashCode() this port can compute
+// without hashing the reference chain; ObjectModification.Equals still decides equality within a
+// bucket.
+type objectModificationBucket struct {
+	action string
+	tree   string
+}
+
+func newObjectModificationBucket(objectModification ObjectModification) objectModificationBucket {
+	bucket := objectModificationBucket{action: string(objectModification.objectModificationType)}
+	if objectModification.objectTree != nil {
+		bucket.tree = objectModification.objectTree.String()
+	}
+	return bucket
 }
 
 // Add appends objectModification unless an equal entry (per ObjectModification.Equals) is
 // already present.
 func (s *objectModificationSet) Add(objectModification ObjectModification) {
-	for _, existing := range s.items {
-		if existing.Equals(objectModification) {
+	bucket := newObjectModificationBucket(objectModification)
+	for _, index := range s.buckets[bucket] {
+		if s.items[index].Equals(objectModification) {
 			return
 		}
 	}
+	if s.buckets == nil {
+		s.buckets = make(map[objectModificationBucket][]int)
+	}
+	s.buckets[bucket] = append(s.buckets[bucket], len(s.items))
 	s.items = append(s.items, objectModification)
 }
 
