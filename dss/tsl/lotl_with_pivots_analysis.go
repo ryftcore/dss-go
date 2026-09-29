@@ -169,6 +169,13 @@ func (a *LOTLWithPivotsAnalysis) downloadAndParseAllPivots(pivotURLs []string) m
 			wg.Add(1)
 			go func(url string, processing *PivotProcessing) {
 				defer wg.Done()
+				// Java collects each pivot through Future.get() and only logs an
+				// ExecutionException, so a pivot whose processing throws simply has no
+				// processing result; a Go panic in a goroutine, in contrast, is fatal for the
+				// whole process. PivotProcessing.Call already records the exceptions Java's
+				// AbstractAnalysis download()/parsing() catch on the pivot's cache entry (see
+				// catchException); this recover is the backstop for anything past those.
+				defer func() { _ = recover() }()
 				result, err := processing.Call()
 				if err != nil {
 					return

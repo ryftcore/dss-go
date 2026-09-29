@@ -12,6 +12,8 @@
 package tsl
 
 import (
+	"fmt"
+
 	"github.com/ryftcore/dss-go/dss/model"
 	"github.com/ryftcore/dss-go/dss/spi/client/http"
 	"github.com/ryftcore/dss-go/dss/utils"
@@ -66,31 +68,66 @@ func (p *PivotProcessing) Call() (*PivotProcessingResult, error) {
 	return nil, nil
 }
 
+// catchException runs fn and returns the error it returns or, when it panics, an error built from
+// the panic value: the stand-in for the catch (Exception e) of the inherited
+// AbstractAnalysis.download()/parsing(), which records the exception on the cache instead of
+// letting it escape (the same helper job.AbstractAnalysis uses, unexported there).
+//
+// This matters more here than on the main analysis path: a pivot runs on its own goroutine
+// (see LOTLWithPivotsAnalysis.downloadAndParseAllPivots) with no recover of the analysis
+// runnable's around it, so an unrecovered panic - e.g. the nil dereference LOTLParsingTask
+// reproduces from upstream's NullPointerException for a pivot lacking <SchemeInformation> -
+// would take down the whole process, where Java records a parsing error on the pivot's cache
+// entry and carries on.
+func catchException(fn func() error) (err error) {
+	defer func() {
+		if recovered := recover(); recovered != nil {
+			if recoveredErr, ok := recovered.(error); ok {
+				err = recoveredErr
+			} else {
+				err = model.NewDSSError(fmt.Sprint(recovered))
+			}
+		}
+	}()
+	return fn()
+}
+
 // download ports the inherited download(String), see this file's header.
 func (p *PivotProcessing) download(url string) model.DSSDocument {
-	downloadTask := NewXmlDownloadTask(p.dssFileLoader, url)
-	downloadResult, err := downloadTask.Get()
-	if err != nil {
+	var document model.DSSDocument
+	if err := catchException(func() error {
+		downloadTask := NewXmlDownloadTask(p.dssFileLoader, url)
+		downloadResult, err := downloadTask.Get()
+		if err != nil {
+			return err
+		}
+		if !p.pivotCacheAccess.IsUpToDate(downloadResult) {
+			p.pivotCacheAccess.UpdateDownloadResult(downloadResult)
+			p.expireCache()
+		}
+		document = downloadResult.DSSDocument()
+		return nil
+	}); err != nil {
 		p.pivotCacheAccess.DownloadError(err)
 		return nil
 	}
-	if !p.pivotCacheAccess.IsUpToDate(downloadResult) {
-		p.pivotCacheAccess.UpdateDownloadResult(downloadResult)
-		p.expireCache()
-	}
-	return downloadResult.DSSDocument()
+	return document
 }
 
 // parsing ports the inherited parsing(DSSDocument), see this file's header.
 func (p *PivotProcessing) parsing(document model.DSSDocument) {
 	if p.pivotCacheAccess.IsParsingRefreshNeeded() {
-		parsingTask := NewLOTLParsingTask(document, p.pivotSource)
-		parsingResult, err := parsingTask.Get()
-		if err != nil {
+		if err := catchException(func() error {
+			parsingTask := NewLOTLParsingTask(document, p.pivotSource)
+			parsingResult, err := parsingTask.Get()
+			if err != nil {
+				return err
+			}
+			p.pivotCacheAccess.UpdateParsingResult(parsingResult)
+			return nil
+		}); err != nil {
 			p.pivotCacheAccess.ParsingError(err)
-			return
 		}
-		p.pivotCacheAccess.UpdateParsingResult(parsingResult)
 	}
 }
 
