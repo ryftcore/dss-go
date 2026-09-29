@@ -26,6 +26,12 @@ type PdfTimestampTokenIdentifierBuilder struct {
 	// pdfRevision is the PdfDocTimestampRevision of the PdfTimestampToken this builder is for
 	// (Java's pdfTimestampToken.getPdfRevision()).
 	pdfRevision *PdfDocTimestampRevision
+
+	// token is the PdfTimestampToken this builder was built for, set by NewPdfTimestampToken once
+	// the token exists. It has no Java counterpart: the validation.TimestampToken holds this
+	// builder, so this field is what keeps the wrapper reachable from the bare token for
+	// PdfTimestampTokenOf, without a strong process-wide registry (see pdf_timestamp_token.go).
+	token *PdfTimestampToken
 }
 
 // NewPdfTimestampTokenIdentifierBuilder builds an identifier for the given PdfTimestampToken's

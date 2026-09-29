@@ -13,10 +13,20 @@
 // populated by NewPdfTimestampToken and queried by PdfTimestampTokenOf - both names
 // native_pdf_signature_service.go and pades_timestamp_scope_finder.go already call, per this
 // chunk's own manifest.
+//
+// The registry must not keep a token, and through it the whole PDF it was read from, alive for
+// the life of the process, which Java's `instanceof` (no side table at all) never does. Both
+// sides of the mapping are therefore weak, and the wrapper is kept alive by the very
+// *validation.TimestampToken it is looked up from: the token holds its identifier builder, and the
+// builder holds the wrapper (PdfTimestampTokenIdentifierBuilder.token). A registry entry thus
+// lives exactly as long as its token, and runtime.AddCleanup removes it once the token is
+// unreachable.
 package pades
 
 import (
+	"runtime"
 	"sync"
+	"weak"
 
 	"github.com/ryftcore/dss-go/dss/enumerations"
 	"github.com/ryftcore/dss-go/dss/spi/validation"
@@ -35,8 +45,17 @@ type PdfTimestampToken struct {
 var pdfTimestampTokenRegistryMu sync.Mutex
 
 // pdfTimestampTokenRegistry maps the wrapped *validation.TimestampToken back to the enclosing
-// *PdfTimestampToken; see this file's header for why this registry exists.
-var pdfTimestampTokenRegistry = map[*validation.TimestampToken]*PdfTimestampToken{}
+// *PdfTimestampToken; see this file's header for why this registry exists and why both sides are
+// weak.
+var pdfTimestampTokenRegistry = map[weak.Pointer[validation.TimestampToken]]weak.Pointer[PdfTimestampToken]{}
+
+// pdfTimestampTokenRegistryForget drops the entry of a token that has been garbage collected.
+// It is a plain function, not a closure, so that it cannot keep the token it is attached to alive.
+func pdfTimestampTokenRegistryForget(key weak.Pointer[validation.TimestampToken]) {
+	pdfTimestampTokenRegistryMu.Lock()
+	delete(pdfTimestampTokenRegistry, key)
+	pdfTimestampTokenRegistryMu.Unlock()
+}
 
 // NewPdfTimestampToken is the default constructor. Port of the
 // PdfTimestampToken(PdfDocTimestampRevision) constructor.
@@ -56,10 +75,14 @@ func NewPdfTimestampToken(pdfTimestampRevision *PdfDocTimestampRevision) (*PdfTi
 		return nil, err
 	}
 	token := &PdfTimestampToken{TimestampToken: base, pdfRevision: pdfTimestampRevision}
+	// base -> its identifier builder -> token: the wrapper lives as long as the token it wraps.
+	identifierBuilder.token = token
 
+	key := weak.Make(base)
 	pdfTimestampTokenRegistryMu.Lock()
-	pdfTimestampTokenRegistry[base] = token
+	pdfTimestampTokenRegistry[key] = weak.Make(token)
 	pdfTimestampTokenRegistryMu.Unlock()
+	runtime.AddCleanup(base, pdfTimestampTokenRegistryForget, key)
 
 	return token, nil
 }
@@ -73,8 +96,15 @@ func (t *PdfTimestampToken) PdfRevision() *PdfDocTimestampRevision {
 // was built through NewPdfTimestampToken. It stands in for Java's
 // `timestampToken instanceof PdfTimestampToken` checks; see this file's header.
 func PdfTimestampTokenOf(timestampToken *validation.TimestampToken) (*PdfTimestampToken, bool) {
+	if timestampToken == nil {
+		return nil, false
+	}
 	pdfTimestampTokenRegistryMu.Lock()
 	defer pdfTimestampTokenRegistryMu.Unlock()
-	pdfTimestampToken, ok := pdfTimestampTokenRegistry[timestampToken]
-	return pdfTimestampToken, ok
+	weakToken, ok := pdfTimestampTokenRegistry[weak.Make(timestampToken)]
+	if !ok {
+		return nil, false
+	}
+	pdfTimestampToken := weakToken.Value()
+	return pdfTimestampToken, pdfTimestampToken != nil
 }
