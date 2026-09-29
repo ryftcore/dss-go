@@ -34,6 +34,10 @@ import (
 // validation.DefaultAdvancedSignature.
 //
 // serialVersionUID and java.io.Serializable are dropped (no Go counterpart).
+//
+// As upstream, a Signature is not safe for concurrent use: its sources, the reference validations
+// and the cryptographic verification are filled lazily without synchronization. A validation
+// creates its own Signature objects, so nothing in the library shares one across goroutines.
 type Signature struct {
 	validation.DefaultAdvancedSignature
 
@@ -950,6 +954,9 @@ func (s *Signature) referenceValidationsByUriHashMechanism() []*model.ReferenceV
 
 	var detachedReferenceValidations []*model.ReferenceValidation
 
+	// digest memo, see isDocumentDigestMatch
+	digestMemo := newDetachedDigestMemo(len(detachedDocuments))
+
 	for _, signedDataName := range signedDataOrder {
 		expectedDigestString := signedDataHashMap[signedDataName]
 
@@ -962,20 +969,21 @@ func (s *Signature) referenceValidationsByUriHashMechanism() []*model.ReferenceV
 			referenceValidation.SetDigest(model.NewDigest(digestAlgorithm, expectedDigest))
 		}
 
-		var detachedDocument model.DSSDocument
+		detachedIndex := -1
 		if len(signedDataHashMap) == 1 && len(detachedDocuments) == 1 {
-			detachedDocument = detachedDocuments[0]
+			detachedIndex = 0
 		} else {
-			detachedDocument = s.detachedDocumentByDigest(digestAlgorithm, expectedDigest, signedDataName, detachedDocuments)
-			if detachedDocument == nil {
-				detachedDocument = jadesSignatureDetachedDocumentByName(signedDataName, detachedDocuments)
+			detachedIndex = s.detachedDocumentIndexByDigest(digestMemo, digestAlgorithm, expectedDigest, signedDataName, detachedDocuments)
+			if detachedIndex < 0 {
+				detachedIndex = jadesSignatureDetachedDocumentIndexByName(signedDataName, detachedDocuments)
 			}
 		}
 
-		if detachedDocument != nil {
+		if detachedIndex >= 0 {
+			detachedDocument := detachedDocuments[detachedIndex]
 			referenceValidation.SetFound(true)
 			referenceValidation.SetDocument(detachedDocument)
-			if digestAlgorithm != "" && s.isDocumentDigestMatch(detachedDocument, digestAlgorithm, expectedDigest, signedDataName) {
+			if digestAlgorithm != "" && s.isDocumentDigestMatch(digestMemo, detachedIndex, detachedDocument, digestAlgorithm, expectedDigest, signedDataName) {
 				referenceValidation.SetIntact(true)
 			}
 		} else {
@@ -1011,19 +1019,20 @@ func (s *Signature) digestAlgorithmForDetachedContent() enumerations.DigestAlgor
 	return ""
 }
 
-// detachedDocumentByDigest ports the private getDetachedDocumentByDigest(DigestAlgorithm,
-// byte[], String, List<DSSDocument>).
-func (s *Signature) detachedDocumentByDigest(digestAlgorithm enumerations.DigestAlgorithm, expectedDigest []byte,
-	signedDataName string, detachedContent []model.DSSDocument) model.DSSDocument {
+// detachedDocumentIndexByDigest ports the private getDetachedDocumentByDigest(DigestAlgorithm,
+// byte[], String, List<DSSDocument>), returning the index of the matching document in
+// detachedContent (or -1 for Java's null), so that the caller can share the digest memo.
+func (s *Signature) detachedDocumentIndexByDigest(memo *detachedDigestMemo, digestAlgorithm enumerations.DigestAlgorithm,
+	expectedDigest []byte, signedDataName string, detachedContent []model.DSSDocument) int {
 	if digestAlgorithm == "" || expectedDigest == nil {
-		return nil
+		return -1
 	}
-	for _, detachedDocument := range detachedContent {
-		if s.isDocumentDigestMatch(detachedDocument, digestAlgorithm, expectedDigest, signedDataName) {
-			return detachedDocument
+	for index, detachedDocument := range detachedContent {
+		if s.isDocumentDigestMatch(memo, index, detachedDocument, digestAlgorithm, expectedDigest, signedDataName) {
+			return index
 		}
 	}
-	return nil
+	return -1
 }
 
 // jadesSignatureDetachedDocumentByName ports the private getDetachedDocumentByName(String,
@@ -1031,6 +1040,18 @@ func (s *Signature) detachedDocumentByDigest(digestAlgorithm enumerations.Digest
 func jadesSignatureDetachedDocumentByName(documentName string, detachedContent []model.DSSDocument) model.DSSDocument {
 	documentName = spi.DSSUtilsDecodeURI(documentName)
 	return spi.DSSUtilsDocumentWithName(detachedContent, documentName)
+}
+
+// jadesSignatureDetachedDocumentIndexByName is jadesSignatureDetachedDocumentByName returning the
+// document's index in detachedContent (or -1 when not found) instead of the document.
+func jadesSignatureDetachedDocumentIndexByName(documentName string, detachedContent []model.DSSDocument) int {
+	documentName = spi.DSSUtilsDecodeURI(documentName)
+	for index, document := range detachedContent {
+		if documentName == document.Name() {
+			return index
+		}
+	}
+	return -1
 }
 
 // signedDataUriHashMap ports the private getSignedDataUriHashMap(), returning both the map
@@ -1094,27 +1115,18 @@ func (s *Signature) signedDataContentTypeList() []string {
 // getDigestValue/toBase64Url calls this reaches are not guarded by a try/catch here, so an
 // unchecked exception would propagate out of this (and, transitively, getReferenceValidations())
 // uncaught.
-func (s *Signature) isDocumentDigestMatch(document model.DSSDocument, digestAlgorithm enumerations.DigestAlgorithm,
-	expectedDigest []byte, signedDataName string) bool {
-	_, isDigestDocument := document.(*model.DigestDocument)
-
-	var computedDigestValue []byte
-	if s.jws.IsRfc7797UnencodedPayload() || isDigestDocument {
-		value, err := document.DigestValue(digestAlgorithm)
-		if err != nil {
-			panic(err)
-		}
-		computedDigestValue = value
-	} else {
-		base64UrlEncodedDocument, err := DSSJsonUtilsToBase64UrlDocument(document)
-		if err != nil {
-			panic(err)
-		}
-		computedDigestValue, err = spi.DSSUtilsDigest(digestAlgorithm, []byte(base64UrlEncodedDocument))
-		if err != nil {
-			panic(err)
-		}
-	}
+//
+// The digest computed for a document is memoized in memo (by the document's index in the detached
+// contents), which is not part of the Java signature: the digest algorithm is fixed for a whole
+// getReferenceValidationsByUriHashMechanism() run, so a sigD listing n entries over m detached
+// documents digests each document once instead of up to n times (Java re-encodes and re-digests
+// the whole document for every entry). The memo cannot change a result: it only skips recomputing
+// the same digest of the same document.
+func (s *Signature) isDocumentDigestMatch(memo *detachedDigestMemo, index int, document model.DSSDocument,
+	digestAlgorithm enumerations.DigestAlgorithm, expectedDigest []byte, signedDataName string) bool {
+	computedDigestValue := memo.digestOf(index, func() []byte {
+		return s.detachedDocumentDigestValue(document, digestAlgorithm)
+	})
 
 	if bytes.Equal(expectedDigest, computedDigestValue) {
 		return true
@@ -1123,6 +1135,55 @@ func (s *Signature) isDocumentDigestMatch(document model.DSSDocument, digestAlgo
 	// provided on the sigD : {}!" at WARN (matching name) or DEBUG (mismatching name) level.
 	_ = signedDataName
 	return false
+}
+
+// detachedDocumentDigestValue computes the digest isDocumentDigestMatch compares with the sigD
+// 'hashV' entry: the digest of the raw document when the payload is unencoded (RFC 7797) or the
+// document is a DigestDocument, and otherwise the digest of its base64url encoding.
+//
+// Panics with the underlying error when the digest cannot be computed (see isDocumentDigestMatch).
+func (s *Signature) detachedDocumentDigestValue(document model.DSSDocument,
+	digestAlgorithm enumerations.DigestAlgorithm) []byte {
+	_, isDigestDocument := document.(*model.DigestDocument)
+
+	if s.jws.IsRfc7797UnencodedPayload() || isDigestDocument {
+		value, err := document.DigestValue(digestAlgorithm)
+		if err != nil {
+			panic(err)
+		}
+		return value
+	}
+	base64UrlEncodedDocument, err := DSSJsonUtilsToBase64UrlDocument(document)
+	if err != nil {
+		panic(err)
+	}
+	value, err := spi.DSSUtilsDigest(digestAlgorithm, []byte(base64UrlEncodedDocument))
+	if err != nil {
+		panic(err)
+	}
+	return value
+}
+
+// detachedDigestMemo memoizes the digest computed for each detached document during one run of
+// referenceValidationsByUriHashMechanism, keyed by the document's index in the detached contents
+// (documents are not used as keys, since a DSSDocument implementation need not be comparable).
+type detachedDigestMemo struct {
+	digests  [][]byte
+	computed []bool
+}
+
+func newDetachedDigestMemo(size int) *detachedDigestMemo {
+	return &detachedDigestMemo{digests: make([][]byte, size), computed: make([]bool, size)}
+}
+
+// digestOf returns the memoized digest of the document at index, computing it with compute on
+// first use. A panic raised by compute propagates without being memoized.
+func (m *detachedDigestMemo) digestOf(index int, compute func() []byte) []byte {
+	if !m.computed[index] {
+		m.digests[index] = compute()
+		m.computed[index] = true
+	}
+	return m.digests[index]
 }
 
 // counterSignatureReferenceValidation ports the private getCounterSignatureReferenceValidation().

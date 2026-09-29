@@ -27,7 +27,9 @@ type JWS struct {
 	unprotected *jose.Object
 
 	// decodedPayload stores a cached parsed payload as a map, when applicable. Port of the
-	// private field of the same name.
+	// private field of the same name. As upstream, no payload setter invalidates it: the payload
+	// must be set (at parse time, or by Signature.jadesSignaturePayload for a detached
+	// signature) before the first DecodedPayload call.
 	decodedPayload *jose.Object
 
 	// jwsJsonSerializationObject is the parent JWSJsonSerializationObject. Port of the private
