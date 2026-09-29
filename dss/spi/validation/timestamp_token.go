@@ -27,6 +27,10 @@
 //   - DigestAlgorithm.forOID throws an unchecked IllegalArgumentException for a message-imprint
 //     algorithm DSS does not know; DigestAlgorithm() panics with the same message rather than
 //     growing an error return that would spread through every matchData variant.
+//   - A signing-time signed attribute whose date string cannot be read makes BouncyCastle's
+//     Time#getDate throw an unchecked IllegalStateException that nothing upstream catches;
+//     timestampTokenVerifySignerInfo panics with the same message (recovered at the facade
+//     boundary) instead of skipping the signing-time validity check.
 //   - The suppressMatchWarnings flag of the matchData family only silences log output, and this
 //     port drops slf4j; the flag is kept for API fidelity but has no observable effect.
 //   - synchronized is dropped from isSignedBy, as model.TokenBase already drops it from its own.
@@ -226,7 +230,22 @@ func timestampTokenVerifySignerInfo(signerInfo *cmscore.SignerInfo, cms *cmscore
 		return false, err
 	}
 	if signingTime != nil {
-		if date := spi.DSSASN1UtilsDate(signingTime.Encoded()); !date.IsZero() && !candidate.IsValidOn(date) {
+		// SignerInformation#getSigningTime: Time.getInstance(...) accepts only a UTCTime or a
+		// GeneralizedTime, anything else is an IllegalArgumentException that becomes this
+		// CMSException. (This is not DSSASN1Utils.getDate, which would merely yield null.)
+		if !signingTime.IsUniversal(asn1ber.TagUTCTime) && !signingTime.IsUniversal(asn1ber.TagGeneralizedTime) {
+			return false, timestampTokenCMSError("CMSException",
+				"signing-time attribute value not a valid 'Time' structure")
+		}
+		date := spi.DSSASN1UtilsDate(signingTime.Encoded())
+		if date.IsZero() {
+			// Time#getDate wraps the ParseException of an unreadable date string in an unchecked
+			// IllegalStateException, which neither TimeStampToken#validate nor the callers in
+			// checkIsSignedBy catch. It becomes a panic, recovered at the facade boundary, rather
+			// than silently skipping the validity check.
+			panic("invalid date string: " + string(signingTime.Content()))
+		}
+		if !candidate.IsValidOn(date) {
 			return false, timestampTokenCMSError("CMSVerifierCertificateNotValidException",
 				"verifier not valid at signingTime")
 		}
