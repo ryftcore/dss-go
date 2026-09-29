@@ -102,14 +102,21 @@ func (a *LOTLWithPivotsAnalysis) currentCertificateSourceFromPivots(initialCerti
 func (a *LOTLWithPivotsAnalysis) validationPivot(pivotCacheAccess *TLCacheAccessByKey, document model.DSSDocument, certificateSource spi.CertificateSource) {
 	// True if EMPTY / EXPIRED by TL/LOTL
 	if pivotCacheAccess.IsValidationRefreshNeeded() {
-		validationTask := NewTLValidatorTask(document, certificateSource)
-		result, err := validationTask.Get()
-		if err != nil {
+		// Java wraps the task construction, get() and the cache update in one
+		// try/catch(Exception): an unchecked exception is recorded as this pivot's validation
+		// error and the walk over the remaining pivots goes on (see catchException).
+		if err := catchException(func() error {
+			validationTask := NewTLValidatorTask(document, certificateSource)
+			result, err := validationTask.Get()
+			if err != nil {
+				return err
+			}
+			pivotCacheAccess.UpdateValidationResult(result)
+			return nil
+		}); err != nil {
 			a.assertOriginalDocumentIsAccessible(pivotCacheAccess)
 			pivotCacheAccess.ValidationError(err)
-			return
 		}
-		pivotCacheAccess.UpdateValidationResult(result)
 	}
 }
 

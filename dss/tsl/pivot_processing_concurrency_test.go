@@ -174,6 +174,26 @@ func TestPivotProcessingCall_PanicIsRecordedAsParsingError(t *testing.T) {
 	}
 }
 
+// TestValidationPivot_PanicIsRecordedAsValidationError: upstream's validationPivot wraps the
+// validation task in try/catch(Exception) and records the exception on the pivot's validation
+// entry, so the walk over the remaining pivots carries on. A nil certificate source makes
+// NewTLValidatorTask panic (Objects.requireNonNull) - that must end up as a recorded error.
+func TestValidationPivot_PanicIsRecordedAsValidationError(t *testing.T) {
+	analysis, factory, pivotURLs := newPivotFanOut(t, pivotWithEmptySchemeInformation, 1, false)
+	pivotKey := job.NewCacheKey(pivotURLs[0])
+
+	analysis.validationPivot(factory.CacheAccess(pivotKey),
+		model.NewInMemoryDocument([]byte(pivotWithEmptySchemeInformation)), nil)
+
+	entry := factory.ValidationCache().Get(pivotKey)
+	if !entry.IsError() {
+		t.Fatalf("expected the validation failure to be recorded, got state %s", entry.CurrentState())
+	}
+	if entry.ExceptionMessage() != "The certificate source is null" {
+		t.Errorf("recorded message = %q, want the panic's message", entry.ExceptionMessage())
+	}
+}
+
 // TestLOTLAnalysisRun_ParsingPanicIsRecordedAsParsingError covers the main analysis path, which
 // shares AbstractAnalysis.parsing with upstream: the nil dereference LOTLParsingTask reproduces
 // from upstream's NullPointerException on a LOTL lacking <SchemeInformation> is caught there and
