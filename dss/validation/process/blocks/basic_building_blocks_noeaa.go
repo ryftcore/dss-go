@@ -6,14 +6,21 @@
 // Without the "eaa" build tag, none of the four EAA-specific constructors
 // (fc.NewEAAFormatChecking, fc.NewEAARevocationFormatChecking,
 // sav.NewEAAAcceptanceValidation, sav.NewEAARevocationTokenAcceptanceValidation)
-// are compiled into the binary at all, so this build can never validate an
-// EAA or EAA_REVOCATION token to begin with - upstream Java dispatches by the
-// document/token type actually being validated, and a build without the EAA
-// module present simply never constructs an EAAWrapper/EAARevocationTokenWrapper
-// token in the first place. These two methods therefore return nil
-// unconditionally, mirroring "never construct those" rather than reimplementing
-// any EAA logic: they exist only so the two ContextEAA / ContextEAARevocation branches
-// in basic_building_blocks.go have something to call under both tag states.
+// are compiled into the binary at all, so this build cannot run the EAA-specific
+// format-checking and acceptance-validation blocks of an EAA or EAA_REVOCATION token.
+// These two methods therefore return nil unconditionally, rather than
+// reimplementing any EAA logic: they exist only so the two ContextEAA /
+// ContextEAARevocation branches in basic_building_blocks.go have something to call
+// under both tag states.
+//
+// NOTE: this does NOT mean an EAAWrapper is never constructed in a build without the
+// tag - diagnostic data parsing (dss/diagnostic) and the EAA presentation executor and
+// report builder (dss/validation/executor) are untagged, so diagnostic data holding an
+// EAA is accepted here, and the basic building blocks of its EAA token then simply carry
+// no FC block. The signature/certificate executors report on such data without the EAA
+// blocks (see docs/compatibility/known-gaps.md, "EAA"); the EAA presentation process
+// (dss/validation/process/eaa) needs the FC block and fails with an explicit "requires
+// the 'eaa' build tag" error instead of proceeding without the format-checking gate.
 package blocks
 
 import (

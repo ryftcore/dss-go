@@ -88,25 +88,46 @@ func (c *ValidationProcess) InitChain() {
 
 	// 2. Verify electronic signatures
 	for _, signatureWrapper := range c.eaa.EAASignatures() {
-		item = item.SetNextItem(c.signatureValidationConclusive(signatureWrapper))
+		item = c.appendItem(item, c.signatureValidationConclusive(signatureWrapper))
 	}
 
 	// 3. Verify Key Binding signature
 	if c.eaa.KeyBindingSignature() != nil {
-		item = item.SetNextItem(c.keyBindingSignatureValidationConclusive(c.eaa.KeyBindingSignature()))
+		item = c.appendItem(item, c.keyBindingSignatureValidationConclusive(c.eaa.KeyBindingSignature()))
 	}
 
 	// 4. Digest (selective disclosures) validation
 	xmlCV := eaaBBBs.CV
 	if xmlCV != nil {
-		item = item.SetNextItem(vpfbs.NewCryptographicVerificationResultCheck(c.I18nProvider, c.Result, xmlCV, c.eaa, c.FailLevelRule()))
+		item = c.appendItem(item, vpfbs.NewCryptographicVerificationResultCheck(c.I18nProvider, c.Result, xmlCV, c.eaa, c.FailLevelRule()))
 	}
 
 	// 5. EAA Acceptance Validation
 	xmlSAV := eaaBBBs.SAV
 	if xmlSAV != nil {
-		item = item.SetNextItem(c.signatureAcceptanceValidation(xmlSAV)) //nolint:staticcheck // mirrors upstream EAAValidationProcess#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
+		item = c.appendItem(item, c.signatureAcceptanceValidation(xmlSAV)) //nolint:staticcheck // mirrors upstream EAAValidationProcess#initChain: Java's trailing `item = item.setNextItem(...)` is the same dead store - setNextItem links the item and returns it, and nothing reads the tail afterwards.
 	}
+}
+
+// appendItem ports `item.setNextItem(next)`. Java seeds `item` with firstItem, which only the
+// format-checking step (1.) ever sets: when the basic building blocks carry no FC block, the
+// first following step calls setNextItem on null and throws a NullPointerException, so an EAA
+// validation without a format-checking result cannot proceed. The Go form of that null
+// dereference is the bare nil-interface panic this helper replaces with an explicit
+// IllegalStateException-style panic of the same fail-closed effect (never a verdict built
+// without the format-checking gate).
+//
+// The FC block is missing in exactly one situation: a build without the `eaa` build tag, where
+// blocks.BasicBuildingBlocks has no EAA format-checking block to dispatch to (see
+// blocks/basic_building_blocks_noeaa.go) although the diagnostic data and this presentation
+// process are untagged and reach here for any diagnostic data holding an EAA. EAA validation
+// is only supported with `-tags eaa`.
+func (c *ValidationProcess) appendItem(item, next process.ChainItem[*jaxb.XmlValidationProcessEAA]) process.ChainItem[*jaxb.XmlValidationProcessEAA] {
+	if item == nil {
+		panic(fmt.Sprintf("Invalid state! No Format Checking result found for the EAA with Id '%s': "+
+			"EAA validation is only supported when built with the 'eaa' build tag", c.eaa.Id()))
+	}
+	return item.SetNextItem(next)
 }
 
 // signatureValidationConclusive ports the private
