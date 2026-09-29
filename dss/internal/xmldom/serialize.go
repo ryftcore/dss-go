@@ -8,6 +8,7 @@ import (
 	"strings"
 	"unicode"
 	"unicode/utf16"
+	"unicode/utf8"
 )
 
 // Serialize is a byte-for-byte reimplementation of what DomUtils.serializeNode(Node)
@@ -171,6 +172,7 @@ type serializer struct {
 	depth        int
 	startTagOpen bool
 	attrs        []outAttr
+	attrIdx      map[string]int // qname -> index in attrs; built only for a wide start tag
 
 	cdataOpen bool
 
@@ -319,15 +321,25 @@ func domAttrOrder(attrs []*Node) []*Node {
 	if len(attrs) < 2 {
 		return attrs
 	}
-	out := make([]*Node, 0, len(attrs))
-	for _, a := range attrs {
-		q := a.Name.QName()
-		i := sort.Search(len(out), func(i int) bool {
-			return compareUTF16(out[i].Name.QName(), q) >= 0
-		})
-		out = append(out, nil)
-		copy(out[i+1:], out[i:])
-		out[i] = a
+	// One stable sort instead of a binary-search insertion per attribute, whose slice
+	// shifts cost O(n^2) for an element carrying n attributes. Xerces inserts an
+	// attribute BEFORE an equal-named one already present, so equal names would come out
+	// in reverse source order; feeding the sort the reversed input reproduces exactly
+	// that (the parser rejects duplicate QNames, so it only matters for a hand-built tree).
+	type keyed struct {
+		name string
+		node *Node
+	}
+	items := make([]keyed, len(attrs))
+	for i, a := range attrs {
+		items[len(attrs)-1-i] = keyed{a.Name.QName(), a}
+	}
+	sort.SliceStable(items, func(i, j int) bool {
+		return compareUTF16(items[i].name, items[j].name) < 0
+	})
+	out := make([]*Node, len(items))
+	for i, it := range items {
+		out[i] = it.node
 	}
 	return out
 }
@@ -336,7 +348,19 @@ func domAttrOrder(attrs []*Node) []*Node {
 // This differs from Go's byte-wise ordering only when one string holds a supplementary
 // character, whose surrogates sort below U+E000 in UTF-16 and above it in UTF-8.
 func compareUTF16(a, b string) int {
-	ar, br := []rune(a), []rune(b)
+	// Skip the common ASCII prefix: over ASCII the two orders agree, and almost every real
+	// comparison is decided there without allocating.
+	i := 0
+	for i < len(a) && i < len(b) && a[i] == b[i] && a[i] < utf8.RuneSelf {
+		i++
+	}
+	if i == len(a) && i == len(b) {
+		return 0
+	}
+	if i < len(a) && i < len(b) && a[i] < utf8.RuneSelf && b[i] < utf8.RuneSelf {
+		return int(a[i]) - int(b[i])
+	}
+	ar, br := []rune(a[i:]), []rune(b[i:])
 	au, bu := utf16.Encode(ar), utf16.Encode(br)
 	for i := 0; i < len(au) && i < len(bu); i++ {
 		if au[i] != bu[i] {
@@ -417,15 +441,40 @@ func (s *serializer) startPrefixMapping(prefix, uri string) {
 // gives incorrect value, rely only on 'rawName'". Two attributes that differ only in
 // namespace therefore collapse into one, the later value winning: an element carrying both
 // setAttributeNS(A, "p:Id") and setAttributeNS(B, "p:Id") serializes with a single p:Id.
+//
+// The lookup is a linear scan for an ordinary start tag and switches to a map once the tag
+// is wide (Xalan's AttributesImplSerializer does the same above 12 attributes), because n
+// attributes cost O(n^2) comparisons otherwise - tens of seconds for an attacker-supplied
+// element with 100 000 of them.
 func (s *serializer) addAttributeAlways(uri, local, qname, value string) {
-	for i := range s.attrs {
-		if s.attrs[i].qname == qname {
+	if s.attrIdx != nil {
+		if i, ok := s.attrIdx[qname]; ok {
 			s.attrs[i].value = value
 			return
 		}
+	} else {
+		for i := range s.attrs {
+			if s.attrs[i].qname == qname {
+				s.attrs[i].value = value
+				return
+			}
+		}
 	}
 	s.attrs = append(s.attrs, outAttr{uri: uri, local: local, qname: qname, value: value})
+	switch {
+	case s.attrIdx != nil:
+		s.attrIdx[qname] = len(s.attrs) - 1
+	case len(s.attrs) > attrIndexThreshold:
+		s.attrIdx = make(map[string]int, 2*len(s.attrs))
+		for i := range s.attrs {
+			s.attrIdx[s.attrs[i].qname] = i
+		}
+	}
 }
+
+// attrIndexThreshold is the pending-attribute count above which addAttributeAlways indexes
+// them by qname.
+const attrIndexThreshold = 12
 
 // addAttribute is SerializerBase.addAttribute(String, String).
 func (s *serializer) addAttribute(name, value string) {
@@ -516,6 +565,7 @@ func (s *serializer) processAttributes() {
 		s.raw(`"`)
 	}
 	s.attrs = s.attrs[:0]
+	s.attrIdx = nil
 }
 
 func (s *serializer) endElement(qname string) {

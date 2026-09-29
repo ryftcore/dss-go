@@ -1,6 +1,7 @@
 package xmldom
 
 import (
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -168,6 +169,30 @@ func TestScanStartTagAgreesWithEncodingXML(t *testing.T) {
 		if _, err := Parse([]byte(src), nil); err != nil {
 			t.Errorf("Parse(%q) = %v", src, err)
 		}
+	}
+}
+
+// TestNormalizeAttValueReferencesAreLinear pins that decoding a reference does not copy the
+// remainder of the value (X06-PERF-001): 40 000 references in a 200 KB value used to cost
+// about 4 GB of transient allocation, a CPU/memory denial of service reachable from any
+// attacker-supplied document.
+func TestNormalizeAttValueReferencesAreLinear(t *testing.T) {
+	const refs = 40000
+	raw := []byte(strings.Repeat("&amp;", refs))
+
+	var before, after runtime.MemStats
+	runtime.ReadMemStats(&before)
+	got, err := normalizeAttValue(raw)
+	runtime.ReadMemStats(&after)
+	if err != nil {
+		t.Fatalf("normalizeAttValue: %v", err)
+	}
+	if want := strings.Repeat("&", refs); got != want {
+		t.Fatalf("normalizeAttValue decoded %d bytes, want %d of '&'", len(got), len(want))
+	}
+	if allocated := after.TotalAlloc - before.TotalAlloc; allocated > 32<<20 {
+		t.Errorf("normalizeAttValue allocated %d MiB for a %d KiB value; want linear (<32 MiB)",
+			allocated>>20, len(raw)>>10)
 	}
 }
 

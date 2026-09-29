@@ -182,7 +182,6 @@ func TestKnownAnswers(t *testing.T) {
 
 	var checked int
 	for _, fixture := range order {
-		fixture := fixture
 		t.Run(fixture, func(t *testing.T) {
 			st := loadFixture(t, fixture, detached[fixture])
 			for _, row := range byFixture[fixture] {

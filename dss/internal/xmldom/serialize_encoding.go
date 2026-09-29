@@ -155,15 +155,22 @@ func writeTruncatingASCII(dst []byte, r rune) []byte {
 	return append(dst, byte(h), byte(l))
 }
 
+// The two UTF-16 writers encode with utf16.AppendRune into a stack array, which is
+// utf16.Encode([]rune{r}) - including U+FFFD for a surrogate or out-of-range rune - without
+// the two slice allocations per character. (utf16.EncodeRune is NOT a substitute: it
+// answers U+FFFD, U+FFFD for anything below U+10000.)
+
 func writeUTF16BE(dst []byte, r rune) []byte {
-	for _, u := range utf16.Encode([]rune{r}) {
+	var buf [2]uint16
+	for _, u := range utf16.AppendRune(buf[:0], r) {
 		dst = append(dst, byte(u>>8), byte(u))
 	}
 	return dst
 }
 
 func writeUTF16LE(dst []byte, r rune) []byte {
-	for _, u := range utf16.Encode([]rune{r}) {
+	var buf [2]uint16
+	for _, u := range utf16.AppendRune(buf[:0], r) {
 		dst = append(dst, byte(u), byte(u>>8))
 	}
 	return dst

@@ -1,6 +1,7 @@
 package xmldom
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"strconv"
@@ -192,7 +193,10 @@ func normalizeAttValue(raw []byte) (string, error) {
 		case c == '<':
 			return "", errors.New("'<' is not allowed in an attribute value")
 		case c == '&':
-			j := strings.IndexByte(string(raw[i:]), ';')
+			// Scan the bytes in place. strings.IndexByte(string(raw[i:]), ';') copies the
+			// whole remainder of the value once per reference, which makes a value of n
+			// bytes and k references cost O(n*k).
+			j := bytes.IndexByte(raw[i:], ';')
 			if j < 0 {
 				return "", errRefNoSemi
 			}
