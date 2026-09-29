@@ -26,11 +26,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/fs"
+	"math"
 	"net/url"
 	"path"
 	"reflect"
 	"regexp"
+	"strconv"
 	"strings"
+	"sync"
 )
 
 // schemaSet resolves and caches the parsed JSON documents (schemas) reachable from a root schema
@@ -60,6 +63,30 @@ func decodeJSON(data []byte) (any, error) {
 	return v, nil
 }
 
+// sharedSchemaDocs caches, process-wide, the decoded documents of the embedded schema tree
+// (jadesSchemaRoot) by file path. Upstream's JSONSchemaAbstractUtils#getValidator caches the
+// compiled schema across calls; this is the equivalent, so a validation does not re-read and
+// re-decode the ~11 embedded documents every time. The cached values are never mutated: the
+// validate* methods only read the decoded trees.
+var sharedSchemaDocs sync.Map // map[string]any
+
+// compiledPatterns caches compiled "pattern" keywords (a nil *regexp.Regexp for an invalid one).
+// The patterns come from the embedded schemas, so the set is small and bounded.
+var compiledPatterns sync.Map // map[string]*regexp.Regexp
+
+// compilePattern returns the compiled form of a "pattern" keyword, or nil when it is invalid.
+func compilePattern(pattern string) *regexp.Regexp {
+	if cached, ok := compiledPatterns.Load(pattern); ok {
+		return cached.(*regexp.Regexp)
+	}
+	re, err := regexp.Compile(pattern)
+	if err != nil {
+		re = nil
+	}
+	compiledPatterns.Store(pattern, re)
+	return re
+}
+
 // load fetches and parses (once, cached) the root document registered under uri.
 func (s *schemaSet) load(uri string) (any, error) {
 	if doc, ok := s.docs[uri]; ok {
@@ -69,6 +96,15 @@ func (s *schemaSet) load(uri string) (any, error) {
 	if !ok {
 		return nil, fmt.Errorf("unable to load a schema for URI: %s", uri)
 	}
+	// Only the embedded tree is shared across calls: its content is fixed, whereas any other
+	// fs.FS may change (and is only used by tests).
+	shared := s.files == jadesSchemaRoot
+	if shared {
+		if doc, ok := sharedSchemaDocs.Load(relPath); ok {
+			s.docs[uri] = doc
+			return doc, nil
+		}
+	}
 	data, err := fs.ReadFile(s.files, relPath)
 	if err != nil {
 		return nil, fmt.Errorf("unable to load a schema for URI: %s: %w", uri, err)
@@ -76,6 +112,9 @@ func (s *schemaSet) load(uri string) (any, error) {
 	doc, err := decodeJSON(data)
 	if err != nil {
 		return nil, fmt.Errorf("malformed schema for URI: %s: %w", uri, err)
+	}
+	if shared {
+		sharedSchemaDocs.Store(relPath, doc)
 	}
 	s.docs[uri] = doc
 	return doc, nil
@@ -183,7 +222,7 @@ func (s *schemaSet) validate(schemaNode any, baseURI string, instance any, path 
 
 	if str, isString := instance.(string); isString {
 		if pattern, ok := schema["pattern"].(string); ok {
-			if re, err := regexp.Compile(pattern); err == nil && !re.MatchString(str) {
+			if re := compilePattern(pattern); re != nil && !re.MatchString(str) {
 				errs = append(errs, fmt.Sprintf("%s: value does not match pattern %q", errPath(path), pattern))
 			}
 		}
@@ -378,10 +417,10 @@ func jsonType(instance any) string {
 	case string:
 		return "string"
 	case json.Number:
-		if strings.ContainsAny(string(v), ".eE") {
-			return "number"
+		if isIntegerNumber(string(v)) {
+			return "integer"
 		}
-		return "integer"
+		return "number"
 	case map[string]any:
 		return "object"
 	case []any:
@@ -389,6 +428,40 @@ func jsonType(instance any) string {
 	default:
 		return "unknown"
 	}
+}
+
+// isIntegerNumber reports whether a JSON number literal (as produced by json.Decoder, so already
+// syntactically valid) is typed "integer" by the validator upstream uses, com.github.erosb.
+// jsonsKema (0.31.0). Draft-06+ defines an integer as a number with a zero fractional part, so
+// 1.0 is one, and that validator agrees - but only up to the way it decides it, which is
+// reproduced here (Validator.findActualNumberType, JsonParser.parseNumber):
+//
+//   - a literal without '.', 'e' or 'E' is an integer;
+//   - any other literal is parsed as a Double and its Double.toString() is inspected: integer when
+//     nothing but zeros follows the '.'. Double.toString switches to scientific notation
+//     ("1.0E7", "1.7E9") from 10^7 on, where an 'E' follows the '.', so 1700000000.0 and 1e7 are
+//     NOT integers there while 1.0, 5e0 and 12.0 are;
+//   - a literal too large for a Double falls back to BigDecimal.toString(), which is integer when
+//     the coefficient is a single digit ("1E+999").
+//
+// Before, every literal with a '.' or an exponent was a "number".
+func isIntegerNumber(literal string) bool {
+	if !strings.ContainsAny(literal, ".eE") {
+		return true
+	}
+	value, err := strconv.ParseFloat(literal, 64)
+	if err != nil {
+		// out of range for a Double (+/-Inf): BigDecimal.toString() of the literal
+		mantissa, _, _ := strings.Cut(strings.ToLower(strings.TrimPrefix(literal, "-")), "e")
+		coefficient := strings.TrimLeft(strings.Replace(mantissa, ".", "", 1), "0")
+		return len(coefficient) <= 1
+	}
+	magnitude := math.Abs(value)
+	if magnitude == 0 {
+		return true // "0.0"
+	}
+	// Double.toString is plain decimal ("N.0" for a whole value) only within [1e-3, 1e7)
+	return magnitude >= 1e-3 && magnitude < 1e7 && value == math.Trunc(value)
 }
 
 // typeMatches reports whether instance's JSON type satisfies the declared draft-07 "type" value,
