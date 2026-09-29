@@ -1,3 +1,4 @@
+// Go-only support file with no upstream class: a weak side table standing in for Java downcasts.
 package xades
 
 import (
