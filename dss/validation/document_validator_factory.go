@@ -35,6 +35,10 @@ var documentValidatorFactoryRegistry []DocumentValidatorFactory
 
 // RegisterDocumentValidatorFactory registers a DocumentValidatorFactory to be
 // consulted by SignedDocumentValidatorFromDocument.
+//
+// The registry is an unsynchronized package-level slice, like the ServiceLoader provider list it
+// replaces: call this from an init() function (or at least before any goroutine validates a
+// document), never concurrently with SignedDocumentValidatorFromDocument.
 func RegisterDocumentValidatorFactory(f DocumentValidatorFactory) {
 	documentValidatorFactoryRegistry = append(documentValidatorFactoryRegistry, f)
 }
