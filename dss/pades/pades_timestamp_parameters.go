@@ -191,12 +191,19 @@ func (p *TimestampParameters) Reinit() {
 }
 
 // String ports #toString.
+//
+// DIVERGENCE, deliberate: PAdESTimestampParameters#toString appends
+// Arrays.toString(passwordProtection), which writes the document password in clear text into any
+// log line or error message that formats the parameters. The port renders it as
+// padesPasswordProtectionString does. Nothing else in the rendering changes; the string is a
+// diagnostic aid and takes no part in equals/hashCode.
 func (p *TimestampParameters) String() string {
 	return fmt.Sprintf("PAdESTimestampParameters [pdfSignatureCache=%v, timestampDate=%v, timestampSize=%v, "+
 		"timestampFilter='%s', timestampSubFilter='%s', appName='%s', timestampImageParameters=%v, "+
-		"passwordProtection=%v] %s",
+		"passwordProtection=%s] %s",
 		p.pdfSignatureCache, p.timestampDate, p.timestampSize, p.timestampFilter, p.timestampSubFilter,
-		p.appName, p.timestampImageParameters, p.passwordProtection, p.TimestampParameters.String())
+		p.appName, p.timestampImageParameters, padesPasswordProtectionString(p.passwordProtection),
+		p.TimestampParameters.String())
 }
 
 // Equals ports #equals.

@@ -393,13 +393,28 @@ func (p *SignatureParameters) Reinit() {
 }
 
 // String ports #toString.
+//
+// DIVERGENCE, deliberate: PAdESSignatureParameters#toString appends
+// Arrays.toString(passwordProtection), which writes the document password in clear text into any
+// log line or error message that formats the parameters. The port renders it as
+// padesPasswordProtectionString does. Nothing else in the rendering changes; the string is a
+// diagnostic aid and takes no part in equals/hashCode.
 func (p *SignatureParameters) String() string {
 	return fmt.Sprintf("PAdESSignatureParameters [reason='%s', contactInfo='%s', location='%s', signerName='%s', "+
 		"signatureSize=%d, signatureFilter='%s', signatureSubFilter='%s', appName='%s', signatureImageParameters=%v, "+
-		"permission=%v, passwordProtection=%v, signingTimeZone=%v, includeVRIDictionary=%v] %s",
+		"permission=%v, passwordProtection=%s, signingTimeZone=%v, includeVRIDictionary=%v] %s",
 		p.reason, p.contactInfo, p.location, p.signerName, p.signatureSize, p.signatureFilter, p.signatureSubFilter,
-		p.appName, p.signatureImageParameters, p.permission, p.passwordProtection, p.signingTimeZone,
-		p.includeVRIDictionary, p.SignatureParameters.String())
+		p.appName, p.signatureImageParameters, p.permission, padesPasswordProtectionString(p.passwordProtection),
+		p.signingTimeZone, p.includeVRIDictionary, p.SignatureParameters.String())
+}
+
+// padesPasswordProtectionString renders a PDF document password for String(): "null" when none is
+// set (as Java's Arrays.toString(null)), "[redacted]" otherwise.
+func padesPasswordProtectionString(passwordProtection []byte) string {
+	if passwordProtection == nil {
+		return "null"
+	}
+	return "[redacted]"
 }
 
 // Equals ports #equals.
