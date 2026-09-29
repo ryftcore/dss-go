@@ -336,18 +336,24 @@ func addEquivalentCertificates(subXCV *jaxb.XmlSubXCV, ids []string) {
 
 // removeAllCertificates ports List#removeAll(Collection) over certificate
 // wrappers, whose equals() compares the wrapper type and the token Id.
+//
+// Both operands hold only *diagnostic.CertificateWrapper values, so equals() reduces to the Id
+// comparison; the ids to remove are collected once into a set, which keeps the removal linear
+// (List#removeAll, and the nested loops this replaces, are quadratic in the sizes of the cross
+// / equivalent certificate sets a certificate can be given). The retained elements keep their
+// order.
 func removeAllCertificates(certificates []*diagnostic.CertificateWrapper,
 	toRemove []*diagnostic.CertificateWrapper) []*diagnostic.CertificateWrapper {
 	var result []*diagnostic.CertificateWrapper
+	if len(certificates) == 0 {
+		return result
+	}
+	removedIds := make(map[string]struct{}, len(toRemove))
+	for _, removed := range toRemove {
+		removedIds[removed.Id()] = struct{}{}
+	}
 	for _, certificate := range certificates {
-		found := false
-		for _, removed := range toRemove {
-			if certificate.Equals(removed) {
-				found = true
-				break
-			}
-		}
-		if !found {
+		if _, found := removedIds[certificate.Id()]; !found {
 			result = append(result, certificate)
 		}
 	}
@@ -355,19 +361,19 @@ func removeAllCertificates(certificates []*diagnostic.CertificateWrapper,
 }
 
 // removeAllOrphanCertificates ports List#removeAll(Collection) over orphan
-// certificate token wrappers.
+// certificate token wrappers (compared by Id, in linear time, see removeAllCertificates).
 func removeAllOrphanCertificates(certificates []*diagnostic.OrphanCertificateTokenWrapper,
 	toRemove []*diagnostic.OrphanCertificateTokenWrapper) []*diagnostic.OrphanCertificateTokenWrapper {
 	var result []*diagnostic.OrphanCertificateTokenWrapper
+	if len(certificates) == 0 {
+		return result
+	}
+	removedIds := make(map[string]struct{}, len(toRemove))
+	for _, removed := range toRemove {
+		removedIds[removed.Id()] = struct{}{}
+	}
 	for _, certificate := range certificates {
-		found := false
-		for _, removed := range toRemove {
-			if certificate.Id() == removed.Id() {
-				found = true
-				break
-			}
-		}
-		if !found {
+		if _, found := removedIds[certificate.Id()]; !found {
 			result = append(result, certificate)
 		}
 	}

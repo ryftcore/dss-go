@@ -3,6 +3,7 @@ package utils
 
 import (
 	"sort"
+	"sync"
 
 	"github.com/ryftcore/dss-go/dss/internal/xpath10"
 )
@@ -14,7 +15,13 @@ import (
 // anything else) to consume, so NamespaceURI/Prefix/Prefixes are plain methods rather than an
 // interface implementation; namespaceContextMapToXPath10 (in xpath_utils.go) is the actual
 // bridge xpath10.Compile is given.
+//
+// Unlike upstream's HashMaps, the registry is guarded by a RWMutex. The process-global instance
+// (XPathUtilsGetNamespaceContextMap) is re-registered by xades.NewSignature and NewService on
+// every construction, so parallel validations write it concurrently with XPath compilation, and
+// a concurrent Go map write aborts the process where Java's HashMap merely loses an update.
 type NamespaceContextMap struct {
+	mu           sync.RWMutex
 	prefixMap    map[string]string
 	namespaceMap map[string]map[string]struct{}
 }
@@ -31,6 +38,8 @@ func NewNamespaceContextMap() *NamespaceContextMap {
 // prefix, and reports whether prefix was not already registered. Ports
 // registerNamespace(String, String).
 func (m *NamespaceContextMap) RegisterNamespace(prefix, namespace string) bool {
+	m.mu.Lock()
+	defer m.mu.Unlock()
 	_, existed := m.prefixMap[prefix]
 	m.prefixMap[prefix] = namespace
 	m.createNamespace(prefix, namespace)
@@ -50,6 +59,8 @@ func (m *NamespaceContextMap) createNamespace(prefix, namespace string) {
 // PrefixMap returns a copy of the prefix-to-URI bindings, so a caller cannot mutate the
 // registry through it. Ports getPrefixMap().
 func (m *NamespaceContextMap) PrefixMap() map[string]string {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
 	out := make(map[string]string, len(m.prefixMap))
 	for k, v := range m.prefixMap {
 		out[k] = v
@@ -61,6 +72,8 @@ func (m *NamespaceContextMap) PrefixMap() map[string]string {
 // registered. Ports getNamespaceURI(String). Java's Objects-non-null check on the argument
 // has no Go analogue, since a Go string is never nil.
 func (m *NamespaceContextMap) NamespaceURI(prefix string) string {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
 	return m.prefixMap[prefix]
 }
 
@@ -75,6 +88,8 @@ func (m *NamespaceContextMap) NamespaceURI(prefix string) string {
 // at Compile time (see namespaceContextMapToXPath10) - so this exists only to keep the
 // type's public surface complete.
 func (m *NamespaceContextMap) Prefix(namespaceURI string) (string, bool) {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
 	set, ok := m.namespaceMap[namespaceURI]
 	if !ok || len(set) == 0 {
 		return "", false
@@ -97,6 +112,8 @@ func (m *NamespaceContextMap) Prefix(namespaceURI string) (string, bool) {
 // in DSS ever calls getPrefixes with an unregistered URI - so this returns an empty, non-nil
 // slice instead of panicking.
 func (m *NamespaceContextMap) Prefixes(namespaceURI string) []string {
+	m.mu.RLock()
+	defer m.mu.RUnlock()
 	set := m.namespaceMap[namespaceURI]
 	out := make([]string, 0, len(set))
 	for prefix := range set {

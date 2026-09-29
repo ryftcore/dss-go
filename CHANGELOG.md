@@ -10,6 +10,142 @@ API changes; each one is listed under **Changed**. Release procedure:
 
 ## [Unreleased]
 
+### Security
+
+- **`validation/job`, `tsl`: data race on shared cache entries.** The TL/LOTL job
+  drives one `CachedEntry` from several goroutines (the pivot fan-out expires the
+  shared LOTL and preceding-pivot validation entries). `CachedEntry` state is now
+  serialized by a per-entry mutex.
+- **`spi/policy`: false "digest valid" on a non-conforming ASN.1 signature policy.**
+  `BasicASN1SignaturePolicyValidator` reported the policy digest valid when the
+  top-level SEQUENCE had fewer than three elements. It now follows Java's control
+  flow (`digestValid=false`, `asn1Processable` set as upstream) for every
+  non-conforming input, and accepts BER indefinite-length policies.
+- **`spi/validation`: unorderable certificate sets no longer pass the revocation
+  checks.** When the processed certificates cannot be ordered (no signing
+  certificate, only bridge certificates), the required-revocation-data,
+  POE-coverage, fresh-revocation and self-issued-revocation checks used by
+  signing/extension now abort with a `*model.DSSError` (an error at the facade), as
+  Java's `DSSException` does, instead of reporting the check as satisfied.
+- **`validation/process/bbb/fc`: cyclic manifest references.** A manifest that lists
+  its own time-stamp file, or two manifests listing each other's, sent the
+  signed-and-timestamped-files-covered check into unbounded recursion, a fatal Go
+  stack overflow that a crafted container could use to end the process. It now
+  fails with an ordinary error (see `docs/compatibility/known-gaps.md`).
+- **`tsl`, `validation/job`: panics inside TL/LOTL tasks.** A panic in a
+  download/parsing/validation task (for example a pivot LOTL without
+  `<SchemeInformation>`) is now recorded as a cache error, as Java's
+  `catch (Exception)` does. It previously crashed the process from a pivot
+  goroutine, or was swallowed without recording an error.
+- **`xml/utils`: unsynchronized global XPath state.** The namespace registry,
+  executor loader and initializer flag were written without synchronization, so
+  concurrent XAdES validations could abort the process with
+  `concurrent map writes`.
+- **`internal/xmldom`, `internal/xmlc14n`: quadratic work on attacker-sized XML.**
+  Normalizing attribute values with many references, serializing an element with
+  many attributes, canonicalizing an element's attribute set and removing URI dot
+  segments were O(n²); they are now linear or O(n log n).
+- **`pades`: the PDF password no longer appears in `String()`.**
+  `SignatureParameters.String()` and `TimestampParameters.String()` print
+  `passwordProtection=[redacted]` (deliberate divergence from upstream's
+  `toString`).
+- **`internal/pdf`: the `/U` and `/O` password hashes are compared in constant
+  time.**
+
+### Fixed
+
+- `asic/cades`, `asic/xades`: a `SignaturePolicyProvider` set on the container
+  analyzer is now forwarded to the per-signature analyzers (it was dropped). Only an
+  explicitly set provider is forwarded; unlike upstream, no default provider that
+  downloads policy URLs named inside the container is created (see
+  `docs/compatibility/known-gaps.md`).
+- `asic/cades`: an error attaching a container time-stamp to the detached
+  time-stamp source is no longer swallowed.
+- `cades`: counter-signatures no longer carry a `mimeType` signed attribute,
+  matching upstream `CAdESLevelBaselineB#addMimeType`.
+- `detailedreport`: `HighestConclusion` and the message collector no longer panic
+  for a signature with none of the archival, long-term or basic validation blocks
+  (Java returns null). `NewDetailedReport` creates its `MessageCollector` eagerly,
+  so one report can be read from several goroutines.
+- `internal/asn1ber`: `OIDFromString` now refuses what BouncyCastle's
+  `new ASN1ObjectIdentifier(String)` refuses (`"5.3"`, `"1.40"`, `"01.2"`, signed
+  arcs); such input used to yield an OID that `EncodeOID` silently dropped.
+- `internal/cmscore`: TSTInfo `Accuracy` millis/micros outside 1..999 are refused,
+  as BouncyCastle does; an out-of-range value is no longer clamped to 0.
+- `internal/jose`: `JWS.VerifySignature` no longer returns a cached verdict after
+  the payload or protected header changed.
+- `jades`: the signature scope finder parses a padded `Digest` HTTP header value
+  (`SHA-256=<base64>=`); Go's `strings.Split` kept the trailing empty field Java's
+  `split` drops, so the message-body scope was omitted. A plain `HTTPHeader` named
+  `Digest` is accepted, as in Java.
+- `jades/specs`: the schema engine types JSON numbers as `integer` exactly as
+  upstream's jsonsKema 0.31.0 does (e.g. `1.0` is an integer).
+- `model/eaa`: `DisclosureValidation.Equals` compares disclosures by salt and
+  claim, as Java's `Objects.equals` does, instead of a deep comparison that
+  included function fields.
+- `model/tsl`: `PivotInfo.DSSID()` returns a `PivotIdentifier` (`P-` prefix) as
+  Java's `PivotInfo#getDSSId()` does, instead of the embedded `LOTLInfo`'s
+  identifier. `ConditionForQualifiers.Equals` and
+  `CertificateContentEquivalence.Equals` compare conditions structurally.
+- `pades`: `GetRevisions` skips a revision that cannot be built (e.g. a
+  `/DocTimeStamp` whose `/Contents` is not an RFC 3161 token) and analyses the
+  rest, like upstream's `catch (Exception)`, instead of aborting.
+- `pades`: a `/DSS /VRI` entry whose value is not a dictionary no longer panics; as
+  upstream, the VRI dictionaries are dropped.
+- `pades`: `IsValidForPAdESBaselineBProfile` no longer applies CAdES requirement
+  (k), matching upstream's `cmsBaselineBRequirements()`.
+  `cades.BaselineRequirementsChecker` gains `CMSBaselineBRequirements`.
+- `pades`, `xades`: process-wide registries that recover concrete time-stamp,
+  reference-validation and signature-policy values no longer keep every validated
+  document alive for the life of the process.
+- `policy/crypto/json`: a malformed validity date in a JSON cryptographic-suite
+  algorithm skips that algorithm entry, as upstream does, instead of keeping it
+  with an open-ended validity window. A malformed `PolicyIssueDate`/`NextUpdate`
+  fails, as upstream throws.
+- `spi/client/http`: each `NativeHTTPDataLoaderCall.Call` closes its idle
+  connection; one connection and two goroutines leaked per fetch.
+- `spi/lote`: `TrustedEntitiesCertificateSource` enumerates certificates in
+  DSS-id order instead of random map order.
+- `spi/validation`: `RevocationFreshnessStatus` records the revocation nextUpdate
+  time, so its alert message carries the "NextUpdate time" suffix as in Java.
+- `spi/validation`: the revocation loading strategy catches the whole
+  `DSSException` family (`DSSExternalResourceException`,
+  `DSSDataLoaderMultipleException`), like Java's `catch (DSSException)`.
+- `spi/validation`: a time-stamp's signing-time attribute is validated like
+  BouncyCastle does; a malformed value is an error instead of silently skipping the
+  certificate-validity check.
+- `spi/validation/scope`: the document-equality fallback no longer panics on
+  incomparable `DSSDocument` implementations.
+- `token`: a PKCS#12 with several private keys under a shared CA gives every key
+  its complete certificate chain; later keys got a chain truncated to the leaf.
+- `validation/job`: a panicking alert no longer aborts the alerting pass.
+- `validation/process/eaa`: without the `eaa` build tag, EAA presentation
+  validation fails with an explicit error naming the tag instead of a nil-pointer
+  panic.
+- `validation/reports`: trusted-entity names in the diagnostic data are listed in a
+  deterministic language order.
+- `xades`, `spi/validation/timestamp`: `validateTimestamps` dispatches
+  `GetTimestampScopes` to the format override as Java does, so an XAdES
+  `IndividualDataObjectsTimeStamp` is no longer attributed to every signature
+  scope. The `StructureValidatorFactory` singleton is race-free.
+
+### Changed
+
+- Performance only, no output change: `i18n` message-tag lookups use a prebuilt
+  index; `validation/executor` indexes orphan certificate ids once; certificate
+  removal in `validation/process/blocks` and the evidence-record renewal check in
+  `bbb/cv` are linear; `pades` indexes its object-modification set; `jades`
+  digests each detached document once per `ObjectIdByURIHash` validation and caches
+  the embedded schemas (about 40× faster header validation); `asic` parses each
+  manifest once per lookup; `internal/jose` writes typed slices directly.
+- Added `analyzer.DefaultDocumentAnalyzer.ConfiguredSignaturePolicyProvider()`.
+- `cades/testdata/gen/AtsHashIndexOracle.java` commits the generator of
+  `attribute-table-order-oracle.txt`.
+- Removed the unused `eaaPayloadClaimElements` table from `simplereport/jaxb`.
+- Documentation: init-time-only registries, the `crlparser` package doc, the
+  `NativeHTTPDataLoader` defaults, and new known-gaps entries for XML structure
+  validation, the XPath Id lookup and the ASiC policy provider.
+
 ## [0.1.0] - 2026-09-28
 
 First tagged release. Initial public port of [esig/dss](https://github.com/esig/dss) (upstream

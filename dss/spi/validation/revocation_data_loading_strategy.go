@@ -26,6 +26,7 @@ import (
 	"github.com/ryftcore/dss-go/dss/model"
 	"github.com/ryftcore/dss-go/dss/model/x509/revocation"
 	"github.com/ryftcore/dss-go/dss/spi"
+	"github.com/ryftcore/dss-go/dss/spi/exception"
 )
 
 // RevocationDataLoadingStrategyOverrides carries the operation Java declares abstract on
@@ -107,6 +108,19 @@ func (s *RevocationDataLoadingStrategy) getControlTime() time.Time {
 	return time.Now()
 }
 
+// revocationDataLoadingStrategyIsDSSException reports whether err is what Java's
+// catch (DSSException) would catch: a *model.DSSError or one of the exception types that extend
+// DSSException upstream and embed it here (errors.As on *model.DSSError alone does not see an
+// embedding type, whose Unwrap yields the cause rather than the embedded value). The PAdES
+// ProtectedDocumentException family cannot come out of a revocation source and lives in a package
+// this one must not import.
+func revocationDataLoadingStrategyIsDSSException(err error) bool {
+	var dssError *model.DSSError
+	var externalResource *exception.DSSExternalResourceException
+	var multiple *exception.DSSDataLoaderMultipleException
+	return errors.As(err, &dssError) || errors.As(err, &externalResource) || errors.As(err, &multiple)
+}
+
 // checkCRL retrieves and verifies the obtained CRL token.
 //
 // NOTE: returns only if a valid entry has been obtained!
@@ -121,8 +135,7 @@ func (s *RevocationDataLoadingStrategy) checkCRL(certificateToken, issuerToken *
 	}
 	defer func() {
 		if r := recover(); r != nil {
-			var dssErr *model.DSSError
-			if err, ok := r.(error); ok && errors.As(err, &dssErr) {
+			if err, ok := r.(error); ok && revocationDataLoadingStrategyIsDSSException(err) {
 				revocationToken = nil
 				return
 			}
@@ -144,8 +157,7 @@ func (s *RevocationDataLoadingStrategy) checkOCSP(certificateToken, issuerToken 
 	}
 	defer func() {
 		if r := recover(); r != nil {
-			var dssErr *model.DSSError
-			if err, ok := r.(error); ok && errors.As(err, &dssErr) {
+			if err, ok := r.(error); ok && revocationDataLoadingStrategyIsDSSException(err) {
 				revocationToken = nil
 				return
 			}

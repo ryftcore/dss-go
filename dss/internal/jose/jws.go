@@ -37,7 +37,13 @@ type JWS struct {
 	key             crypto.PublicKey
 	doKeyValidation bool
 
+	// validSignature caches the verdict of VerifySignature, and validInput the signing input that
+	// verdict is over. SetKey and SetSignature drop the cache, as jose4j's onNewKey does; the
+	// signing input is compared on every call because it can change without going through this
+	// type at all (Headers hands out the header for direct modification, and the payload has
+	// several setters), and a verdict about one input says nothing about another.
 	validSignature    *bool
+	validInput        []byte
 	knownCriticalHdrs map[string]struct{}
 
 	// CheckCritOverride replaces the default 'crit' handling when non-nil.
@@ -147,7 +153,7 @@ func (j *JWS) Signature() []byte { return j.signature }
 // SetSignature sets the raw signature value. Port of the protected setSignature(byte[]).
 func (j *JWS) SetSignature(signature []byte) {
 	j.signature = signature
-	j.validSignature = nil
+	j.validSignature, j.validInput = nil, nil
 }
 
 // EncodedSignature returns BASE64URL(signature). Port of getEncodedSignature().
@@ -212,7 +218,7 @@ func (j *JWS) Key() crypto.PublicKey { return j.key }
 // validSignature.
 func (j *JWS) SetKey(key crypto.PublicKey) {
 	j.key = key
-	j.validSignature = nil
+	j.validSignature, j.validInput = nil, nil
 }
 
 // IsDoKeyValidation reports whether the key is checked against the algorithm's requirements
@@ -282,6 +288,11 @@ func (j *JWS) CheckCrit() error {
 // means the cryptography said no, an error means the algorithm, the key or the encoding made the
 // question unanswerable. The result is cached, and SetKey or SetSignature clears the cache,
 // exactly as onNewKey does upstream.
+//
+// The cached verdict is reused only while the signing input is byte for byte the one it was
+// computed over. jose4j reuses it regardless, so a JsonWebSignature whose payload or header is
+// replaced after a verification keeps answering for the old input; nothing in dss-jades does
+// that, but a stale "valid" is the one wrong answer a verifier must never give.
 func (j *JWS) VerifySignature() (bool, error) {
 	alg, err := j.resolveAlgorithm()
 	if err != nil {
@@ -292,17 +303,19 @@ func (j *JWS) VerifySignature() (bool, error) {
 			return false, err
 		}
 	}
-	if j.validSignature != nil {
+	signingInput := j.SigningInputBytes()
+	if j.validSignature != nil && bytes.Equal(j.validInput, signingInput) {
 		return *j.validSignature, nil
 	}
 	if err := j.CheckCrit(); err != nil {
 		return false, err
 	}
-	valid, err := alg.verify(j.signature, j.key, j.SigningInputBytes())
+	valid, err := alg.verify(j.signature, j.key, signingInput)
 	if err != nil {
 		return false, err
 	}
 	j.validSignature = &valid
+	j.validInput = signingInput
 	return valid, nil
 }
 

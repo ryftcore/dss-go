@@ -6,6 +6,7 @@ package diagnostic
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/ryftcore/dss-go/dss/diagnostic/jaxb"
 	"github.com/ryftcore/dss-go/dss/model"
@@ -119,10 +120,24 @@ func (b *XmlTrustedEntityBuilder) getXmlTrustedEntity(certificateToken *model.Ce
 	return result
 }
 
+// getLangAndValues ports the private getLangAndValues(Map<String, List<String>>).
+//
+// DIVERGENCE, deliberate: Java drains the map's entrySet(), whose order is the hash order of the
+// map implementation the caller supplied; ranging the Go map would make the emitted
+// XmlLangAndValue order vary from run to run. The port substitutes a deterministic order -
+// languages sorted, each language's values in their given order - exactly as
+// XmlTrustServiceProviderBuilder.getLangAndValues does. Only the order of entries of different
+// languages can differ from upstream's; the multiset of entries never does.
 func (b *XmlTrustedEntityBuilder) getLangAndValues(m map[string][]string) []*jaxb.XmlLangAndValue {
 	if utils.IsMapNotEmpty(m) {
 		result := make([]*jaxb.XmlLangAndValue, 0)
-		for lang, values := range m {
+		langs := make([]string, 0, len(m))
+		for lang := range m {
+			langs = append(langs, lang)
+		}
+		sort.Strings(langs)
+		for _, lang := range langs {
+			values := m[lang]
 			for _, value := range values {
 				l, v := lang, value
 				result = append(result, &jaxb.XmlLangAndValue{Lang: &l, Value: v})

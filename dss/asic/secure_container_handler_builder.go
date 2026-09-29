@@ -111,7 +111,9 @@ func (b *SecureContainerHandlerBuilder) SetExtractComments(extractComments bool)
 // DSSResourcesHandler creation in internal methods. DSSResourcesHandler defines a way to operate
 // with OutputStreams and create DSSDocuments.
 //
-// Default : document.InMemoryResourcesHandler. Works with data in memory.
+// Default : document.InMemoryResourcesHandler. Works with data in memory, so creating or merging a
+// container holds the whole output in memory; pass a document.TempFileResourcesHandlerBuilder to
+// keep large containers on disk instead.
 //
 // Panics with the Java message when resourcesHandlerBuilder is nil (Objects.requireNonNull).
 //

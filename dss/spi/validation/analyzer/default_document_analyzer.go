@@ -435,6 +435,17 @@ func (a *DefaultDocumentAnalyzer) SetSignaturePolicyProvider(signaturePolicyProv
 	a.signaturePolicyProvider = signaturePolicyProvider
 }
 
+// ConfiguredSignaturePolicyProvider returns the SignaturePolicyProvider set with
+// SetSignaturePolicyProvider, or nil when none was set.
+//
+// It exists for the analyzers that hand their provider on to nested analyzers from another
+// package (ASiC containers), where Java uses the protected getSignaturePolicyProvider(). Unlike
+// that method, it does not instantiate a default provider: see the DIVERGENCE note in
+// asic/cades/asic_container_with_cades_analyzer.go.
+func (a *DefaultDocumentAnalyzer) ConfiguredSignaturePolicyProvider() *policy.SignaturePolicyProvider {
+	return a.signaturePolicyProvider
+}
+
 // SetSignaturePolicyValidatorLoader sets a loader for a SignaturePolicyValidator. Port of
 // setSignaturePolicyValidatorLoader(SignaturePolicyValidatorLoader).
 func (a *DefaultDocumentAnalyzer) SetSignaturePolicyValidatorLoader(signaturePolicyValidatorLoader policy.SignaturePolicyValidatorLoader) {

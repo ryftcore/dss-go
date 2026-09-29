@@ -12,6 +12,7 @@
 package xmlc14n
 
 import (
+	"bytes"
 	"errors"
 	"strings"
 	"unicode"
@@ -444,9 +445,12 @@ func removeDotSegments(path string) (string, error) {
 		return "", ErrXMLBaseUnjoinable
 	}
 
-	var output strings.Builder
+	// The output is a byte slice, not a strings.Builder: the 2C branch removes the last
+	// segment, which a Builder can only do by copying everything before it into a fresh
+	// buffer - O(n) per "/.." and O(n^2) for n/2 segments followed by n/2 "..".
+	output := make([]byte, 0, len(input))
 	if input[0] == '/' {
-		output.WriteByte('/')
+		output = append(output, '/')
 		input = input[1:]
 	}
 
@@ -456,8 +460,8 @@ func removeDotSegments(path string) (string, error) {
 			input = input[2:]
 		case strings.HasPrefix(input, "../"):
 			input = input[3:]
-			if output.String() != "/" {
-				output.WriteString("../")
+			if string(output) != "/" {
+				output = append(output, "../"...)
 			}
 		case strings.HasPrefix(input, "/./"):
 			input = input[2:]
@@ -465,15 +469,15 @@ func removeDotSegments(path string) (string, error) {
 			input = "/"
 		case strings.HasPrefix(input, "/../"):
 			input = input[3:]
-			input = dotDotOutput(&output, input)
+			output, input = dotDotOutput(output, input)
 		case input == "/..":
 			input = "/"
-			input = dotDotOutput(&output, input)
+			output, input = dotDotOutput(output, input)
 		case input == ".":
 			input = ""
 		case input == "..":
-			if output.String() != "/" {
-				output.WriteString("..")
+			if string(output) != "/" {
+				output = append(output, ".."...)
 			}
 			input = ""
 		default:
@@ -497,11 +501,11 @@ func removeDotSegments(path string) (string, error) {
 				segment = input[begin:end]
 				input = input[end:]
 			}
-			output.WriteString(segment)
+			output = append(output, segment...)
 		}
 	}
 
-	out := output.String()
+	out := string(output)
 	if strings.HasSuffix(out, "..") {
 		out += "/"
 	}
@@ -509,28 +513,26 @@ func removeDotSegments(path string) (string, error) {
 }
 
 // dotDotOutput is the output-buffer half of removeDotSegments' 2C branch, shared by its
-// "/../" and "/.." arms exactly as the duplicated Java blocks are. It returns the possibly
-// shortened input.
-func dotDotOutput(output *strings.Builder, input string) string {
-	s := output.String()
+// "/../" and "/.." arms exactly as the duplicated Java blocks are. It returns the updated
+// output buffer and the possibly shortened input.
+func dotDotOutput(output []byte, input string) ([]byte, string) {
 	switch {
-	case len(s) == 0:
-		output.WriteByte('/')
-	case strings.HasSuffix(s, "../"):
-		output.WriteString("..")
-	case strings.HasSuffix(s, ".."):
-		output.WriteString("/..")
+	case len(output) == 0:
+		output = append(output, '/')
+	case bytes.HasSuffix(output, []byte("../")):
+		output = append(output, ".."...)
+	case bytes.HasSuffix(output, []byte("..")):
+		output = append(output, "/.."...)
 	default:
-		index := strings.LastIndexByte(s, '/')
+		index := bytes.LastIndexByte(output, '/')
 		if index == -1 {
-			output.Reset()
+			output = output[:0]
 			if len(input) > 0 && input[0] == '/' {
 				input = input[1:]
 			}
 		} else {
-			output.Reset()
-			output.WriteString(s[:index])
+			output = output[:index]
 		}
 	}
-	return input
+	return output, input
 }

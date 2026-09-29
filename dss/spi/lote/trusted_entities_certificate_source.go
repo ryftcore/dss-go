@@ -10,6 +10,7 @@
 package lote
 
 import (
+	"sort"
 	"strings"
 	"time"
 
@@ -76,9 +77,28 @@ func (s *TrustedEntitiesCertificateSource) SetTrustedPropertiesByCertificates(tr
 	}
 	s.trustPropertiesByEntity = make(map[string][]*lote.TrustedProperties)
 	s.CommonTrustedCertificateSource = *spi.NewCommonTrustedCertificateSource()
-	for certificateToken, trustPropertiesList := range trustPropertiesByCerts {
-		s.addCertificateWithTrustedProperties(certificateToken, trustPropertiesList)
+	for _, certificateToken := range trustedEntitiesCertificateSourceSortedTokens(trustPropertiesByCerts) {
+		s.addCertificateWithTrustedProperties(certificateToken, trustPropertiesByCerts[certificateToken])
 	}
+}
+
+// trustedEntitiesCertificateSourceSortedTokens returns the map's certificate keys ordered by their
+// DSS id. Java iterates the Map<CertificateToken, ?> the two setters are handed through its
+// entrySet(); a java.util.HashMap's order is arbitrary but, for a given set of keys, the same on
+// every run, so the resulting certificate order is stable upstream. Go randomises map iteration,
+// so ranging over the map directly would make Certificates(), and everything downstream of it, come
+// out in a different order on every run. Sorting by DSS id restores a stable order, as
+// spi/tsl.TrustedListsCertificateSource does for the identical shape; it is not Java's own
+// bucket order, which is not reproducible here.
+func trustedEntitiesCertificateSourceSortedTokens[V any](m map[*model.CertificateToken]V) []*model.CertificateToken {
+	tokens := make([]*model.CertificateToken, 0, len(m))
+	for token := range m {
+		tokens = append(tokens, token)
+	}
+	sort.SliceStable(tokens, func(i, j int) bool {
+		return tokens[i].DSSIDAsString() < tokens[j].DSSIDAsString()
+	})
+	return tokens
 }
 
 // addCertificateWithTrustedProperties ports the private addCertificate(CertificateToken,
@@ -127,8 +147,8 @@ func (s *TrustedEntitiesCertificateSource) SetTrustedTimeByCertificates(trustTim
 		panic("trustTimeByCertificate cannot be null!")
 	}
 	s.trustTimeByEntity = make(map[string][]*tsl.CertificateTrustTime)
-	for certificateToken, certificateTrustTimes := range trustTimeByCertificate {
-		s.addCertificateTrustTimes(certificateToken, certificateTrustTimes)
+	for _, certificateToken := range trustedEntitiesCertificateSourceSortedTokens(trustTimeByCertificate) {
+		s.addCertificateTrustTimes(certificateToken, trustTimeByCertificate[certificateToken])
 	}
 }
 

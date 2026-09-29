@@ -34,6 +34,17 @@ var oidPublicKeyRSA = asn1.ObjectIdentifier{1, 2, 840, 113549, 1, 1, 1}
 // signature this port cross-validates against was verified with) has no such restriction and
 // parses the certificate's ASN.1 INTEGER exactly as encoded, sign included.
 //
+// DIVERGENCE, deliberate: from the Go standard library, not from upstream - this is what makes
+// the port agree with upstream's DSSUtils.loadCertificate (CertificateFactory#generateCertificate
+// over BouncyCastle), which accepts such a certificate. The price is a process-wide side effect
+// of importing this package: every crypto/x509 certificate parse in the binary, including code
+// that has nothing to do with DSS, loses Go's default strictness about negative serial numbers.
+// An explicit x509negativeserial setting in GODEBUG (or a //go:debug directive) still wins, see
+// below. Scoping the leniency to ParseCertificate would need a splice-and-restore repair of the
+// serial number like spliceParsablePublicKey's for the key, and would still leave the stdlib
+// entry points this port calls directly (x509.ParseCertificates in
+// spi.KeyStoreCertificateSource) strict; it was judged not worth that risk.
+//
 // A signature-validation library must be able to read every certificate a real CA issued,
 // however imperfectly DER-encoded, in order to validate signatures made against it - this is
 // not a cryptographic weakening (the certificate's own signature is still fully verified; only

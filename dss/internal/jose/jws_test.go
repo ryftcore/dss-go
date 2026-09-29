@@ -2,6 +2,7 @@ package jose
 
 import (
 	"bufio"
+	"crypto/ed25519"
 	"crypto/x509"
 	"encoding/hex"
 	"os"
@@ -310,4 +311,53 @@ func TestSetPayloadBytesKeepsStaleEncodedPayload(t *testing.T) {
 	if got := jws.EncodedPayload(); got != Base64URLEncode([]byte("third")) {
 		t.Errorf("after SetPayload, EncodedPayload = %q", got)
 	}
+}
+
+// TestVerifySignatureCacheIsBoundToTheSigningInput: VerifySignature caches its verdict, and only
+// SetKey and SetSignature used to drop it, so replacing the payload or the protected header of a
+// JWS that had been verified left the old verdict standing - a stale "valid" for a signature that
+// no longer matches what it is attached to.
+func TestVerifySignatureCacheIsBoundToTheSigningInput(t *testing.T) {
+	publicKey, privateKey, err := ed25519.GenerateKey(nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	jws := NewJWS()
+	jws.SetAlgorithmHeaderValue(AlgorithmEdDSA)
+	jws.SetPayload("the signed payload")
+	jws.SetSignature(ed25519.Sign(privateKey, jws.SigningInputBytes()))
+	jws.SetKey(publicKey)
+
+	verify := func(step string, want bool) {
+		t.Helper()
+		got, err := jws.VerifySignature()
+		if err != nil {
+			t.Fatalf("%s: %v", step, err)
+		}
+		if got != want {
+			t.Errorf("%s: VerifySignature = %v, want %v", step, got, want)
+		}
+	}
+
+	verify("as signed", true)
+	verify("as signed, cached", true)
+
+	jws.SetPayload("a different payload")
+	verify("after SetPayload", false)
+	jws.SetPayload("the signed payload")
+	verify("payload restored", true)
+
+	jws.SetPayloadBytes([]byte("different bytes"))
+	verify("after SetPayloadBytes", false)
+	jws.SetPayloadBytes([]byte("the signed payload"))
+	verify("payload bytes restored", true)
+
+	jws.SetEncodedPayload(Base64URLEncode([]byte("another payload")))
+	verify("after SetEncodedPayload", false)
+	jws.SetEncodedPayload(Base64URLEncode([]byte("the signed payload")))
+	verify("encoded payload restored", true)
+
+	// The header is handed out for direct modification, so no setter of the JWS can hook it.
+	jws.Headers().Put("kid", "some key")
+	verify("after a header change", false)
 }

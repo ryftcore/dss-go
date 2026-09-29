@@ -78,3 +78,46 @@ func evidenceRecordDiagnosticData(covered bool) *diagnostic.Data {
 		},
 	})
 }
+
+// multisetCovers must agree with the upstream scan-and-remove loop for every
+// input, duplicates included (the removal "to avoid checking duplicates" makes
+// this a multiset, not a set, inclusion test).
+func TestMultisetCoversMatchesScanAndRemove(t *testing.T) {
+	reference := func(required, available []string) bool {
+		available = append([]string(nil), available...)
+		for _, name := range required {
+			index := -1
+			for i, candidate := range available {
+				if candidate == name {
+					index = i
+					break
+				}
+			}
+			if index < 0 {
+				return false
+			}
+			available = append(available[:index], available[index+1:]...)
+		}
+		return true
+	}
+	names := []string{"", "a", "b", "c"}
+	var lists [][]string
+	var build func(prefix []string, depth int)
+	build = func(prefix []string, depth int) {
+		lists = append(lists, append([]string(nil), prefix...))
+		if depth == 0 {
+			return
+		}
+		for _, n := range names {
+			build(append(prefix, n), depth-1)
+		}
+	}
+	build(nil, 3)
+	for _, required := range lists {
+		for _, available := range lists {
+			if got, want := multisetCovers(required, available), reference(required, available); got != want {
+				t.Fatalf("multisetCovers(%q, %q) = %v, want %v", required, available, got, want)
+			}
+		}
+	}
+}

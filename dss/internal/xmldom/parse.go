@@ -50,6 +50,12 @@ func Parse(src []byte, opts *ParseOptions) (*Node, error) {
 }
 
 // ParseReader reads r to completion and calls Parse.
+//
+// It buffers the whole stream, and with nil options or MaxBytes == 0 it does so WITHOUT a size
+// bound (as DocumentBuilder does upstream): a caller reading an untrusted stream must set
+// ParseOptions.MaxBytes, which caps what is read (at most MaxBytes+1 bytes) as well as what
+// is parsed. No caller inside this module uses ParseReader; the DSS entry points read their
+// input into a []byte and hand it to Parse.
 func ParseReader(r io.Reader, opts *ParseOptions) (*Node, error) {
 	o := opts.normalized()
 	var (

@@ -24,6 +24,10 @@ var mimeTypeLoaderRegistry []MimeTypeLoader
 // RegisterMimeTypeLoader registers a MimeTypeLoader to be consulted by
 // MimeTypeFromMimeTypeString, MimeTypeFromFileExtension, and
 // MimeTypeFromFileName, in the order loaders are registered.
+//
+// The registry is an unsynchronized package-level slice, like the ServiceLoader provider list it
+// replaces: call this from an init() function (or at least before any goroutine looks a MIME
+// type up), never concurrently with a lookup.
 func RegisterMimeTypeLoader(l MimeTypeLoader) {
 	mimeTypeLoaderRegistry = append(mimeTypeLoaderRegistry, l)
 }

@@ -60,12 +60,17 @@ var (
 
 // RegisterValidationPolicyFactory registers a ValidationPolicyFactory to be consulted by
 // FromDefaultValidationPolicy / FromValidationPolicyDocument. See the file header.
+//
+// Like RegisterCryptographicSuiteFactory, it appends to an unsynchronized package-level slice:
+// call it from an init() function (or at least before any goroutine loads a policy), never
+// concurrently with a policy load.
 func RegisterValidationPolicyFactory(f modelpolicy.ValidationPolicyFactory) {
 	validationPolicyFactoryRegistry = append(validationPolicyFactoryRegistry, f)
 }
 
 // RegisterCryptographicSuiteFactory registers a CryptographicSuiteFactory to be consulted by
 // the WithCryptographicSuite*/WithDefaultCryptographicSuite* family. See the file header.
+// Not safe to call concurrently with a policy load; see RegisterValidationPolicyFactory.
 func RegisterCryptographicSuiteFactory(f modelpolicy.CryptographicSuiteFactory) {
 	cryptographicSuiteFactoryRegistry = append(cryptographicSuiteFactoryRegistry, f)
 }

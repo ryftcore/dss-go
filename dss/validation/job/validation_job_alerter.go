@@ -63,12 +63,22 @@ func (a *ValidationJobAlerter[D, L]) DetectChanges(jobSummary modeljob.Validatio
 // message); slf4j logging is dropped per the porting convention for this module, so the
 // error is discarded silently rather than logged.
 func executeDocumentListAlert[L any](alrt alert.Alert[L], info L) {
-	_ = alrt.Alert(info)
+	executeAlert(alrt, info)
 }
 
 // executeDocumentAlert runs alert on info, swallowing any error. See
 // executeDocumentListAlert for the DEVIATION note (applies identically to the document
 // branch).
 func executeDocumentAlert[D any](alrt alert.Alert[D], info D) {
+	executeAlert(alrt, info)
+}
+
+// executeAlert is the shared body of Java's execute(Alert<T>, T): `try { alert.alert(info); }
+// catch (Exception e) { LOG.warn(...); }`. The checked / handler-raised exceptions are the error
+// Alert returns; the unchecked ones (a NullPointerException in a detector or handler, ...) are Go
+// panics, which are swallowed the same way so that one failing alert does not abort the alerting
+// pass for the remaining documents.
+func executeAlert[T any](alrt alert.Alert[T], info T) {
+	defer func() { _ = recover() }()
 	_ = alrt.Alert(info)
 }

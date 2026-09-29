@@ -15,8 +15,6 @@
 package xades
 
 import (
-	"sync"
-
 	"github.com/ryftcore/dss-go/dss/internal/xmldsig"
 	"github.com/ryftcore/dss-go/dss/model"
 )
@@ -31,19 +29,16 @@ import (
 // xadesSignaturePolicyRegistry in xades_signature_policy.go and
 // SignatureBuilderRegisterPolicyTransforms in xades_signature_builder.go. Registered by
 // NewReferenceValidation; the key is the pointer identity of the embedded field, stable for
-// the lifetime of the enclosing *ReferenceValidation.
-var xadesReferenceValidationRegistry sync.Map // map[*model.ReferenceValidation]*ReferenceValidation
+// the lifetime of the enclosing *ReferenceValidation. The registry holds neither the key nor the
+// value strongly (see weakRegistry), so it does not keep the validated signatures' DOM alive.
+var xadesReferenceValidationRegistry weakRegistry[model.ReferenceValidation, ReferenceValidation]
 
 // ReferenceValidationFor recovers the *ReferenceValidation that produced rv, if any.
 func ReferenceValidationFor(rv *model.ReferenceValidation) (*ReferenceValidation, bool) {
 	if rv == nil {
 		return nil, false
 	}
-	v, ok := xadesReferenceValidationRegistry.Load(rv)
-	if !ok {
-		return nil, false
-	}
-	return v.(*ReferenceValidation), true
+	return xadesReferenceValidationRegistry.load(rv)
 }
 
 // ReferenceValidation contains information about a XAdES reference validation.
@@ -63,7 +58,7 @@ func NewReferenceValidation(reference *xmldsig.Reference) *ReferenceValidation {
 	v.SetId(DSSXMLUtilsGetReferenceId(reference))
 	v.SetUri(DSSXMLUtilsGetReferenceURI(reference))
 	v.SetDocument(DSSXMLUtilsGetDocument(reference))
-	xadesReferenceValidationRegistry.Store(&v.ReferenceValidation, v)
+	xadesReferenceValidationRegistry.store(&v.ReferenceValidation, v)
 	return v
 }
 

@@ -48,6 +48,10 @@ func NewASiCEWithXAdESManifestParserWithSignature(signatureDocument, manifestDoc
 }
 
 // Manifest returns a parsed model.ManifestFile. Ports getManifest().
+//
+// As upstream (which only logs a warning), a manifest that cannot be read - not XML, malformed,
+// truncated - yields a ManifestFile without entries, so an empty entry list means either "no
+// entries" or "unreadable manifest"; callers must not treat it as a well-formedness signal.
 func (p *ASiCEWithXAdESManifestParser) Manifest() *model.ManifestFile {
 	manifest := model.NewManifestFile()
 	manifest.SetDocument(p.manifestDocument)

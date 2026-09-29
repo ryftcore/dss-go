@@ -86,19 +86,24 @@ func (c *EvidenceRecordHashTreeRenewalTimestampCheck) timestampCoversAllOriginal
 	evidenceRecord *diagnostic.EvidenceRecordWrapper, timestampWrapper *diagnostic.TimestampWrapper) bool {
 	evidenceRecordCoveredDocuments := c.coveredDocuments(evidenceRecord.DigestMatchers())
 	timestampCoveredDocuments := c.coveredDocuments(timestampWrapper.DigestMatchers())
-	for _, originalDataObject := range evidenceRecordCoveredDocuments {
-		index := -1
-		for i, covered := range timestampCoveredDocuments {
-			if covered == originalDataObject {
-				index = i
-				break
-			}
-		}
-		if index < 0 {
+	return multisetCovers(evidenceRecordCoveredDocuments, timestampCoveredDocuments)
+}
+
+// multisetCovers reports whether every element of required, counted with its
+// multiplicity, is present in available. Java scans the time-stamp's covered
+// documents with List#contains and removes each match (List#remove) "to avoid
+// checking duplicates" - an O(n*m) multiset-inclusion test; counting the
+// available names in a map gives the identical verdict in O(n+m).
+func multisetCovers(required, available []string) bool {
+	remaining := make(map[string]int, len(available))
+	for _, name := range available {
+		remaining[name]++
+	}
+	for _, name := range required {
+		if remaining[name] == 0 {
 			return false
 		}
-		// remove object to avoid checking duplicates
-		timestampCoveredDocuments = append(timestampCoveredDocuments[:index], timestampCoveredDocuments[index+1:]...)
+		remaining[name]-- // consume the object to avoid checking duplicates
 	}
 	return true
 }

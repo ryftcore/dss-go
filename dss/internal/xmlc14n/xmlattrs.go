@@ -120,7 +120,8 @@ func (s *xmlAttrStack) getXmlnsAttr(col *attrSet) error {
 			base, hasBase := "", false
 			baseIdx := -1
 			var baseAttr outAttr
-			for i, a := range col.items {
+			items := col.sorted()
+			for i, a := range items {
 				if a.local == "base" {
 					base, hasBase, baseIdx, baseAttr = a.value, true, i, a
 					break
@@ -145,7 +146,7 @@ func (s *xmlAttrStack) getXmlnsAttr(col *attrSet) error {
 			if hasBase && base != "" {
 				baseAttr.value = base
 				if baseIdx >= 0 {
-					col.items[baseIdx].value = base // Java mutates the Attr in place.
+					items[baseIdx].value = base // Java mutates the Attr in place.
 				} else {
 					col.add(baseAttr)
 				}

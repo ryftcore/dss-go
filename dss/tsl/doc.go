@@ -19,6 +19,14 @@
 // and the sha2 types implement the ".sha2" digest side-file publication scheme of TS 119 612
 // clause 6.1.
 //
+// # Concurrency
+//
+// Like upstream's ExecutorService, TLValidationJob runs one goroutine per LOTL / TL analysis,
+// and LOTLWithPivotsAnalysis adds one goroutine per pivot it has to refresh. The job's caches
+// (dss/validation/job) serialize access to every cache entry and are safe for that use. The
+// DSSFileLoader handed to the job is called from all these goroutines at once, so it must be
+// safe for concurrent use.
+//
 // # Ported from
 //
 // dss-tsl-validation (DSS 6.5.RC1). Every file names its own upstream source in its header.

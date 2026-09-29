@@ -39,6 +39,10 @@ func NewDSSSecureRandomProviderWithDigestAlgorithm(digestAlgorithm enumerations.
 
 // GetSecureRandom returns a deterministic io.Reader seeded from seed. Port of
 // getSecureRandom(byte[]).
+//
+// The returned reader is a reproducibility seam (byte-identical output for the same seed), not a
+// source of entropy: it must not stand in for crypto/rand where key material, IVs or nonces are
+// generated.
 func (p *DSSSecureRandomProvider) GetSecureRandom(seed []byte) io.Reader {
 	return newDSSFixedSecureRandom(p.digestAlgorithm, seed)
 }

@@ -55,11 +55,8 @@ func ManifestParserGetLinkedManifest(manifestDocuments []model.DSSDocument, sign
 // getManifestRootElement(DSSDocument). Logging (LOG.warn) is dropped per PORTING.md
 // (slf4j dropped).
 func asicManifestParserGetManifestRootElement(manifestDocument model.DSSDocument) *xmldom.Node {
-	if !xmlutils.DomUtilsIsDOM(manifestDocument) {
-		return nil
-	}
-	manifestDom, err := xmlutils.DomUtilsBuildDOMFromDocument(manifestDocument)
-	if err != nil {
+	manifestDom := asicManifestParserBuildDOM(manifestDocument)
+	if manifestDom == nil {
 		return nil
 	}
 	element, err := xmlutils.XPathUtilsGetElement(manifestDom, ASiCManifestPathASiCManifestPath)
@@ -67,6 +64,28 @@ func asicManifestParserGetManifestRootElement(manifestDocument model.DSSDocument
 		return nil
 	}
 	return element
+}
+
+// asicManifestParserBuildDOM returns the DOM of manifestDocument, or nil when it is not an XML
+// document. Java checks DomUtils.isDOM(manifestDocument) - the XML preamble check followed by a
+// full parse whose result is discarded - and then parses the document again. Both steps are
+// folded into a single parse here: the preamble check, a parse error and a panic while parsing
+// (which DomUtilsIsDOM treats as "not a DOM") still yield nil, but the manifest is parsed once
+// instead of twice.
+func asicManifestParserBuildDOM(manifestDocument model.DSSDocument) (manifestDom *xmldom.Node) {
+	defer func() {
+		if recover() != nil {
+			manifestDom = nil
+		}
+	}()
+	if startsWithPreamble, err := xmlutils.DomUtilsStartsWithXmlPreambleDocument(manifestDocument); err != nil || !startsWithPreamble {
+		return nil
+	}
+	manifestDom, err := xmlutils.DomUtilsBuildDOMFromDocument(manifestDocument)
+	if err != nil {
+		return nil
+	}
+	return manifestDom
 }
 
 // asicManifestParserGetLinkedSignatureName ports the private static

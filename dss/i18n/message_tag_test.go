@@ -92,6 +92,22 @@ func TestMessageTagValueOf(t *testing.T) {
 	}
 }
 
+// TestMessageTagIndexMatchesValues pins that the name index MessageTagValueOf and
+// MessageTagGetSemantic resolve through covers exactly the MessageTagValues() set: every tag
+// resolves to itself, and the index holds nothing else.
+func TestMessageTagIndexMatchesValues(t *testing.T) {
+	values := MessageTagValues()
+	if len(messageTagsByName) != len(values) {
+		t.Fatalf("name index has %d entries, MessageTagValues() has %d", len(messageTagsByName), len(values))
+	}
+	for _, tag := range values {
+		got, err := MessageTagValueOf(string(tag))
+		if err != nil || got != tag {
+			t.Errorf("MessageTagValueOf(%q) = %v, %v; want %v", tag, got, err, tag)
+		}
+	}
+}
+
 func TestMessageTagId(t *testing.T) {
 	if got, want := MessageTagBBBXCVCCCBB.Id(), "BBB_XCV_CCCBB"; got != want {
 		t.Fatalf("Id() = %q, want %q", got, want)

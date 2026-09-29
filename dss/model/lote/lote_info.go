@@ -18,9 +18,14 @@ import (
 // AbstractDocumentInfo's fields/behaviour directly into Info instead of depending on a
 // generic job.AbstractDocumentInfo type. LoLoTEInfo (same package) embeds Info by value
 // and defines its own BuildIdentifier/DSSID pair that shadows these for direct calls on a
-// *LoLoTEInfo. The integrator should confirm the actual job package interfaces (assumed here:
-// job.DownloadInfoRecord, job.ParsingInfoRecord, job.ValidationInfoRecord) match what this type
-// structurally provides.
+// *LoLoTEInfo. Info mirrors the shape of the generic job.DocumentInfo interface (accessors for
+// the download/parsing/validation records, Url, Parent, DSSIDAsString) but is not asserted
+// against it: ParsingCacheInfo returns this package's narrower ParsingInfoRecord.
+//
+// Because there is no virtual dispatch, a call made through the embedded value - DSSID on
+// &loloteInfo.Info - yields Info's "LoTE-" identifier, where Java's overridden buildIdentifier
+// yields the "LoLoTE-" one for any LoTEInfo reference. Hold the *LoLoTEInfo itself, not its
+// embedded Info, wherever the LoLoTE identifier matters.
 type Info struct {
 	// downloadCacheInfo is the download result record.
 	downloadCacheInfo job.DownloadInfoRecord

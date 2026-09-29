@@ -38,6 +38,10 @@ var loTELoaderRegistry []LoTELoader
 // RegisterLoTELoader registers a LoTELoader to be consulted by ListType,
 // LoTEServiceStatus, LoTEServiceTypeIdentifier and CertificateApprovalStatus
 // lookup functions, in the order loaders are registered.
+//
+// The registry is an unsynchronized package-level slice, like the ServiceLoader provider list it
+// replaces: call this from an init() function (or at least before any goroutine performs a
+// lookup), never concurrently with a lookup.
 func RegisterLoTELoader(l LoTELoader) {
 	loTELoaderRegistry = append(loTELoaderRegistry, l)
 }

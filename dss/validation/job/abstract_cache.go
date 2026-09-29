@@ -74,6 +74,9 @@ func (a *AbstractCache[R]) Keys() []CacheKey {
 
 // Get returns the CachedEntry for the related cacheKey. Returns a new empty entry if no
 // result is found for the key. Port of get(CacheKey).
+//
+// mu only guards the map: the returned *CachedEntry is shared by every caller of the key and
+// is safe for concurrent use because it serializes its own state (see CachedEntry).
 func (a *AbstractCache[R]) Get(cacheKey CacheKey) *CachedEntry[R] {
 	a.mu.Lock()
 	defer a.mu.Unlock()

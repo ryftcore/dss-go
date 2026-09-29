@@ -209,6 +209,13 @@ type SignatureTimestampSourceOverrides[AS validation.AdvancedSignature, SA inter
 	// this interface. SignatureTimestampSource provides the base's original body as
 	// GetCounterSignatureReferences below.
 	GetCounterSignatureReferences(counterSignature validation.AdvancedSignature) []*validation.TimestampedReference
+
+	// GetTimestampScopes generates the scopes of timestampToken. Port of the protected
+	// getTimestampScopes(TimestampToken); concrete-not-abstract in Java and overridden by
+	// XAdESTimestampSource, so validateTimestamps() must reach the override through this
+	// interface, as it does in Java through virtual dispatch. SignatureTimestampSource provides
+	// the base's original body as GetTimestampScopes below.
+	GetTimestampScopes(timestampToken *validation.TimestampToken) []scope.SignatureScope
 }
 
 // SignatureTimestampSource is the timestamp source of a signature.
@@ -1068,9 +1075,17 @@ func (s *SignatureTimestampSource[AS, SA]) getTimestampMessageImprintDigestBuild
 	return s.overrides.GetTimestampMessageImprintDigestBuilderForToken(timestampToken)
 }
 
-// getTimestampScopes generates timestamp token scopes. Port of the protected
-// getTimestampScopes(TimestampToken).
+// getTimestampScopes generates timestamp token scopes, dispatching to the format-specific
+// override the way Java's unqualified getTimestampScopes(timestampToken) call does. Port of the
+// call sites of the protected getTimestampScopes(TimestampToken).
 func (s *SignatureTimestampSource[AS, SA]) getTimestampScopes(timestampToken *validation.TimestampToken) []scope.SignatureScope {
+	return s.overrides.GetTimestampScopes(timestampToken)
+}
+
+// GetTimestampScopes generates timestamp token scopes. Port of the protected
+// getTimestampScopes(TimestampToken); the default body, which a format-specific source (XAdES)
+// shadows to use its own scope finder.
+func (s *SignatureTimestampSource[AS, SA]) GetTimestampScopes(timestampToken *validation.TimestampToken) []scope.SignatureScope {
 	timestampScopeFinder := validationscope.NewEncapsulatedTimestampScopeFinder()
 	timestampScopeFinder.SetSignature(s.signature)
 	return timestampScopeFinder.FindTimestampScope(timestampToken)

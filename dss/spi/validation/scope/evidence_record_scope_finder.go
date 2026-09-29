@@ -145,6 +145,18 @@ func documentsEqual(a, b model.DSSDocument) bool {
 		bv, ok := b.(*model.FileDocument)
 		return ok && av.Equals(bv)
 	default:
-		return a == b
+		return documentsReferenceEqual(a, b)
 	}
+}
+
+// documentsReferenceEqual is Go's interface equality, made total: comparing two interface values
+// whose dynamic type is not comparable (a value type holding a slice, map or func) panics in Go,
+// whereas Java's reference-equality Object#equals simply answers false for distinct objects.
+func documentsReferenceEqual(a, b model.DSSDocument) (equal bool) {
+	defer func() {
+		if recover() != nil {
+			equal = false
+		}
+	}()
+	return a == b
 }

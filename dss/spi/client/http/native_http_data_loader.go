@@ -19,6 +19,14 @@ const (
 
 // NativeHTTPDataLoader is an implementation of a native Go DataLoader using
 // net/http.
+//
+// As upstream, a new loader imposes no limit: the response size (MaxInputSize)
+// and the connect and read timeouts default to 0, meaning unlimited, and the
+// standard library follows redirects. The URLs fetched during a validation
+// (AIA caIssuers, trusted list, OCSP and CRL endpoints) are taken from the
+// document under validation, so an application validating untrusted documents
+// with online retrieval enabled should call SetMaxInputSize, SetConnectTimeout
+// and SetReadTimeout.
 type NativeHTTPDataLoader struct {
 	// maxInputSize is the max InputStream size.
 	maxInputSize int

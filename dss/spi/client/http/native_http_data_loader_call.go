@@ -114,6 +114,12 @@ func (c *NativeHTTPDataLoaderCall) SetIncludeResponseDetails(includeResponseDeta
 // Call executes the HTTP request. Ports Callable<ResponseEnvelope>#call.
 func (c *NativeHTTPDataLoaderCall) Call() (*modelhttp.ResponseEnvelope, error) {
 	client := c.createClient()
+	// Every call builds its own http.Transport (see createClient), which nothing else refers to
+	// once Call returns. A Transport does not close its keep-alive connections when it is
+	// garbage collected, so without this the connection (and its two goroutines) would stay open
+	// until the server closes it. Deferred before the body is closed, hence runs after it, when
+	// the connection has been returned to the idle pool.
+	defer client.CloseIdleConnections()
 
 	var bodyReader io.Reader
 	method := http.MethodGet

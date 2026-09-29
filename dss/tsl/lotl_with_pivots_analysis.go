@@ -102,14 +102,21 @@ func (a *LOTLWithPivotsAnalysis) currentCertificateSourceFromPivots(initialCerti
 func (a *LOTLWithPivotsAnalysis) validationPivot(pivotCacheAccess *TLCacheAccessByKey, document model.DSSDocument, certificateSource spi.CertificateSource) {
 	// True if EMPTY / EXPIRED by TL/LOTL
 	if pivotCacheAccess.IsValidationRefreshNeeded() {
-		validationTask := NewTLValidatorTask(document, certificateSource)
-		result, err := validationTask.Get()
-		if err != nil {
+		// Java wraps the task construction, get() and the cache update in one
+		// try/catch(Exception): an unchecked exception is recorded as this pivot's validation
+		// error and the walk over the remaining pivots goes on (see catchException).
+		if err := catchException(func() error {
+			validationTask := NewTLValidatorTask(document, certificateSource)
+			result, err := validationTask.Get()
+			if err != nil {
+				return err
+			}
+			pivotCacheAccess.UpdateValidationResult(result)
+			return nil
+		}); err != nil {
 			a.assertOriginalDocumentIsAccessible(pivotCacheAccess)
 			pivotCacheAccess.ValidationError(err)
-			return
 		}
-		pivotCacheAccess.UpdateValidationResult(result)
 	}
 }
 
@@ -169,6 +176,13 @@ func (a *LOTLWithPivotsAnalysis) downloadAndParseAllPivots(pivotURLs []string) m
 			wg.Add(1)
 			go func(url string, processing *PivotProcessing) {
 				defer wg.Done()
+				// Java collects each pivot through Future.get() and only logs an
+				// ExecutionException, so a pivot whose processing throws simply has no
+				// processing result; a Go panic in a goroutine, in contrast, is fatal for the
+				// whole process. PivotProcessing.Call already records the exceptions Java's
+				// AbstractAnalysis download()/parsing() catch on the pivot's cache entry (see
+				// catchException); this recover is the backstop for anything past those.
+				defer func() { _ = recover() }()
 				result, err := processing.Call()
 				if err != nil {
 					return

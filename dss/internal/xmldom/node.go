@@ -39,7 +39,9 @@ func (k Kind) String() string {
 // subset visibility and Exclude comparisons are all pointer comparisons.
 //
 // Attrs holds an element's attributes, including namespace declarations, in DOCUMENT
-// ORDER. Callers must not reorder or mutate it directly; use SetAttr/RemoveAttr.
+// ORDER. Callers must not reorder or mutate it directly; use SetAttr/RemoveAttr. Only those
+// mutators invalidate the owning document's ID index (see bump), so editing Attrs in place
+// leaves ElementByID/IDAttrs/DuplicateIDs answering from a stale index.
 //
 // Field usage per kind:
 //

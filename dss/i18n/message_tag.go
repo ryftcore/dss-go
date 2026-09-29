@@ -2093,12 +2093,26 @@ func MessageTagValues() []MessageTag {
 	}
 }
 
+// messageTagsByName indexes every MessageTag by its Java enum name, so MessageTagValueOf and
+// MessageTagGetSemantic (called by the report builders once per indication/sub-indication) are a
+// map lookup instead of building the ~1000-entry MessageTagValues slice and scanning it on every
+// call. Built once from MessageTagValues in declaration order; a duplicate name (none exists)
+// would keep its first entry, as the linear scan it replaces did.
+var messageTagsByName = func() map[string]MessageTag {
+	values := MessageTagValues()
+	byName := make(map[string]MessageTag, len(values))
+	for _, v := range values {
+		if _, exists := byName[string(v)]; !exists {
+			byName[string(v)] = v
+		}
+	}
+	return byName
+}()
+
 // MessageTagValueOf returns the MessageTag matching the given Java enum name.
 func MessageTagValueOf(name string) (MessageTag, error) {
-	for _, v := range MessageTagValues() {
-		if string(v) == name {
-			return v, nil
-		}
+	if v, ok := messageTagsByName[name]; ok {
+		return v, nil
 	}
 	return "", fmt.Errorf("no enum constant MessageTag.%s", name)
 }
@@ -2113,10 +2127,6 @@ func (m MessageTag) Id() string {
 // Java's null return ("no matching tag") becomes the ok=false result.
 func MessageTagGetSemantic(etsiCode string) (MessageTag, bool) {
 	expectedEnumValue := "SEMANTICS_" + etsiCode
-	for _, messageTag := range MessageTagValues() {
-		if string(messageTag) == expectedEnumValue {
-			return messageTag, true
-		}
-	}
-	return "", false
+	messageTag, ok := messageTagsByName[expectedEnumValue]
+	return messageTag, ok
 }

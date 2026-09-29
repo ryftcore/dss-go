@@ -92,8 +92,11 @@ func (c *CacheConnector) TableQuery(query *SqlQuery) bool {
 	}
 
 	if _, err := tx.Exec(query.QueryString()); err != nil {
-		// Java's tableQuery catches SQLException and returns false
-		// without rolling back; mirrored here.
+		// Java's tableQuery catches SQLException and returns false without an
+		// explicit rollback (closeQuietly closes the connection, which discards
+		// the uncommitted transaction). A database/sql transaction must be
+		// ended, or it keeps its connection checked out, so it is rolled back
+		// here.
 		_ = tx.Rollback()
 		return false
 	}

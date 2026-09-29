@@ -83,6 +83,10 @@ var signedDocumentExtenderFactories []SignedDocumentExtenderFactory
 // consulted by FromDocument, in registration order. Stands in for a
 // META-INF/services/...SignedDocumentExtenderFactory ServiceLoader entry; see the file
 // DEVIATION above.
+//
+// The registry is an unsynchronized package-level slice, like the ServiceLoader provider list it
+// replaces: call this from an init() function (or at least before any goroutine calls
+// FromDocument), never concurrently with FromDocument.
 func RegisterSignedDocumentExtenderFactory(factory SignedDocumentExtenderFactory) {
 	signedDocumentExtenderFactories = append(signedDocumentExtenderFactories, factory)
 }

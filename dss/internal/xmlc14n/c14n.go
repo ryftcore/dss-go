@@ -59,6 +59,13 @@ func (in Input) nodeSetMode() bool {
 }
 
 // Canonicalize writes the canonical form of in to w.
+//
+// When it returns an error, w may already hold a prefix of the output: the writer is buffered
+// and flushes whenever the buffer fills, and a filter failure is only reported once the
+// traversal is over (Santuario, too, writes to its OutputStream as it goes and can fail
+// half-way). A caller that passes a streaming writer must discard whatever was written when
+// the returned error is non-nil; CanonicalizeToBytes and CanonicalizeNode do so by returning
+// nil bytes.
 func Canonicalize(alg Algorithm, in Input, w io.Writer) error {
 	resolved, err := Resolve(alg)
 	if err != nil {

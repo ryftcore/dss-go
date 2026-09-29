@@ -3,8 +3,6 @@
 package xades
 
 import (
-	"sync"
-
 	"github.com/ryftcore/dss-go/dss/internal/xmldom"
 	"github.com/ryftcore/dss-go/dss/model/signature"
 )
@@ -18,8 +16,10 @@ import (
 // SignatureBuilderRegisterPolicyTransforms/SignatureBuilderPolicyTransforms in
 // xades_signature_builder.go, which solves the analogous model.Policy/XmlPolicyWithTransforms
 // problem. Registered by both constructors below; the key is the exact pointer identity of the
-// embedded field, which is stable for the lifetime of the enclosing *SignaturePolicy.
-var xadesSignaturePolicyRegistry sync.Map // map[*signature.Policy]*SignaturePolicy
+// embedded field, which is stable for the lifetime of the enclosing *SignaturePolicy. The
+// registry holds neither the key nor the value strongly (see weakRegistry), so it does not keep
+// the policies of every validated signature alive.
+var xadesSignaturePolicyRegistry weakRegistry[signature.Policy, SignaturePolicy]
 
 // SignaturePolicyFor recovers the *SignaturePolicy that produced sp, if any. Used by
 // signature_policy_store_builder.go in place of Java's downcast.
@@ -27,11 +27,7 @@ func SignaturePolicyFor(sp *signature.Policy) (*SignaturePolicy, bool) {
 	if sp == nil {
 		return nil, false
 	}
-	v, ok := xadesSignaturePolicyRegistry.Load(sp)
-	if !ok {
-		return nil, false
-	}
-	return v.(*SignaturePolicy), true
+	return xadesSignaturePolicyRegistry.load(sp)
 }
 
 // SignaturePolicy represents a signature policy extracted from a XAdES (XML) signature.
@@ -47,7 +43,7 @@ type SignaturePolicy struct {
 // represents the implied policy.
 func NewSignaturePolicy() *SignaturePolicy {
 	p := &SignaturePolicy{Policy: *signature.NewPolicy()}
-	xadesSignaturePolicyRegistry.Store(&p.Policy, p)
+	xadesSignaturePolicyRegistry.store(&p.Policy, p)
 	return p
 }
 
@@ -55,7 +51,7 @@ func NewSignaturePolicy() *SignaturePolicy {
 // SignaturePolicy(String).
 func NewSignaturePolicyWithIdentifier(identifier string) *SignaturePolicy {
 	p := &SignaturePolicy{Policy: *signature.NewPolicyWithIdentifier(identifier)}
-	xadesSignaturePolicyRegistry.Store(&p.Policy, p)
+	xadesSignaturePolicyRegistry.store(&p.Policy, p)
 	return p
 }
 

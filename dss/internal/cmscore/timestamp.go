@@ -306,19 +306,48 @@ func accuracyFromElement(element *asn1ber.Element) (*Accuracy, error) {
 	for _, child := range element.Children() {
 		switch {
 		case child.IsUniversal(asn1ber.TagInteger):
-			value := int(child.Integer().Int64())
+			// DIVERGENCE, deliberate: BouncyCastle's Accuracy keeps seconds as an unrestricted
+			// ASN1Integer, so a value beyond 2^63 parses there. Accuracy.Seconds is an int
+			// here, and clamping such a value to 0 (what int(Int64()) does) would report a
+			// wrong accuracy without a word, so it is refused instead. No DSS code reads the
+			// accuracy, and no TSA writes seconds anywhere near that size.
+			value, err := expectSmallInteger(child, "Accuracy.seconds")
+			if err != nil {
+				return nil, err
+			}
 			accuracy.Seconds = &value
 		case child.IsContextSpecific(0):
-			value := int(child.Integer().Int64())
+			value, err := accuracySubSecond(child, "Accuracy.millis")
+			if err != nil {
+				return nil, err
+			}
 			accuracy.Millis = &value
 		case child.IsContextSpecific(1):
-			value := int(child.Integer().Int64())
+			value, err := accuracySubSecond(child, "Accuracy.micros")
+			if err != nil {
+				return nil, err
+			}
 			accuracy.Micros = &value
 		default:
 			return nil, errors.New("cmscore: unexpected Accuracy component")
 		}
 	}
 	return accuracy, nil
+}
+
+// accuracySubSecond decodes the [0] millis or [1] micros component of an Accuracy, an IMPLICIT
+// INTEGER (1..999). BouncyCastle's Accuracy(ASN1Sequence) refuses a value outside that range
+// (IllegalArgumentException "Invalid millis field : not in (1..999)", ArithmeticException for
+// one that does not even fit an int), which fails the parse of the whole TimeStampToken there.
+func accuracySubSecond(element *asn1ber.Element, name string) (int, error) {
+	if element.IsConstructed() {
+		return 0, fmt.Errorf("cmscore: %s is not an INTEGER", name)
+	}
+	value := element.Integer()
+	if !value.IsInt64() || value.Int64() < 1 || value.Int64() > 999 {
+		return 0, fmt.Errorf("cmscore: %s is not in (1..999)", name)
+	}
+	return int(value.Int64()), nil
 }
 
 // TSTInfo is

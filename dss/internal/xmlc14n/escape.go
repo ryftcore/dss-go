@@ -33,7 +33,9 @@ const (
 
 // writeAttrValueEscaped ports CanonicalizerBase.outputAttrToWriter's value loop.
 func writeAttrValueEscaped(w *bufio.Writer, s string) {
-	for _, r := range runes(s) {
+	for i := 0; i < len(s); {
+		r, size := nextRune(s, i)
+		i += size
 		switch r {
 		case '&':
 			w.WriteString(escAmp)
@@ -56,7 +58,9 @@ func writeAttrValueEscaped(w *bufio.Writer, s string) {
 // writeTextEscaped ports CanonicalizerBase.outputTextToWriter. Text and CDATA nodes go through
 // the same writer upstream, so a CDATA section is emitted as escaped text.
 func writeTextEscaped(w *bufio.Writer, s string) {
-	for _, r := range runes(s) {
+	for i := 0; i < len(s); {
+		r, size := nextRune(s, i)
+		i += size
 		switch r {
 		case '&':
 			w.WriteString(escAmp)
@@ -78,7 +82,9 @@ func writeTextEscaped(w *bufio.Writer, s string) {
 // is six literal characters that pass through unchanged. Because XML 2.11 turns a literal CR
 // in the source into LF, a CR can only reach this function from DOM construction.
 func writeCarriageReturnEscaped(w *bufio.Writer, s string) {
-	for _, r := range runes(s) {
+	for i := 0; i < len(s); {
+		r, size := nextRune(s, i)
+		i += size
 		if r == 0x0D {
 			w.WriteString(escXD)
 			continue
@@ -109,21 +115,16 @@ func writeRune(w *bufio.Writer, r rune) {
 	w.WriteRune(r)
 }
 
-// runes decodes s, reporting each invalid byte as invalidRune so that writeRune substitutes
-// '?' exactly where Java's UtfHelpper does. A plain range over the string would collapse an
-// invalid byte and a well-formed U+FFFD into the same rune; keeping them apart costs one
-// function and removes a silent divergence.
-func runes(s string) []rune {
-	out := make([]rune, 0, len(s))
-	for i := 0; i < len(s); {
-		r, size := utf8.DecodeRuneInString(s[i:])
-		if r == utf8.RuneError && size == 1 {
-			out = append(out, invalidRune)
-			i++
-			continue
-		}
-		out = append(out, r)
-		i += size
+// nextRune decodes the rune at s[i], reporting an invalid byte as invalidRune so that writeRune
+// substitutes '?' exactly where Java's UtfHelpper does. A plain range over the string would
+// collapse an invalid byte and a well-formed U+FFFD into the same rune; keeping them apart
+// costs one function and removes a silent divergence. It decodes in place: materialising a
+// []rune per text node, attribute value, comment and PI is one heap allocation (4 bytes per
+// character) on the hottest loop of the canonicalizer.
+func nextRune(s string, i int) (rune, int) {
+	r, size := utf8.DecodeRuneInString(s[i:])
+	if r == utf8.RuneError && size == 1 {
+		return invalidRune, 1
 	}
-	return out
+	return r, size
 }

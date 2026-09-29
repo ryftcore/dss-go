@@ -2,6 +2,8 @@
 package job
 
 import (
+	"fmt"
+
 	"github.com/ryftcore/dss-go/dss/model"
 	"github.com/ryftcore/dss-go/dss/spi"
 	"github.com/ryftcore/dss-go/dss/spi/client/http"
@@ -30,11 +32,15 @@ type AbstractAnalysisOverrides interface {
 //
 // slf4j debug/warn logging is dropped (no observable behavior).
 //
-// DEVIATION: Java's download()/parsing()/validation() wrap the whole body (task
-// construction, get(), and every subsequent cache call) in a single try/catch(Exception).
-// The Go port only routes the error returned by the task's Get() (see DownloadTask,
-// ParsingTask, ValidationTask) to the corresponding *Error cache method; the surrounding
-// cache-access calls are ordinary (non-erroring) Go method calls, not further guarded.
+// Java's download()/parsing()/validation() wrap the whole body (task construction, get(), and
+// every subsequent cache call) in a single try/catch(Exception) that records the exception with
+// the corresponding *Error cache method. The Go port reproduces that span: an error returned by
+// the task's Get() (see DownloadTask, ParsingTask, ValidationTask) and a panic raised anywhere
+// inside it - Go's unchecked exception, e.g. the nil dereference standing in for a
+// NullPointerException on a malformed document - are both routed to the *Error cache method (see
+// catchException). Without the panic half, such a document would abort the analysis without any
+// error being recorded (and, inside a goroutine that has no recover of its own, crash the
+// process).
 type AbstractAnalysis struct {
 	// overrides points back at the concrete analysis; see InitAbstractAnalysis.
 	overrides AbstractAnalysisOverrides
@@ -79,19 +85,47 @@ func (a *AbstractAnalysis) CacheAccessByKey() ReadOnlyCacheAccessByKey {
 	return a.cacheAccess
 }
 
+// catchException runs fn and returns the error it returns or, when it panics, an error built
+// from the panic value. It stands in for Java's catch (Exception e) in download()/parsing()/
+// validation(): Java's unchecked exceptions (NullPointerException, IllegalStateException, ...)
+// are Go panics, and Java's checked ones are the error fn returns. A panic value that is already
+// an error (a *model.DSSError, a runtime.Error) is passed through unchanged; anything else
+// (the ported Objects.requireNonNull messages are plain strings) becomes a *model.DSSError with
+// that message.
+func catchException(fn func() error) (err error) {
+	defer func() {
+		if recovered := recover(); recovered != nil {
+			if recoveredErr, ok := recovered.(error); ok {
+				err = recoveredErr
+			} else {
+				err = model.NewDSSError(fmt.Sprint(recovered))
+			}
+		}
+	}()
+	return fn()
+}
+
 // download downloads the document by url. Port of download(String).
 func (a *AbstractAnalysis) download(url string) model.DSSDocument {
-	downloadTask := a.abstractAnalysisOverrides().GetDownloadTask(a.dssFileLoader, url)
-	downloadResult, err := downloadTask.Get()
-	if err != nil {
+	overrides := a.abstractAnalysisOverrides()
+	var document model.DSSDocument
+	if err := catchException(func() error {
+		downloadTask := overrides.GetDownloadTask(a.dssFileLoader, url)
+		downloadResult, err := downloadTask.Get()
+		if err != nil {
+			return err
+		}
+		if !a.cacheAccess.IsUpToDate(downloadResult) {
+			a.cacheAccess.UpdateDownloadResult(downloadResult)
+			a.expireCache()
+		}
+		document = downloadResult.DSSDocument()
+		return nil
+	}); err != nil {
 		a.cacheAccess.DownloadError(err)
 		return nil
 	}
-	if !a.cacheAccess.IsUpToDate(downloadResult) {
-		a.cacheAccess.UpdateDownloadResult(downloadResult)
-		a.expireCache()
-	}
-	return downloadResult.DSSDocument()
+	return document
 }
 
 // expireCache expires the cache in order to trigger the corresponding tasks on refresh.
@@ -105,13 +139,18 @@ func (a *AbstractAnalysis) expireCache() {
 func (a *AbstractAnalysis) parsing(document model.DSSDocument) {
 	// True if EMPTY / EXPIRED by a document / document list
 	if a.cacheAccess.IsParsingRefreshNeeded() {
-		parsingTask := a.abstractAnalysisOverrides().GetParsingTask(document)
-		parsingResult, err := parsingTask.Get()
-		if err != nil {
+		overrides := a.abstractAnalysisOverrides()
+		if err := catchException(func() error {
+			parsingTask := overrides.GetParsingTask(document)
+			parsingResult, err := parsingTask.Get()
+			if err != nil {
+				return err
+			}
+			a.cacheAccess.UpdateParsingResult(parsingResult)
+			return nil
+		}); err != nil {
 			a.cacheAccess.ParsingError(err)
-			return
 		}
-		a.cacheAccess.UpdateParsingResult(parsingResult)
 	}
 }
 
@@ -119,12 +158,17 @@ func (a *AbstractAnalysis) parsing(document model.DSSDocument) {
 func (a *AbstractAnalysis) validation(document model.DSSDocument, certificateSource spi.CertificateSource) {
 	// True if EMPTY / EXPIRED by document
 	if a.cacheAccess.IsValidationRefreshNeeded() {
-		validationTask := a.abstractAnalysisOverrides().GetValidationTask(document, certificateSource)
-		validationResult, err := validationTask.Get()
-		if err != nil {
+		overrides := a.abstractAnalysisOverrides()
+		if err := catchException(func() error {
+			validationTask := overrides.GetValidationTask(document, certificateSource)
+			validationResult, err := validationTask.Get()
+			if err != nil {
+				return err
+			}
+			a.cacheAccess.UpdateValidationResult(validationResult)
+			return nil
+		}); err != nil {
 			a.cacheAccess.ValidationError(err)
-			return
 		}
-		a.cacheAccess.UpdateValidationResult(validationResult)
 	}
 }

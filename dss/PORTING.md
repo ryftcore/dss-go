@@ -58,6 +58,24 @@ Naming a constant, given Java's `TYPE` + `NAME`: split `NAME` on `_`, then join 
 - Checked/runtime exceptions → `error` returns. Exception classes that carry meaning (`DSSException`, `IllegalInputException`, …) → error types in the owning package, matched with `errors.As`/`errors.Is`.
 - Java `throw` in constructors → constructor funcs returning `(T, error)`.
 - `dss-alert` handlers keep their semantics: alerts receive a status and decide to log/throw; in Go they receive the status and may return an error.
+- **Never drop an error that stands for an unchecked Java exception.** Where a ported helper returns an `error` for what Java throws as a `RuntimeException` (a `DSSException` from `CertificateReorderer`, say), a caller that has no error return re-raises it with `panic` — the facade's `recovered()` turns it back into an error. Discarding it turns Java's abort into a silent pass; that is how `SignatureValidationContext`'s revocation-presence checks once reported success on an unorderable certificate set.
+- **`catch (Exception)` ports to a deferred `recover`**, scoped to exactly the body Java's `try` covers, keeping whatever the body had already produced (references: `pades` `GetRevisions` and `SingleDssDict` VRI extraction, `validation/job`'s `AbstractAnalysis`).
+- **`catch (DSSException)` must match the whole family.** Go types for Java subclasses of `DSSException` embed `*model.DSSError`, and `errors.As(err, **model.DSSError)` does not see through that embedding (their `Unwrap` yields the cause). Match the subclasses explicitly, as `spi/validation`'s revocation loading strategy does.
+- `panic(nil)` needs no special case: since Go 1.21 it surfaces as `*runtime.PanicNilError`, which `recovered()` handles like any other panic (`dss/recovered_test.go`).
+
+## Concurrency
+
+- Java classes that mutate plain fields without `synchronized` are usually harmless on the JVM, but a racing write in Go can tear an interface value or abort the process (`concurrent map writes`). Any state reached from more than one goroutine — the TL/LOTL job's cache entries, process-wide registries, lazily initialized singletons — gets a mutex, `sync.Once` or an atomic. The Java class has no counterpart to it and sequential behaviour must stay identical (references: `validation/job/cached_entry.go`, `xml/utils`).
+- A process-wide side table that maps an object back to its Go wrapper (the stand-in for Java's `instanceof` on a subclass) must not keep the object alive. Key it by `weak.Pointer` and remove entries with `runtime.AddCleanup` (references: `xades/weak_registry.go`, `pades/pdf_timestamp_token.go`).
+
+## Divergence register
+
+Every `// DIVERGENCE, deliberate:` marker names the upstream method and the reason in code; `docs/compatibility/known-gaps.md` is the user-facing list. Markers outside `internal/` (whose divergences live in each package's `DESIGN.md` or `doc.go`):
+
+- `asic/cades/asic_container_with_cades_analyzer.go`, `asic/xades/asic_container_with_xades_analyzer.go` — only an explicitly set `SignaturePolicyProvider` is forwarded to nested analyzers; upstream's lazily created default would download policy URLs named inside the container.
+- `validation/process/bbb/fc/abstract_signed_and_timestamped_files_covered_check.go` — a cyclic manifest reference is an ordinary panic instead of an unrecoverable stack overflow.
+- `pades/pades_signature_parameters.go`, `pades/pades_timestamp_parameters.go` — `String()` redacts the PDF password.
+- `validation/reports/diagnostic/xml_trusted_entity_builder.go` — trusted-entity names are emitted sorted by language instead of in hash order.
 
 ## Streams & documents
 

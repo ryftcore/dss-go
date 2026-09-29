@@ -330,7 +330,9 @@ func NewDocument(name string, content []byte) Document {
 // recovered runs fn, turning a panic raised by the ported services - which
 // follow Java DSS and throw unchecked exceptions - into an error. A panic
 // value that is already an error is wrapped, so errors.As and errors.Is
-// against the port's error types keep working.
+// against the port's error types keep working. A panic(nil) is not a gap:
+// under this module's go directive (>= 1.21) it is delivered as a
+// *runtime.PanicNilError, so recover() is non-nil and the caller gets an error.
 func recovered(op string, fn func() error) (err error) {
 	defer func() {
 		if p := recover(); p != nil {

@@ -101,6 +101,11 @@ type SecureContainerHandlerOverrides interface {
 
 // SecureContainerHandler is the default implementation of ZipContainerHandler, providing utilities
 // to prevent a denial of service attacks, such as zip-bombing.
+//
+// As upstream, an instance is not safe for concurrent use: the zip-bomb guard counters are
+// per-instance state reset at the start of each extraction. ZipUtils therefore builds a new
+// handler for every call (see ZipUtils.SetZipContainerHandlerBuilder), which is how the package
+// itself always obtains one.
 type SecureContainerHandler struct {
 	// overrides points back at the concrete handler; see InitSecureContainerHandler.
 	overrides SecureContainerHandlerOverrides

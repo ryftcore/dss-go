@@ -368,7 +368,11 @@ settle which cipher width is actually used; see the postcondition guard's commen
 * Wrong or missing password → `ErrInvalidPassword`. The password is tried as the owner password
   first, then as the user password, exactly as `StandardSecurityHandler.prepareForDecryption` does
   (`isOwnerPassword` before `isUserPassword`); which one matched determines
-  `Permissions.OwnerAccess`.
+  `Permissions.OwnerAccess`. The derived hash is compared with `/U`/`/O` in constant time
+  (`constantTimeEqual`, `crypto/subtle`) where pdfbox uses `Arrays.equals`: the verdict is
+  identical, only the timing of a wrong password differs, so this is not a divergence.
+  `TestEncryptionAES256R5KnownAnswer` pins the `/R 5` (plain SHA-256) derivation against
+  `crypto/sha256` directly, independently of the fixture builder the `/R 6` tests share.
 * For `/R 5`/`/R 6`, an `/Encrypt /Perms` that is absent, is not a 16-byte string, or does not
   decrypt under the recovered file key to the `'a' 'd' 'b'` marker, the dictionary `/P` and the
   dictionary `/EncryptMetadata` → `ErrInvalidPassword` (ISO 32000-2 Algorithm 13, `validatePerms`).

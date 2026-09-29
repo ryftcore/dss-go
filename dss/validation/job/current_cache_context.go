@@ -6,6 +6,10 @@ import "time"
 // CurrentCacheContext contains information for a cache record state.
 //
 // slf4j trace/debug logging is dropped (no observable behavior).
+//
+// A CurrentCacheContext is not safe for concurrent use by itself (its state transitions call back
+// into it re-entrantly through CacheState, so it cannot carry a lock of its own): every context
+// owned by a CachedEntry is reached only through that entry, whose mutex serializes all access.
 type CurrentCacheContext struct {
 	// state is the current state.
 	state CacheState

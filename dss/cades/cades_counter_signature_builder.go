@@ -237,7 +237,13 @@ func (b *CounterSignatureBuilder) GenerateCounterSignature(signerInformation *cm
 	parameters *SignatureParameters, customContentSigner *cms.CustomContentSigner) ([]*cmscore.SignerInfo, error) {
 
 	toSignDocument := model.NewInMemoryDocument(signerInformation.Signature)
-	cmsBuilderHelper := b.InitCMSBuilderHelper(toSignDocument, parameters, customContentSigner)
+	// Upstream's CAdESLevelBaselineB#addMimeType tests "parameters instanceof
+	// CAdESCounterSignatureParameters", and every caller of this method hands it the parameters
+	// of a counter-signature. The embedded *SignatureParameters has lost that dynamic type, so
+	// the fact travels with the helper instead: without it every counter-signature would carry
+	// a mimeType signed attribute that upstream never writes.
+	cmsBuilderHelper := b.InitCMSBuilderHelper(toSignDocument, parameters, customContentSigner).
+		SetCounterSignature(true)
 	signerInfoGenerator, err := cmsBuilderHelper.CreateSignerInfoGenerator()
 	if err != nil {
 		return nil, err

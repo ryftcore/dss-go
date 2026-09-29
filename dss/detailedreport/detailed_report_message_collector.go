@@ -235,20 +235,26 @@ func (c *MessageCollector) collectQualificationMessages(t messageType, tokenId s
 func (c *MessageCollector) collectSignatureValidation(t messageType, xmlSignature *jaxb.XmlSignature) []Message {
 	result := []Message{}
 
-	highestConclusion := c.detailedReport.HighestConclusion(derefString(xmlSignature.Id))
+	// Java's getMessages(type, null) is an empty list, so a signature with no
+	// validation process block at all (nil highest conclusion) contributes no
+	// message rather than failing.
+	var highestConclusion *jaxb.XmlConclusion
+	if highest := c.detailedReport.HighestConclusion(derefString(xmlSignature.Id)); highest != nil {
+		highestConclusion = highest.Conclusion
+	}
 	if enumerations.MessageTypeError != t || (xmlSignature.ValidationProcessBasicSignature != nil &&
-		subIndicationOf(highestConclusion.Conclusion) == subIndicationOf(xmlSignature.ValidationProcessBasicSignature.Conclusion)) {
+		subIndicationOf(highestConclusion) == subIndicationOf(xmlSignature.ValidationProcessBasicSignature.Conclusion)) {
 		if xmlSignature.ValidationProcessBasicSignature != nil {
 			addMessages(&result, messages(t, xmlSignature.ValidationProcessBasicSignature.Conclusion))
 		}
 	}
 	if enumerations.MessageTypeError != t || (xmlSignature.ValidationProcessLongTermData != nil &&
-		subIndicationOf(highestConclusion.Conclusion) == subIndicationOf(xmlSignature.ValidationProcessLongTermData.Conclusion)) {
+		subIndicationOf(highestConclusion) == subIndicationOf(xmlSignature.ValidationProcessLongTermData.Conclusion)) {
 		if xmlSignature.ValidationProcessLongTermData != nil {
 			addMessages(&result, messages(t, xmlSignature.ValidationProcessLongTermData.Conclusion))
 		}
 	}
-	addMessages(&result, messages(t, highestConclusion.Conclusion))
+	addMessages(&result, messages(t, highestConclusion))
 	return result
 }
 

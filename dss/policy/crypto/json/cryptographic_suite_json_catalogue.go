@@ -57,8 +57,19 @@ func buildJSONMetadata(securitySuitabilityPolicy jsonObject) *modelpolicy.Crypto
 		metadata.SetPublisherURI(publisher.asString(jsonConstraintURI))
 	}
 
-	metadata.SetPolicyIssueDate(asDateTime(securitySuitabilityPolicy, jsonConstraintPolicyIssueDate))
-	metadata.SetNextUpdate(asDateTime(securitySuitabilityPolicy, jsonConstraintNextUpdate))
+	// Java's getAsDateTime throws an IllegalArgumentException on a malformed
+	// date, which buildMetadata does not catch: it leaves getMetadata() and so
+	// getCryptographicSuite(). The panic is the port of that unchecked exception.
+	policyIssueDate, err := asDateTime(securitySuitabilityPolicy, jsonConstraintPolicyIssueDate)
+	if err != nil {
+		panic(err)
+	}
+	metadata.SetPolicyIssueDate(policyIssueDate)
+	nextUpdate, err := asDateTime(securitySuitabilityPolicy, jsonConstraintNextUpdate)
+	if err != nil {
+		panic(err)
+	}
+	metadata.SetNextUpdate(nextUpdate)
 	metadata.SetUsage(securitySuitabilityPolicy.asString(jsonConstraintUsage))
 
 	metadata.SetVersion(jsonCatalogueVersion(securitySuitabilityPolicy))
@@ -86,8 +97,11 @@ func buildJSONAlgorithmList(securitySuitabilityPolicy jsonObject) []*modelpolicy
 // entry, logs it (slf4j dropped, per PORTING.md), and skips the entry
 // (returning null). The accessors here never panic on malformed JSON
 // shapes (see json_object.go: every getter degrades to a zero value rather
-// than erroring), so there is nothing to recover from here - the function
-// simply cannot fail, unlike its Java counterpart.
+// than erroring); the one failure an entry can raise is an unparseable
+// validity date (Java's IllegalArgumentException from RFC3339DateUtils),
+// which comes back as an error from buildJSONEvaluationList and skips the
+// entry here, so an algorithm whose validity window cannot be read is not
+// kept with an open-ended window.
 func buildJSONAlgorithm(algorithmType jsonObject) *modelpolicy.CryptographicSuiteAlgorithm {
 	algorithm := modelpolicy.NewCryptographicSuiteAlgorithm()
 
@@ -97,7 +111,11 @@ func buildJSONAlgorithm(algorithmType jsonObject) *modelpolicy.CryptographicSuit
 		algorithm.SetAlgorithmIdentifierURIs(algorithmIdentifierURIs(algorithmIdentifier))
 	}
 
-	algorithm.SetEvaluationList(buildJSONEvaluationList(algorithmType.asObjectList(jsonConstraintEvaluation)))
+	evaluationList, err := buildJSONEvaluationList(algorithmType.asObjectList(jsonConstraintEvaluation))
+	if err != nil {
+		return nil
+	}
+	algorithm.SetEvaluationList(evaluationList)
 	algorithm.SetInformationTextList(jsonInformationText(algorithmType))
 
 	return algorithm
@@ -122,13 +140,18 @@ func algorithmIdentifierURIs(algorithmIdentifier jsonObject) []string {
 }
 
 // buildJSONEvaluationList ports the private
-// buildEvaluationList(List<JsonObjectWrapper>) helper.
-func buildJSONEvaluationList(evaluations []jsonObject) []*modelpolicy.CryptographicSuiteEvaluation {
+// buildEvaluationList(List<JsonObjectWrapper>) helper. The error is the
+// IllegalArgumentException Java lets escape from a malformed validity date.
+func buildJSONEvaluationList(evaluations []jsonObject) ([]*modelpolicy.CryptographicSuiteEvaluation, error) {
 	var evaluationList []*modelpolicy.CryptographicSuiteEvaluation
 	for _, evaluationType := range evaluations {
-		evaluationList = append(evaluationList, buildJSONEvaluation(evaluationType))
+		evaluation, err := buildJSONEvaluation(evaluationType)
+		if err != nil {
+			return nil, err
+		}
+		evaluationList = append(evaluationList, evaluation)
 	}
-	return evaluationList
+	return evaluationList, nil
 }
 
 // jsonInformationText ports the private
@@ -142,20 +165,29 @@ func jsonInformationText(algorithmType jsonObject) []string {
 }
 
 // buildJSONEvaluation ports the private
-// buildEvaluation(JsonObjectWrapper) helper.
-func buildJSONEvaluation(evaluationType jsonObject) *modelpolicy.CryptographicSuiteEvaluation {
+// buildEvaluation(JsonObjectWrapper) helper. The error is the
+// IllegalArgumentException Java lets escape from a malformed validity date.
+func buildJSONEvaluation(evaluationType jsonObject) (*modelpolicy.CryptographicSuiteEvaluation, error) {
 	evaluation := modelpolicy.NewCryptographicSuiteEvaluation()
 	evaluation.SetParameterList(buildJSONParameterList(evaluationType.asObjectList(jsonConstraintParameter)))
 
 	if validity := evaluationType.asObject(jsonConstraintValidity); validity != nil {
-		evaluation.SetValidityStart(asDate(validity, jsonConstraintStart))
-		evaluation.SetValidityEnd(asDate(validity, jsonConstraintEnd))
+		validityStart, err := asDate(validity, jsonConstraintStart)
+		if err != nil {
+			return nil, err
+		}
+		evaluation.SetValidityStart(validityStart)
+		validityEnd, err := asDate(validity, jsonConstraintEnd)
+		if err != nil {
+			return nil, err
+		}
+		evaluation.SetValidityEnd(validityEnd)
 	}
 
 	evaluation.SetAlgorithmUsage(jsonAlgorithmUsage(evaluationType))
 	evaluation.SetRecommendation(jsonRecommendation(evaluationType))
 
-	return evaluation
+	return evaluation, nil
 }
 
 // buildJSONParameterList ports the private
@@ -234,46 +266,42 @@ func jsonToInteger(parameterType jsonObject, name string) *int {
 }
 
 // asDate gets a value of the header name as a time.Time (date only). If
-// not present, or not able to convert, returns nil. Ports the private
-// getAsDate(JsonObjectWrapper, String) helper.
+// not present, returns nil. Ports the private getAsDate(JsonObjectWrapper,
+// String) helper (whose javadoc says "or not able to convert, returns null",
+// but whose body lets RFC3339DateUtils#getDate throw an
+// IllegalArgumentException for a malformed, present date string).
 //
-// Java's IllegalArgumentException from a malformed (but present) date
-// string propagates uncaught out of buildEvaluation, through
-// buildEvaluationList, and is only caught by buildAlgorithm's
-// try/catch (skipping that whole algorithm entry - see buildJSONAlgorithm's
-// doc comment on why there is no equivalent catch here). This function
-// instead treats an unparseable date the same as an absent one
-// (returns nil), which is more permissive for a single malformed date but
-// avoids introducing panic/recover control flow for a case the upstream
-// resources this package ports (dss-crypto-suite.json) never exercise.
-func asDate(jsonObj jsonObject, name string) *time.Time {
+// That exception propagates uncaught out of buildEvaluation and
+// buildEvaluationList and is caught by buildAlgorithm's try/catch, which skips
+// the whole algorithm entry. The error return carries it the same way (see
+// buildJSONAlgorithm); reading a malformed date as an absent one would keep
+// the entry with an open-ended validity window instead.
+func asDate(jsonObj jsonObject, name string) (*time.Time, error) {
 	dateString := jsonObj.asString(name)
 	if dateString == "" {
-		return nil
+		return nil, nil
 	}
 	t, err := rfc3339GetDate(dateString)
 	if err != nil {
-		return nil
+		return nil, err
 	}
-	return &t
+	return &t, nil
 }
 
 // asDateTime gets a value of the header name as a time.Time (with
-// time). If not present, or not able to convert, returns nil. Ports the
-// private getAsDateTime(JsonObjectWrapper, String) helper; see asDate's
-// doc comment for the same malformed-input handling note (buildMetadata,
-// this method's only caller, has no enclosing try/catch in Java either -
-// an unparseable PolicyIssueDate/NextUpdate propagates all the way out of
-// getCryptographicSuite in Java, but callers here never observe
-// that path since dss-crypto-suite.json's dates are well-formed).
-func asDateTime(jsonObj jsonObject, name string) *time.Time {
+// time). If not present, returns nil. Ports the private
+// getAsDateTime(JsonObjectWrapper, String) helper; see asDate for the
+// handling of a malformed date (buildMetadata, this method's only caller, has
+// no enclosing try/catch in Java, so there the exception leaves
+// getCryptographicSuite and buildJSONMetadata panics with the error).
+func asDateTime(jsonObj jsonObject, name string) (*time.Time, error) {
 	dateString := jsonObj.asString(name)
 	if dateString == "" {
-		return nil
+		return nil, nil
 	}
 	t, err := rfc3339GetDateTime(dateString)
 	if err != nil {
-		return nil
+		return nil, err
 	}
-	return &t
+	return &t, nil
 }

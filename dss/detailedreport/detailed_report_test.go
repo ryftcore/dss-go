@@ -7,6 +7,7 @@ package detailedreport
 
 import (
 	"os"
+	"sync"
 	"testing"
 
 	"github.com/ryftcore/dss-go/dss/detailedreport/jaxb"
@@ -98,6 +99,52 @@ func TestDetailedReport_dr1(t *testing.T) {
 	}
 	if got := r.BasicBuildingBlocksSubIndication("no-such-token"); got != "" {
 		t.Errorf("BasicBuildingBlocksSubIndication(unknown) = %v, want \"\"", got)
+	}
+}
+
+// A signature carrying none of ValidationProcessBasicSignature/LongTermData/
+// ArchivalData has no highest conclusion. Java's getHighestConclusion answers
+// null there and DetailedReportMessageCollector's getMessages(type, null) is an
+// empty list, so collecting the messages of such a signature yields none instead
+// of failing.
+func TestDetailedReport_HighestConclusionWithoutProcessBlocks(t *testing.T) {
+	id := "S-NO-PROCESS"
+	r := NewDetailedReport(&jaxb.XmlDetailedReport{
+		SignatureOrTimestampOrEvidenceRecord: []jaxb.XmlReportItem{&jaxb.XmlSignature{Id: &id}},
+	})
+	if got := r.HighestConclusion(id); got != nil {
+		t.Fatalf("HighestConclusion = %v, want nil", got)
+	}
+	if got := r.AdESValidationErrors(id); len(got) != 0 {
+		t.Errorf("AdESValidationErrors = %v, want none", got)
+	}
+	if got := r.AdESValidationWarnings(id); len(got) != 0 {
+		t.Errorf("AdESValidationWarnings = %v, want none", got)
+	}
+	if got := r.AdESValidationInfos(id); len(got) != 0 {
+		t.Errorf("AdESValidationInfos = %v, want none", got)
+	}
+}
+
+// One report is safe to read from several goroutines: the message collector is
+// created up front, so no reader takes a lazy-initialisation path (run with
+// -race).
+func TestDetailedReport_MessageCollectorConcurrentReaders(t *testing.T) {
+	r := NewDetailedReport(&jaxb.XmlDetailedReport{})
+	collectors := make([]*MessageCollector, 8)
+	var wg sync.WaitGroup
+	for i := range collectors {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			collectors[i] = r.MessageCollector()
+		}()
+	}
+	wg.Wait()
+	for i, c := range collectors {
+		if c == nil || c != collectors[0] {
+			t.Fatalf("collector %d = %p, want the single shared collector %p", i, c, collectors[0])
+		}
 	}
 }
 

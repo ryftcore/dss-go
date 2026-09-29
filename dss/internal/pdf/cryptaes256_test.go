@@ -14,6 +14,7 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/sha256"
 	"encoding/binary"
 	"encoding/hex"
 	"errors"
@@ -33,6 +34,7 @@ const stdCFAESV3 = "/CF << /StdCF << /CFM /AESV3 /Length 32 >> >> /StmF /StdCF /
 // pValue filled in, is a conforming document that opens with the empty user
 // password; every other field exists so one property at a time can be broken.
 type aes256Spec struct {
+	rev       int    // /R: 5 or 6; zero means 6
 	cfEntry   string // spliced into /Encrypt verbatim
 	pValue    string // the literal /P text, so an edit can be length-preserving
 	ownerPw   []byte // nil: /O is 48 zero bytes and no owner password can match
@@ -72,7 +74,10 @@ func int32Ptr(v int32) *int32 { return &v }
 //	/Perms = Algorithm 13's 16 bytes, AES-ECB under the file key
 func buildAES256Doc(t *testing.T, spec aes256Spec) []byte {
 	t.Helper()
-	const rev = 6
+	rev := spec.rev
+	if rev == 0 {
+		rev = 6
+	}
 	id := []byte("0123456789abcdef")
 
 	var perm int32
@@ -154,9 +159,9 @@ func buildAES256Doc(t *testing.T, spec aes256Spec) []byte {
 		{num: 2, body: "<< /Type /Pages /Kids [3 0 R] /Count 1 >>"},
 		{num: 3, body: "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 10 10] >>"},
 		{num: 4, body: "<< /Secret <" + hex.EncodeToString(secret) + "> >>"},
-		{num: 5, body: fmt.Sprintf("<< /Filter /Standard /V 5 /R 6 /Length 256 %s /P %s %s"+
+		{num: 5, body: fmt.Sprintf("<< /Filter /Standard /V 5 /R %d /Length 256 %s /P %s %s"+
 			"/O <%s> /U <%s> /UE <%s> %s%s>>",
-			spec.cfEntry, pEntry, encryptMetaEntry,
+			rev, spec.cfEntry, pEntry, encryptMetaEntry,
 			hex.EncodeToString(owner), hex.EncodeToString(user),
 			hex.EncodeToString(ue), oeEntry, permsEntry)},
 		{num: 6, body: fmt.Sprintf("<< /Length %d >>\nstream\n%s\nendstream",
@@ -568,4 +573,107 @@ func TestPermissionWordMatchesJavaNarrowing(t *testing.T) {
 			}
 		})
 	}
+}
+
+// TestEncryptionAES256R5KnownAnswer pins the /R 5 password hash, the one
+// AES-256 derivation the /R 6 fixtures above never reach: /R 5 is plain SHA-256
+// (Adobe's Extension Level 3, ISO 32000-2 Algorithm 2.A without the Algorithm
+// 2.B rounds). The expected /U, /O, /UE and /OE are computed here with
+// crypto/sha256 directly, not through hash2AOr256, so a slip in the /R 5 arm (a
+// wrong salt slice, the /R 6 hash pasted in, the user key left out of the owner
+// hash) cannot be mirrored by the fixture builder and cancel out.
+//
+//	/U[0:32]  = SHA-256(userPw  || validation salt)
+//	/O[0:32]  = SHA-256(ownerPw || validation salt || /U[0:48])
+//	/UE key   = SHA-256(userPw  || key salt)
+//	/OE key   = SHA-256(ownerPw || key salt || /U[0:48])
+func TestEncryptionAES256R5KnownAnswer(t *testing.T) {
+	ownerPw := []byte("owner-secret")
+	data := buildAES256Doc(t, aes256Spec{rev: 5, cfEntry: stdCFAESV3, pValue: "-1052", ownerPw: ownerPw})
+
+	entry := func(name string) []byte {
+		t.Helper()
+		i := bytes.Index(data, []byte("/"+name+" <"))
+		if i < 0 {
+			t.Fatalf("no /%s entry in the fixture", name)
+		}
+		rest := data[i+len(name)+3:]
+		raw, err := hex.DecodeString(string(rest[:bytes.IndexByte(rest, '>')]))
+		if err != nil {
+			t.Fatalf("/%s: %v", name, err)
+		}
+		return raw
+	}
+	sha := func(parts ...[]byte) []byte {
+		h := sha256.New()
+		for _, p := range parts {
+			h.Write(p)
+		}
+		return h.Sum(nil)
+	}
+
+	u, o, ue, oe := entry("U"), entry("O"), entry("UE"), entry("OE")
+	if !bytes.Equal(u[:32], sha(nil, []byte("VALIDSLT"))) {
+		t.Errorf("/U validation hash is not SHA-256(pw || salt)")
+	}
+	if !bytes.Equal(o[:32], sha(ownerPw, []byte("OVALIDST"), u[:48])) {
+		t.Errorf("/O validation hash is not SHA-256(pw || salt || /U)")
+	}
+	fileKey := bytes.Repeat([]byte{0x5A}, 32)
+	if !bytes.Equal(ue, aesCBCZeroIV(t, sha(nil, []byte("KEY-SALT")), fileKey)) {
+		t.Errorf("/UE is not the file key under SHA-256(pw || key salt)")
+	}
+	if !bytes.Equal(oe, aesCBCZeroIV(t, sha(ownerPw, []byte("OKEYSALT"), u[:48]), fileKey)) {
+		t.Errorf("/OE is not the file key under SHA-256(pw || key salt || /U)")
+	}
+
+	// The reader's own arm agrees with the independent computation.
+	if got := hash2AOr256(ownerPw, []byte("OVALIDST"), u, 5); !bytes.Equal(got, sha(ownerPw, []byte("OVALIDST"), u[:48])) {
+		t.Errorf("hash2AOr256 /R 5 (owner) = %x", got)
+	}
+	if got := hash2AOr256(nil, []byte("VALIDSLT"), nil, 5); !bytes.Equal(got, sha(nil, []byte("VALIDSLT"))) {
+		t.Errorf("hash2AOr256 /R 5 (user) = %x", got)
+	}
+
+	secret := func(t *testing.T, d *Document) string {
+		t.Helper()
+		obj, err := d.Object(ObjectKey{Num: 4})
+		if err != nil {
+			t.Fatal(err)
+		}
+		got, _ := d.GetString(obj.(*Dict), "Secret")
+		return string(got)
+	}
+	t.Run("opens with the user password", func(t *testing.T) {
+		d, err := OpenBytes(data, nil)
+		if err != nil {
+			t.Fatalf("OpenBytes: %v", err)
+		}
+		if enc := d.Encryption(); enc.V != 5 || enc.R != 5 || enc.CFM != "AESV3" {
+			t.Errorf("encryption = %+v", enc)
+		}
+		if d.Permissions().OwnerAccess {
+			t.Error("the empty user password must not grant owner access")
+		}
+		if got := secret(t, d); got != "classified" {
+			t.Errorf("decrypted string = %q", got)
+		}
+	})
+	t.Run("opens with the owner password", func(t *testing.T) {
+		d, err := OpenBytes(data, &Options{Password: ownerPw})
+		if err != nil {
+			t.Fatalf("OpenBytes: %v", err)
+		}
+		if !d.Permissions().OwnerAccess {
+			t.Error("the owner password must grant owner access")
+		}
+		if got := secret(t, d); got != "classified" {
+			t.Errorf("decrypted string = %q", got)
+		}
+	})
+	t.Run("refuses a wrong password", func(t *testing.T) {
+		if _, err := OpenBytes(data, &Options{Password: []byte("nope")}); !errors.Is(err, ErrInvalidPassword) {
+			t.Errorf("error is %v, want ErrInvalidPassword", err)
+		}
+	})
 }

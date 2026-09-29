@@ -54,6 +54,14 @@ func (b *BaselineRequirementsChecker) GetBaselineSignatureForm() enumerations.Si
 	return enumerations.SignatureFormCAdES
 }
 
+// CMSBaselineBRequirements is the exported form of the protected cmsBaselineBRequirements(): Java
+// lets pades.CMSForPAdESBaselineRequirementsChecker, a subclass in another package, call it
+// directly, and Go has no protected access across packages. It checks the CMS-level BASELINE-B
+// requirements only, i.e. without requirement (k) that HasBaselineBProfile adds.
+func (b *BaselineRequirementsChecker) CMSBaselineBRequirements() bool {
+	return b.cmsBaselineBRequirements()
+}
+
 // cmsBaselineBRequirements checks if BASELINE-B requirements satisfy for a CMS signature.
 // Port of the protected cmsBaselineBRequirements().
 func (b *BaselineRequirementsChecker) cmsBaselineBRequirements() bool {

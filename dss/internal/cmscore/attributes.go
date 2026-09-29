@@ -122,6 +122,11 @@ type Attributes []*Attribute
 
 // Get returns the first attribute of the given type, nil when there is none. Port of
 // AttributeTable#get(ASN1ObjectIdentifier), which likewise answers the first of several.
+//
+// Beware when verifying: a second attribute of the same type is silently ignored here. Where a
+// duplicate is a rejection signal (RFC 5652 permits a single message-digest attribute, for
+// one), use GetAll and refuse it, as spi/validation's timestampTokenSignedAttributeValue does,
+// rather than trusting the first.
 func (a Attributes) Get(attrType asn1.ObjectIdentifier) *Attribute {
 	for _, attribute := range a {
 		if attribute.Type.Equal(attrType) {

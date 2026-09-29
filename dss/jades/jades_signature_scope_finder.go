@@ -135,8 +135,10 @@ func (f *SignatureScopeFinder) getHttpHeaderSignatureScope(originalDocuments []m
 	httpHeadersSignatureScopes = append(httpHeadersSignatureScopes, httpHeadersPayloadSignatureScope)
 
 	for _, document := range originalDocuments {
-		if httpHeaderDigest, ok := document.(*HTTPHeaderDigest); ok && DSSJsonUtilsHTTPHeaderDigest == document.Name() {
-			if httpHeaderDigestSignatureScope := f.getHttpHeaderDigestSignatureScope(httpHeaderDigest); httpHeaderDigestSignatureScope != nil {
+		// Java: DSSJsonUtils.HTTP_HEADER_DIGEST.equals(document.getName()) && document instanceof HTTPHeader
+		// (HTTPHeader or its HTTPHeaderDigest subclass).
+		if httpHeader, ok := httpHeadersPayloadBuilderAsHTTPHeader(document); ok && DSSJsonUtilsHTTPHeaderDigest == document.Name() {
+			if httpHeaderDigestSignatureScope := f.getHttpHeaderDigestSignatureScope(httpHeader); httpHeaderDigestSignatureScope != nil {
 				httpHeadersSignatureScopes = append(httpHeadersSignatureScopes, httpHeaderDigestSignatureScope)
 			}
 			break // only one shall be present
@@ -160,12 +162,33 @@ func (f *SignatureScopeFinder) getHttpHeadersPayloadSignatureScope(originalDocum
 }
 
 // getHttpHeaderDigestSignatureScope ports the private getHttpHeaderDigestSignatureScope(HTTPHeader).
-func (f *SignatureScopeFinder) getHttpHeaderDigestSignatureScope(digestHttpHeader *HTTPHeaderDigest) modelscope.SignatureScope {
+//
+// A HTTPHeaderDigest carries its message body document; a plain HTTPHeader named 'Digest' only
+// carries the digest value, which is exposed as a digest document.
+func (f *SignatureScopeFinder) getHttpHeaderDigestSignatureScope(digestHttpHeader httpHeaderDocument) modelscope.SignatureScope {
 	digest := f.getDigest(digestHttpHeader.Value())
 	if digest == nil {
 		return nil
 	}
-	return NewHTTPHeaderMessageBodySignatureScope(digestHttpHeader.MessageBodyDocument())
+	if httpHeaderDigest, ok := digestHttpHeader.(*HTTPHeaderDigest); ok {
+		return NewHTTPHeaderMessageBodySignatureScope(httpHeaderDigest.MessageBodyDocument())
+	}
+	return NewHTTPHeaderMessageBodySignatureScope(f.CreateDigestDocument(*digest))
+}
+
+// javaSplit reproduces java.lang.String#split(String) for a literal single-character separator:
+// trailing empty strings are removed from the result (so "a=b=" yields ["a", "b"]), unless the
+// separator does not occur, in which case the input itself is the only element. Go's
+// strings.Split keeps the trailing empty strings.
+func javaSplit(s, sep string) []string {
+	if !strings.Contains(s, sep) {
+		return []string{s}
+	}
+	parts := strings.Split(s, sep)
+	for len(parts) > 0 && parts[len(parts)-1] == "" {
+		parts = parts[:len(parts)-1]
+	}
+	return parts
 }
 
 // getDigest ports the private getDigest(String), swallowing any parse failure and returning nil,
@@ -178,7 +201,9 @@ func (f *SignatureScopeFinder) getDigest(digestHeaderValue string) (result *mode
 		}
 	}()
 
-	valueParts := strings.Split(digestHeaderValue, "=")
+	// The RFC 3230 instance digest is 'algo=' + padded base64, so it usually ends with '='; Java's
+	// String#split drops those trailing empty strings, strings.Split does not.
+	valueParts := javaSplit(digestHeaderValue, "=")
 	if len(valueParts) != 2 {
 		// Upstream logs "Not conformant value of 'Digest' header : '{}'!".
 		return nil

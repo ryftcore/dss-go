@@ -5,19 +5,16 @@
 // slf4j logging is dropped per PORTING.md; every LOG.warn call site is called out in the
 // surrounding comment instead.
 //
-// DEVIATION: Java's isValidForPAdESBaselineBProfile() calls the protected
-// cmsBaselineBRequirements() directly; cades_baseline_requirements_checker.go keeps that method
-// unexported (cades package-private), with no exported equivalent, so it is unreachable from
-// this package. HasBaselineBProfile() is used instead - it calls cmsBaselineBRequirements()
-// internally and additionally enforces requirement (k) (signature-policy-store must not be
-// present without a signature-policy-identifier defining sigPolicyHash), a strictly narrower
-// check. A signature failing only requirement (k) is therefore rejected here where upstream
-// Java would accept it; every other outcome is identical.
+// Java's isValidForPAdESBaselineBProfile() calls the protected cmsBaselineBRequirements() of the
+// CAdES base class directly, which is CMS-level only. The Go base class lives in another package,
+// so that method is reached through its exported form, cades.BaselineRequirementsChecker.
+// CMSBaselineBRequirements. (Calling HasBaselineBProfile() instead would add CAdES requirement
+// (k), signature-policy-store without a signature-policy-identifier defining sigPolicyHash,
+// which PAdES does not have: it would reject a CMS that upstream accepts.)
 //
-// getBaselineSignatureForm() is not overridden for the same reason (it is unexported in the
-// base) and, per cades_baseline_requirements_checker.go's header, its return value was read only
-// by slf4j log statements upstream (dropped per PORTING.md) - so the override would have had no
-// observable effect even if it were reachable.
+// getBaselineSignatureForm() is overridden below, for the same reason as in
+// pades_baseline_requirements_checker.go: the base's cmsBaselineBRequirements() has to see the
+// PAdES form (it forbids a signing-time attribute) across the package boundary.
 //
 // INTEGRATOR NOTE (constructor parameter type conflict between two already-landed sibling
 // files): Java's constructor is CMSForPAdESBaselineRequirementsChecker(CAdESSignature) - the
@@ -102,5 +99,5 @@ func (c *CMSForPAdESBaselineRequirementsChecker) IsValidForPAdESBaselineBProfile
 		// {}-BASELINE-B signature (General requirement (b))!".
 		return false
 	}
-	return c.HasBaselineBProfile()
+	return c.CMSBaselineBRequirements()
 }
