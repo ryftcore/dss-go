@@ -2,8 +2,6 @@
 package eaa
 
 import (
-	"reflect"
-
 	"github.com/ryftcore/dss-go/dss/model"
 	"github.com/ryftcore/dss-go/dss/model/eaa/claim"
 )
@@ -111,7 +109,19 @@ func (d *DisclosureValidation) Equals(other *DisclosureValidation) bool {
 	if digestIdEqual && d.digestId != nil {
 		digestIdEqual = *d.digestId == *other.digestId
 	}
-	return reflect.DeepEqual(d.disclosure, other.disclosure) &&
+	return disclosureEquals(d.disclosure, other.disclosure) &&
 		d.namespace == other.namespace &&
 		digestIdEqual
+}
+
+// disclosureEquals ports Objects.equals(disclosure, that.disclosure): the disclosures' own
+// equals (ValidationDisclosure#equals - salt and claim), not a comparison of every field. A
+// reflect.DeepEqual over the struct would also compare the ComputeDigest/NamespaceFunc/
+// DigestIdFunc function fields, which DeepEqual only ever finds equal when both are nil, and
+// the digest cache, so two disclosures equal upstream would be unequal here.
+func disclosureEquals(a, b *ValidationDisclosure) bool {
+	if a == nil || b == nil {
+		return a == b
+	}
+	return a.Equals(b)
 }
