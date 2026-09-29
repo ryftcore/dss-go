@@ -2,6 +2,7 @@
 package fc
 
 import (
+	"fmt"
 	"slices"
 
 	"github.com/ryftcore/dss-go/dss/diagnostic"
@@ -44,15 +45,37 @@ func (c *AbstractSignedAndTimestampedFilesCoveredCheck[T]) Process() bool {
 
 // CheckManifestFilesCovered runs the validation process for the manifest entries coverage.
 func (c *AbstractSignedAndTimestampedFilesCoveredCheck[T]) CheckManifestFilesCovered(entries []string) bool {
-	return c.checkManifestFilesCoveredRecursively(entries, entries, map[string]struct{}{}, true)
+	covered := make(map[string]struct{}, len(entries))
+	for _, entry := range entries {
+		covered[entry] = struct{}{}
+	}
+	return c.checkManifestFilesCoveredRecursively(covered, entries, map[string]struct{}{}, map[string]struct{}{}, true)
 }
 
+// checkManifestFilesCoveredRecursively ports the recursive method of the same
+// name. coveredEntries is the List of the Java method as a set (List#contains
+// is a membership test, and the list is never modified), which keeps the walk
+// linear in the number of manifest entries instead of quadratic.
+//
+// expanding holds the manifest entries whose nested manifest is currently being
+// walked (i.e. those on the recursion stack); it has no Java counterpart.
+// DIVERGENCE, deliberate: Java records an entry in checkedEntries only after its
+// nested manifest has been walked, so a manifest that lists its own time-stamp
+// (or two manifests listing each other's) recurses without end and Java dies
+// with a StackOverflowError - an Error the JVM survives. A Go stack overflow is
+// a fatal runtime error that no recover() can catch and that ends the process,
+// which a crafted container must not be able to cause. The cycle is therefore
+// reported by an ordinary panic at the exact point Java would recurse into it
+// again, so the facade's recovered() turns it into an error just as it does for
+// the other unchecked exceptions of this port. No verdict is produced or
+// changed: every input that terminates in Java yields the same result here.
 func (c *AbstractSignedAndTimestampedFilesCoveredCheck[T]) checkManifestFilesCoveredRecursively(
-	coveredEntries, manifestEntries []string, checkedEntries map[string]struct{}, rootProcess bool) bool {
+	coveredEntries map[string]struct{}, manifestEntries []string, checkedEntries map[string]struct{},
+	expanding map[string]struct{}, rootProcess bool) bool {
 	for _, manifestEntry := range manifestEntries {
 		// skip validation for the first loop (same manifest is evaluated)
 		if !rootProcess {
-			if !slices.Contains(coveredEntries, manifestEntry) {
+			if _, ok := coveredEntries[manifestEntry]; !ok {
 				return false
 			}
 			if _, ok := checkedEntries[manifestEntry]; ok {
@@ -60,9 +83,17 @@ func (c *AbstractSignedAndTimestampedFilesCoveredCheck[T]) checkManifestFilesCov
 			}
 		}
 		entryManifest := c.DiagnosticData.ManifestFileForFilename(manifestEntry)
-		if entryManifest != nil &&
-			!c.checkManifestFilesCoveredRecursively(coveredEntries, entryManifest.Entries.All(), checkedEntries, false) {
-			return false
+		if entryManifest != nil {
+			if _, ok := expanding[manifestEntry]; ok {
+				panic(fmt.Sprintf("Cyclic manifest reference detected for the entry '%s'", manifestEntry))
+			}
+			expanding[manifestEntry] = struct{}{}
+			covered := c.checkManifestFilesCoveredRecursively(coveredEntries, entryManifest.Entries.All(),
+				checkedEntries, expanding, false)
+			delete(expanding, manifestEntry)
+			if !covered {
+				return false
+			}
 		}
 		checkedEntries[manifestEntry] = struct{}{}
 	}
