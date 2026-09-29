@@ -18,8 +18,8 @@
 // its package doc for the RFC 7292 subset it covers): it decrypts and parses every SafeBag itself
 // - RSA, EC and Ed25519 PKCS#8 keys through crypto/x509, DSA by hand since neither
 // x509.ParsePKCS8PrivateKey nor crypto/dsa parses it - so pkcs12BuildKeyStore below only has to
-// correlate certificates with keys (by localKeyId, then by issuer/subject linkage across the
-// remaining certificates) and never re-encodes a key. golang.org/x/crypto/pkcs12 (see go.mod) is
+// correlate certificates with keys (by localKeyId, then by issuer/subject linkage across all the
+// certificates of the file) and never re-encodes a key. golang.org/x/crypto/pkcs12 (see go.mod) is
 // no longer used by this file; dss/spi and dss/spi/validation still use its ToPEM for their own,
 // narrower needs and are unaffected by this change.
 //
@@ -182,9 +182,10 @@ func pkcs12LoadKeyStore(ksBytes []byte, password string) (*keyStore, error) {
 // pkcs12BuildKeyStore groups a pfx.Store's flat certificate/private-key lists back into
 // per-alias entries: each private key is matched to its certificate via the LocalKeyID
 // attribute (or, when that correlation is unavailable, the first unclaimed certificate), then
-// the chain is completed by walking Subject/Issuer linkage across the remaining certificates -
-// the closest a Go program can get to what java.security.KeyStore's PKCS12 provider does
-// internally.
+// the chain is completed by walking Subject/Issuer linkage across all the certificates of the
+// file, independently for every key (so keys issued under a shared intermediate or root each get
+// the complete chain) - the closest a Go program can get to what java.security.KeyStore's PKCS12
+// provider does internally.
 func pkcs12BuildKeyStore(store *pfx.Store) (*keyStore, error) {
 	certs := make([]*x509.Certificate, len(store.Certificates))
 	for i, certBag := range store.Certificates {
@@ -198,7 +199,15 @@ func pkcs12BuildKeyStore(store *pfx.Store) (*keyStore, error) {
 		return nil, errors.New("pkcs12: no private key entry found")
 	}
 
-	used := make([]bool, len(certs))
+	// claimedLeaf marks the certificates already chosen as some private key's own certificate,
+	// so that two keys never end up with the same leaf. chainMember marks the certificates
+	// that already sit in an earlier key's chain: they only steer the "first unclaimed
+	// certificate" fallback away from a CA certificate, they never hide a certificate from a
+	// later key's chain - two keys issued under the same intermediate / root must both get the
+	// complete chain (java.security.KeyStore's PKCS12 provider builds every private key entry's
+	// chain independently, walking issuer to subject over all the certificates of the file).
+	claimedLeaf := make([]bool, len(certs))
+	chainMember := make([]bool, len(certs))
 	entries := make([]keyStoreEntry, 0, len(store.PrivateKeys))
 	for i, keyBag := range store.PrivateKeys {
 		signer, err := pkcs12Signer(keyBag.Key)
@@ -209,7 +218,7 @@ func pkcs12BuildKeyStore(store *pfx.Store) (*keyStore, error) {
 		leafIndex := -1
 		if len(keyBag.LocalKeyID) > 0 {
 			for ci := range certs {
-				if !used[ci] && bytes.Equal(store.Certificates[ci].LocalKeyID, keyBag.LocalKeyID) {
+				if !claimedLeaf[ci] && bytes.Equal(store.Certificates[ci].LocalKeyID, keyBag.LocalKeyID) {
 					leafIndex = ci
 					break
 				}
@@ -217,7 +226,7 @@ func pkcs12BuildKeyStore(store *pfx.Store) (*keyStore, error) {
 		}
 		if leafIndex == -1 {
 			for ci := range certs {
-				if !used[ci] {
+				if !claimedLeaf[ci] && !chainMember[ci] {
 					leafIndex = ci
 					break
 				}
@@ -226,9 +235,11 @@ func pkcs12BuildKeyStore(store *pfx.Store) (*keyStore, error) {
 		if leafIndex == -1 {
 			return nil, fmt.Errorf("pkcs12: unable to associate private key entry %d with a certificate", i)
 		}
-		used[leafIndex] = true
+		claimedLeaf[leafIndex] = true
 
 		chain := []*x509.Certificate{certs[leafIndex]}
+		inThisChain := make([]bool, len(certs)) // guards against issuer/subject cycles (cross-certificates)
+		inThisChain[leafIndex] = true
 		for {
 			tail := chain[len(chain)-1]
 			if bytes.Equal(tail.RawIssuer, tail.RawSubject) {
@@ -236,7 +247,7 @@ func pkcs12BuildKeyStore(store *pfx.Store) (*keyStore, error) {
 			}
 			nextIndex := -1
 			for ci := range certs {
-				if !used[ci] && bytes.Equal(certs[ci].RawSubject, tail.RawIssuer) {
+				if !inThisChain[ci] && bytes.Equal(certs[ci].RawSubject, tail.RawIssuer) {
 					nextIndex = ci
 					break
 				}
@@ -245,7 +256,8 @@ func pkcs12BuildKeyStore(store *pfx.Store) (*keyStore, error) {
 				break
 			}
 			chain = append(chain, certs[nextIndex])
-			used[nextIndex] = true
+			inThisChain[nextIndex] = true
+			chainMember[nextIndex] = true
 		}
 
 		alias := keyBag.FriendlyName
