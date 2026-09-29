@@ -44,7 +44,13 @@ type DetailedReport struct {
 
 // NewDetailedReport is the default constructor.
 func NewDetailedReport(jaxbDetailedReport *jaxb.XmlDetailedReport) *DetailedReport {
-	return &DetailedReport{jaxbDetailedReport: jaxbDetailedReport}
+	r := &DetailedReport{jaxbDetailedReport: jaxbDetailedReport}
+	// Java creates the collector lazily in getMessageCollector(), an
+	// unsynchronised check-then-set. That is harmless on the JVM but is a data
+	// race in Go when one report is read by several goroutines, so the
+	// collector (which only holds the report pointer) is created up front.
+	r.messageCollector = newMessageCollector(r)
+	return r
 }
 
 // ---------------------------------------------------------------- null helpers
@@ -936,14 +942,21 @@ func (r *DetailedReport) FinalSubIndication(tokenId string) enumerations.SubIndi
 // jaxb_process.go's Content/Attrs embedding), but every caller only ever
 // reads .Conclusion off the result, so returning the shared
 // XmlConstraintsConclusionContent they all embed serves the same purpose.
+//
+// Like Java, it answers nil for a signature that carries none of the three
+// blocks (Java's last branch returns getValidationProcessBasicSignature(),
+// which is null then) instead of dereferencing the absent basic block; the
+// message collector tolerates that nil the way Java's getMessages does.
 func (r *DetailedReport) HighestConclusion(signatureId string) *jaxb.XmlConstraintsConclusionContent {
 	xmlSignature := r.XmlSignatureById(signatureId)
 	if xmlSignature.ValidationProcessArchivalData != nil {
 		return &xmlSignature.ValidationProcessArchivalData.XmlConstraintsConclusionWithProofOfExistenceContent.XmlConstraintsConclusionContent
 	} else if xmlSignature.ValidationProcessLongTermData != nil {
 		return &xmlSignature.ValidationProcessLongTermData.XmlConstraintsConclusionWithProofOfExistenceContent.XmlConstraintsConclusionContent
+	} else if xmlSignature.ValidationProcessBasicSignature != nil {
+		return &xmlSignature.ValidationProcessBasicSignature.XmlConstraintsConclusionWithProofOfExistenceContent.XmlConstraintsConclusionContent
 	}
-	return &xmlSignature.ValidationProcessBasicSignature.XmlConstraintsConclusionWithProofOfExistenceContent.XmlConstraintsConclusionContent
+	return nil
 }
 
 // SigningCertificate gets the signing certificate validation block for the
@@ -962,7 +975,9 @@ func (r *DetailedReport) SigningCertificate(bbbId string) *jaxb.XmlSubXCV {
 	return nil
 }
 
-// MessageCollector gets the used MessageCollector.
+// MessageCollector gets the used MessageCollector. NewDetailedReport creates it
+// eagerly, so concurrent readers never race on a lazy initialisation; the
+// fallback only serves a zero-value DetailedReport.
 func (r *DetailedReport) MessageCollector() *MessageCollector {
 	if r.messageCollector == nil {
 		r.messageCollector = newMessageCollector(r)
