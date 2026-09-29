@@ -443,9 +443,8 @@ func (s *serializer) startPrefixMapping(prefix, uri string) {
 // setAttributeNS(A, "p:Id") and setAttributeNS(B, "p:Id") serializes with a single p:Id.
 //
 // The lookup is a linear scan for an ordinary start tag and switches to a map once the tag
-// is wide (Xalan's AttributesImplSerializer does the same above 12 attributes), because n
-// attributes cost O(n^2) comparisons otherwise - tens of seconds for an attacker-supplied
-// element with 100 000 of them.
+// is wide, because n attributes cost O(n^2) comparisons otherwise - tens of seconds for an
+// attacker-supplied element with 100 000 of them. The result is the same either way.
 func (s *serializer) addAttributeAlways(uri, local, qname, value string) {
 	if s.attrIdx != nil {
 		if i, ok := s.attrIdx[qname]; ok {
