@@ -676,7 +676,7 @@ func (s *NativePDFSignatureService) GetRevisions(document model.DSSDocument, pwd
 
 		// Upstream wraps this whole per-dictionary body in try { ... } catch (Exception e) and
 		// logs "Unable to parse signature {} . Reason : {}": one malformed revision (say, a
-		// document time-stamp whose token does not match its signed data, whose
+		// document time-stamp whose /Contents is not an RFC 3161 token, whose
 		// NewPdfDocTimestampRevision panics as PdfDocTimestampRevision throws a DSSException) is
 		// skipped and the remaining signatures are still analysed. Whatever the body had
 		// already added to revisions or lastDSSDictionary before failing is kept, as upstream
