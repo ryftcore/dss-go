@@ -144,6 +144,9 @@ func (b *EmbeddedEvidenceRecordBuilder) getUnsignedAttributeToEmbed(sig *Signatu
 			if lastUnsignedAttribute.IsEvidenceRecord() {
 				expectedEvidenceRecordAttributeType := b.getEvidenceRecordUnsignedPropertyOID(sig)
 				if !expectedEvidenceRecordAttributeType.Equal(lastUnsignedAttribute.ASN1Oid()) {
+					// The argument order is upstream's verbatim, including its slip: the OID found
+					// in the signature lands in the "Expected" slot and the expected one in the
+					// "obtained" slot (CAdESEmbeddedEvidenceRecordBuilder#getUnsignedAttributeToEmbed).
 					return nil, exception.NewIllegalInputException(fmt.Sprintf(
 						"Unable to embed the parallel evidence record. Expected type '%s', obtained type '%s'.",
 						lastUnsignedAttribute.ASN1Oid().String(), expectedEvidenceRecordAttributeType.String()))
