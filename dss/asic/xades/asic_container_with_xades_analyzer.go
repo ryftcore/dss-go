@@ -70,16 +70,16 @@ func (a *ASiCContainerWithXAdESAnalyzer) GetContainerExtractor() *asic.DefaultCo
 // GetSignatureAnalyzers ports the @Override protected getSignatureAnalyzers(), implementing
 // asic.AbstractASiCContainerAnalyzerOverrides.
 //
-// Java's getSignatureAnalyzers() forwards `this.getSignaturePolicyProvider()` (a protected
-// accessor on the frozen analyzer.DefaultDocumentAnalyzer, unexported in the Go port as
-// signaturePolicyProviderOrDefault and not reachable from another package) into each nested
-// XMLDocumentAnalyzer. No exported equivalent exists today, so this propagation is dropped here:
-// each nested XMLDocumentAnalyzer instead lazily instantiates its own default
-// SignaturePolicyProvider. This only differs observably when a caller has set a *custom*
-// SignaturePolicyProvider on the outer analyzer via SetSignaturePolicyProvider - the same gap as
-// asic/cades/asic_container_with_cades_analyzer.go.
+// Java's getSignatureAnalyzers() forwards `this.getSignaturePolicyProvider()` into each nested
+// XMLDocumentAnalyzer. That protected getter creates, when none was set, a default provider whose
+// NativeHTTPDataLoader downloads the policy from the URL named in the signature - i.e. from the
+// (untrusted) container - with no timeout, a side effect plain XAdES validation does not have.
 //
-// TODO: add an exported SignaturePolicyProvider accessor on analyzer.DefaultDocumentAnalyzer.
+// DIVERGENCE, deliberate: ASiCContainerWithXAdESAnalyzer.getSignatureAnalyzers - only a provider
+// the caller explicitly set on the outer analyzer (SetSignaturePolicyProvider) is forwarded, so
+// a custom provider reaches the nested analyzers as it does upstream, whereas the default
+// provider and the container-driven network fetch are not created. Same as
+// asic/cades/asic_container_with_cades_analyzer.go; see PORTING.md.
 func (a *ASiCContainerWithXAdESAnalyzer) GetSignatureAnalyzers() []analyzer.DocumentAnalyzer {
 	if a.SignatureValidators == nil {
 		a.SignatureValidators = make([]analyzer.DocumentAnalyzer, 0)
@@ -89,6 +89,9 @@ func (a *ASiCContainerWithXAdESAnalyzer) GetSignatureAnalyzers() []analyzer.Docu
 				panic(err)
 			}
 			documentAnalyzer.SetCertificateVerifier(a.CertificateVerifier())
+			if signaturePolicyProvider := a.ConfiguredSignaturePolicyProvider(); signaturePolicyProvider != nil {
+				documentAnalyzer.SetSignaturePolicyProvider(signaturePolicyProvider)
+			}
 
 			isOpenDocument, err := asic.UtilsIsOpenDocument(a.GetMimeTypeDocument())
 			if err == nil && isOpenDocument {

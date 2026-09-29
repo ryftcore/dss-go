@@ -7,17 +7,18 @@
 // override it - ASiCContainerWithXAdESAnalyzer - inherit the base's empty body by promotion,
 // matching Java's non-abstract protected default.
 //
-// Java's getSignatureAnalyzers() forwards
-// `this.getSignaturePolicyProvider()` (a protected accessor on the frozen
-// analyzer.DefaultDocumentAnalyzer, unexported in the Go port as
-// signaturePolicyProviderOrDefault and not reachable from another package) into each nested
-// CMSDocumentAnalyzer. No exported equivalent exists on analyzer.DefaultDocumentAnalyzer today,
-// so this propagation is dropped here: each nested CMSDocumentAnalyzer instead lazily
-// instantiates its own default SignaturePolicyProvider. This only differs observably when a
-// caller has set a *custom* SignaturePolicyProvider on the outer analyzer via
-// SetSignaturePolicyProvider.
+// SIGNATURE POLICY PROVIDER. Java's getSignatureAnalyzers() forwards
+// `this.getSignaturePolicyProvider()` into each nested CMSDocumentAnalyzer. That protected
+// getter creates, when none was set, a default provider whose NativeHTTPDataLoader downloads the
+// policy from the URL named in the signature - i.e. from the (untrusted) container - with no
+// timeout, a side effect that plain CAdES validation does not have (there the field stays null
+// and no download is attempted).
 //
-// TODO: add an exported SignaturePolicyProvider accessor on analyzer.DefaultDocumentAnalyzer.
+// DIVERGENCE, deliberate: ASiCContainerWithCAdESAnalyzer.getSignatureAnalyzers - only a provider
+// the caller explicitly set on the outer analyzer (SetSignaturePolicyProvider) is forwarded, so
+// a custom provider (e.g. one holding the policies offline) reaches the nested analyzers as it
+// does upstream; the default provider, and the network fetch driven by the container content
+// that comes with it, is not created. See PORTING.md.
 package cades
 
 import (
@@ -88,8 +89,8 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetContainerExtractor() *asic.DefaultCo
 }
 
 // GetSignatureAnalyzers ports the @Override protected getSignatureAnalyzers(), implementing
-// asic.AbstractASiCContainerAnalyzerOverrides. See the file header's flagged gap regarding the
-// dropped SignaturePolicyProvider propagation.
+// asic.AbstractASiCContainerAnalyzerOverrides. See the file header's DIVERGENCE note regarding
+// the SignaturePolicyProvider propagation.
 func (a *ASiCContainerWithCAdESAnalyzer) GetSignatureAnalyzers() []analyzer.DocumentAnalyzer {
 	if a.SignatureValidators == nil {
 		a.SignatureValidators = make([]analyzer.DocumentAnalyzer, 0)
@@ -99,6 +100,9 @@ func (a *ASiCContainerWithCAdESAnalyzer) GetSignatureAnalyzers() []analyzer.Docu
 				panic(err)
 			}
 			cadesValidator.SetCertificateVerifier(a.CertificateVerifier())
+			if signaturePolicyProvider := a.ConfiguredSignaturePolicyProvider(); signaturePolicyProvider != nil {
+				cadesValidator.SetSignaturePolicyProvider(signaturePolicyProvider)
+			}
 			cadesValidator.SetContainerContents(a.GetArchiveDocuments())
 
 			signedDocument := ASiCWithCAdESUtilsGetSignedDocument(a.AsicContent, signature.Name())
@@ -196,7 +200,12 @@ func (a *ASiCContainerWithCAdESAnalyzer) getTimestampValidator(timestampDocument
 func (a *ASiCContainerWithCAdESAnalyzer) BuildDetachedTimestamps() []*validation.TimestampToken {
 	detachedTimestampSource := timestampsrc.NewDetachedTimestampSource()
 	for _, timestampAnalyzer := range a.GetTimestampAnalyzers() {
-		_ = detachedTimestampSource.AddExternalTimestamp(timestampAnalyzer.Timestamp())
+		// Java's addExternalTimestamp is void and lets any failure propagate as an unchecked
+		// exception; the port returns the error, so it is re-raised (recovered at the facade)
+		// rather than silently dropping the timestamp from the detached timestamps.
+		if err := detachedTimestampSource.AddExternalTimestamp(timestampAnalyzer.Timestamp()); err != nil {
+			panic(err)
+		}
 	}
 	return detachedTimestampSource.DetachedTimestamps()
 }
