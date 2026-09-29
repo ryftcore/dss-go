@@ -14,6 +14,9 @@ type PivotInfo struct {
 	certificateStatusMap map[*model.CertificateToken]CertificatePivotStatus
 	// lotlLocation is the associated XML LOTL location.
 	lotlLocation string
+	// identifier caches the value returned by DSSID, shadowing the embedded LOTLInfo's own
+	// cache so PivotInfo's BuildIdentifier (not LOTLInfo's) is what gets cached and returned.
+	identifier model.Identifier
 }
 
 // NewPivotInfo is the default constructor.
@@ -22,13 +25,16 @@ type PivotInfo struct {
 // their statuses in the current pivot); lotlLocation is the associated LOTL location.
 //
 // JUDGMENT CALL: Java's PivotInfo overrides the protected virtual method buildIdentifier(),
-// invoked polymorphically from deep inside the AbstractDocumentInfo constructor chain so the
-// identifier is built with the most-derived class's logic. Go embedding gives no such virtual
-// dispatch: LOTLInfo's own construction cannot call back into PivotInfo.BuildIdentifier. This
-// port defines BuildIdentifier/IsPivot as ordinary methods that shadow the embedded LOTLInfo
-// ones for direct calls on a *PivotInfo, but does not redefine DSSID - so any code that holds a
-// value only as a LOTLInfo gets LOTLInfo's identifier, not PivotInfo's. This is the same known
-// deviation tl_info.go documents.
+// invoked polymorphically from AbstractDocumentInfo#getDSSId() so the identifier is built with
+// the most-derived class's logic. Go embedding gives no such virtual dispatch: LOTLInfo.DSSID
+// calls LOTLInfo.BuildIdentifier, never PivotInfo's. This port therefore defines
+// BuildIdentifier/DSSID/DSSIDAsString/IsPivot as ordinary methods that shadow the embedded
+// LOTLInfo ones, so any call made on a *PivotInfo yields the PivotIdentifier ("P-" prefix)
+// exactly as Java's PivotInfo#getDSSId() does. The one remaining limitation is a call made
+// through the embedded value - &pivotInfo.LOTLInfo, or a *LOTLInfo the caller derived from it -
+// which yields LOTLInfo's identifier; hold the *PivotInfo itself (as
+// LOTLInfo.PivotInfos() returns) to get Java's behaviour. This is the same limitation
+// tl_info.go documents.
 func NewPivotInfo(downloadCacheInfo job.DownloadInfoRecord, parsingCacheInfo TLParsingInfoRecord,
 	validationCacheInfo job.ValidationInfoRecord, url string,
 	certificates map[*model.CertificateToken]CertificatePivotStatus, lotlLocation string) *PivotInfo {
@@ -60,4 +66,21 @@ func (p *PivotInfo) IsPivot() bool {
 // PivotIdentifier.
 func (p *PivotInfo) BuildIdentifier() model.Identifier {
 	return NewPivotIdentifier(p)
+}
+
+// DSSID returns the Identifier of the object, computing and caching it on first access.
+// Overrides (shadows) the embedded LOTLInfo.DSSID so the cached value is built from
+// PivotInfo's own BuildIdentifier: a PivotIdentifier, as Java's PivotInfo#getDSSId() returns
+// through its buildIdentifier() override, not the LOTLIdentifier the promoted LOTLInfo.DSSID
+// would build.
+func (p *PivotInfo) DSSID() model.Identifier {
+	if p.identifier == nil {
+		p.identifier = p.BuildIdentifier()
+	}
+	return p.identifier
+}
+
+// DSSIDAsString returns the String representation of the identifier.
+func (p *PivotInfo) DSSIDAsString() string {
+	return p.DSSID().AsXmlID()
 }

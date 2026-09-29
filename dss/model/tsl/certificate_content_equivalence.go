@@ -65,10 +65,9 @@ func (c *CertificateContentEquivalence) String() string {
 
 // Equals ports CertificateContentEquivalence#equals(Object).
 //
-// Java's Objects.equals(condition, that.condition) reduces to a Condition interface value
-// comparison; Go compares the interface values directly (equal when both are nil or hold
-// identical dynamic types/values), which matches for the comparable Condition implementations
-// this package defines.
+// Java's Objects.equals(condition, that.condition) calls the condition's own structural
+// equals; conditionEquals does the same through the Condition implementations' Equals methods
+// (comparing the interface values with == would compare pointer identity instead).
 func (c *CertificateContentEquivalence) Equals(other *CertificateContentEquivalence) bool {
 	if other == nil {
 		return false
@@ -79,7 +78,7 @@ func (c *CertificateContentEquivalence) Equals(other *CertificateContentEquivale
 	if c.context != other.context {
 		return false
 	}
-	if c.condition != other.condition {
+	if !conditionEquals(c.condition, other.condition) {
 		return false
 	}
 	if c.contentReplacement == other.contentReplacement {

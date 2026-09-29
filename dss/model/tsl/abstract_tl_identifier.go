@@ -7,8 +7,8 @@ import "github.com/ryftcore/dss-go/dss/model"
 
 // tlURLProvider is satisfied by TLInfo and LOTLInfo (which embeds TLInfo), giving
 // AbstractTLIdentifier access to tlInfo.getUrl() without depending on a concrete type. This
-// lets PivotInfo (see pivot_identifier.go, already ported) satisfy it structurally too, since
-// PivotInfo embeds LOTLInfo and inherits the promoted Url() method.
+// lets PivotInfo (see pivot_identifier.go) satisfy it structurally too, since PivotInfo embeds
+// LOTLInfo and inherits the promoted Url() method.
 type tlURLProvider interface {
 	Url() string
 }
@@ -24,12 +24,10 @@ type AbstractTLIdentifier struct {
 // name of the concrete identifier subclass (e.g. "TrustedListIdentifier"), which
 // IdentifierBase needs for its Equals/String ports.
 //
-// DEVIATION from pivot_identifier.go (already ported): that file calls
-// NewAbstractTLIdentifier(prefix, tlInfo) with two arguments, assuming AbstractTLIdentifier
-// derives its className another way. Java's Identifier#toString()/#equals() rely on
-// getClass().getSimpleName(), which Go cannot recover generically from an embedded struct, so
-// this constructor takes className explicitly instead; pivot_identifier.go's call site will
-// need updating by the integrator to pass "PivotIdentifier" as the first argument.
+// DEVIATION: Java's Identifier#toString()/#equals() rely on getClass().getSimpleName(), which
+// Go cannot recover generically from an embedded struct, so this constructor takes className
+// explicitly. All three concrete identifiers (TrustedListIdentifier, LOTLIdentifier,
+// PivotIdentifier) pass their own Java simple class name.
 func NewAbstractTLIdentifier(className, prefix string, tlInfo tlURLProvider) AbstractTLIdentifier {
 	return AbstractTLIdentifier{
 		MultipleDigestIdentifier: model.NewMultipleDigestIdentifier(className, prefix, []byte(tlInfo.Url())),

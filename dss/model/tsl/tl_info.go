@@ -15,10 +15,11 @@ import (
 // AbstractDocumentInfo's fields/behaviour directly instead of depending on the
 // generic job.AbstractDocumentInfoBase type. LOTLInfo (same package) embeds TLInfo by value and
 // defines its own BuildIdentifier/DSSID pair that shadows these for direct calls on a
-// *LOTLInfo; pivot_info.go further shadows BuildIdentifier on *PivotInfo but does not redefine
-// DSSID, so a caller holding only a *LOTLInfo-shaped or job.DocumentInfo value gets LOTLInfo's
-// identifier, not PivotInfo's - the same known deviation pivot_info.go documents on its own
-// BuildIdentifier.
+// *LOTLInfo, and PivotInfo does the same again (pivot_info.go). Calls made on the most-derived
+// pointer type therefore behave as Java's virtual dispatch does; a call made through an
+// embedded value (&lotlInfo.TLInfo, &pivotInfo.LOTLInfo) resolves to that embedded type's own
+// identifier instead, so callers must not coerce a derived info to its embedded base and expect
+// the derived identifier.
 type TLInfo struct {
 	// downloadCacheInfo is the download result record.
 	downloadCacheInfo job.DownloadInfoRecord

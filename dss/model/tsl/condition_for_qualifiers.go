@@ -60,6 +60,6 @@ func (c *ConditionForQualifiers) Equals(other *ConditionForQualifiers) bool {
 		return true
 	}
 	return c.critical == other.critical &&
-		c.condition == other.condition &&
+		conditionEquals(c.condition, other.condition) &&
 		reflect.DeepEqual(c.qualifiers, other.qualifiers)
 }
