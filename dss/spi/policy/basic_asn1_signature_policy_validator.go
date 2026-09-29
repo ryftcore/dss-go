@@ -2,19 +2,21 @@
 //
 // Deviation: upstream navigates the parsed ASN.1 SEQUENCE via BouncyCastle's
 // ASN1Sequence#getObjectAt. This port parses the same TR 102 272 structure
-// (SignPolicyHashAlg, SignPolicyInfo, SignPolicyHash, ...) with the standard
-// library's encoding/asn1 into a slice of asn1.RawValue, indexed the same
-// way; the digest itself is computed by spi.DSSASN1UtilsAsn1SignaturePolicyDigest,
-// which owns the byte-exact DER re-encoding used for hashing.
+// (SignPolicyHashAlg, SignPolicyInfo, SignPolicyHash, ...) with the BER engine
+// of internal/asn1ber (which, like BouncyCastle, accepts the indefinite-length
+// form) and indexes its children the same way; an index past the end of the
+// SEQUENCE panics, standing in for the ArrayIndexOutOfBoundsException that
+// getObjectAt throws. The digest itself is computed by
+// spi.DSSASN1UtilsAsn1SignaturePolicyDigest, which owns the byte-exact DER
+// re-encoding used for hashing.
 package policy
 
 import (
 	"bytes"
-	"crypto/x509/pkix"
-	"encoding/asn1"
 	"fmt"
 
 	"github.com/ryftcore/dss-go/dss/enumerations"
+	"github.com/ryftcore/dss-go/dss/internal/asn1ber"
 	"github.com/ryftcore/dss-go/dss/model"
 	"github.com/ryftcore/dss-go/dss/model/signature"
 	"github.com/ryftcore/dss-go/dss/spi"
@@ -87,14 +89,11 @@ func (v *BasicASN1SignaturePolicyValidator) Validate(signaturePolicy *signature.
 			panic(err)
 		}
 
-		elements, ok := basicASN1SignaturePolicyValidatorTopLevelElements(policyBytes)
-		if !ok || len(elements) < 3 {
-			// Not a recognisable TR 102 272 SEQUENCE: Java's
-			// ASN1Sequence#getObjectAt would throw, which is caught below;
-			// silently returning here (no ASN1Processable flag set) mirrors
-			// the effect for a non-conforming top-level object.
-			return
-		}
+		// Java: ASN1Sequence asn1Sequence = DSSASN1Utils.toASN1Primitive(policyBytes);
+		// a parse failure (DSSException) or a top-level object that is not a
+		// SEQUENCE (ClassCastException) is caught below and marks the digest
+		// invalid, leaving asn1Processable false.
+		elements := basicASN1SignaturePolicyValidatorTopLevelElements(policyBytes)
 
 		validationResult.SetAsn1Processable(true)
 
@@ -110,8 +109,12 @@ func (v *BasicASN1SignaturePolicyValidator) Validate(signaturePolicy *signature.
 		 * document is equal to the digest algorithm indicated in the attribute.
 		 */
 
-		var algID pkix.AlgorithmIdentifier
-		if _, err := asn1.Unmarshal(elements[0].FullBytes, &algID); err != nil {
+		// Java: (ASN1Sequence) asn1Sequence.getObjectAt(0) followed by
+		// AlgorithmIdentifier.getInstance(...): an empty SEQUENCE, a first
+		// element that is not a SEQUENCE or a malformed AlgorithmIdentifier
+		// throws, and the catch marks the digest invalid.
+		algID, err := asn1ber.AlgorithmIdentifierFromElement(basicASN1SignaturePolicyValidatorObjectAt(elements, 0))
+		if err != nil {
 			panic(err)
 		}
 		signPolicyHashAlgFromPolicy, err := enumerations.DigestAlgorithmForOID(algID.Algorithm.String())
@@ -133,7 +136,15 @@ func (v *BasicASN1SignaturePolicyValidator) Validate(signaturePolicy *signature.
 						utils.ToBase64(digest.Value()), utils.ToBase64(recalculatedDigest.Value())))
 			}
 
-			policyDigestValueFromPolicy := elements[2].Bytes
+			// Java: ((ASN1OctetString) asn1Sequence.getObjectAt(2)).getOctets():
+			// a SEQUENCE with fewer than three elements (or a third element
+			// that is not an OCTET STRING) throws here, after the re-calculated
+			// digest has been compared, and the catch marks the digest invalid.
+			signPolicyHash := basicASN1SignaturePolicyValidatorObjectAt(elements, 2)
+			if !signPolicyHash.IsUniversal(asn1ber.TagOctetString) {
+				panic("ASN1Encodable cannot be cast to ASN1OctetString")
+			}
+			policyDigestValueFromPolicy := signPolicyHash.Octets()
 			equal = bytes.Equal(digest.Value(), policyDigestValueFromPolicy)
 			validationResult.SetDigestValid(equal)
 			if !equal {
@@ -170,22 +181,33 @@ func (v *BasicASN1SignaturePolicyValidator) GetComputedDigest(policyDocument mod
 }
 
 // basicASN1SignaturePolicyValidatorTopLevelElements parses policyBytes as a
-// top-level ASN.1 SEQUENCE, returning its immediate children. Ports the
-// implicit cast to ASN1Sequence performed by BouncyCastle when navigating
-// asn1Sequence.getObjectAt(...); ok is false when policyBytes is not a
-// SEQUENCE.
-func basicASN1SignaturePolicyValidatorTopLevelElements(policyBytes []byte) (elements []asn1.RawValue, ok bool) {
-	var outer asn1.RawValue
-	if _, err := asn1.Unmarshal(policyBytes, &outer); err != nil {
-		return nil, false
+// single top-level ASN.1 SEQUENCE, returning its immediate children. Ports
+// DSSASN1Utils.toASN1Primitive(policyBytes) followed by the implicit cast to
+// ASN1Sequence: like Java it panics (DSSException / ClassCastException) when
+// policyBytes do not hold exactly one well-formed element, or when that
+// element is not a SEQUENCE.
+func basicASN1SignaturePolicyValidatorTopLevelElements(policyBytes []byte) []*asn1ber.Element {
+	outer, rest, err := asn1ber.Parse(policyBytes)
+	if err != nil {
+		panic(model.NewDSSErrorMessageCause("Cannot convert binaries to ASN1Primitive", err))
 	}
-	if outer.Class != asn1.ClassUniversal || outer.Tag != asn1.TagSequence || !outer.IsCompound {
-		return nil, false
+	if len(rest) != 0 {
+		panic(model.NewDSSError("Cannot convert binaries to ASN1Primitive : extra data found after the object"))
 	}
-	if _, err := asn1.Unmarshal(policyBytes, &elements); err != nil {
-		return nil, false
+	if !outer.IsUniversal(asn1ber.TagSequence) || !outer.IsConstructed() {
+		panic("ASN1Primitive cannot be cast to ASN1Sequence")
 	}
-	return elements, true
+	return outer.Children()
+}
+
+// basicASN1SignaturePolicyValidatorObjectAt ports ASN1Sequence#getObjectAt:
+// it panics for an index past the end of the SEQUENCE, standing in for Java's
+// ArrayIndexOutOfBoundsException.
+func basicASN1SignaturePolicyValidatorObjectAt(elements []*asn1ber.Element, index int) *asn1ber.Element {
+	if index >= len(elements) {
+		panic(fmt.Sprintf("Index %d out of bounds for length %d", index, len(elements)))
+	}
+	return elements[index]
 }
 
 var _ SignaturePolicyValidator = (*BasicASN1SignaturePolicyValidator)(nil)
