@@ -639,15 +639,19 @@ func (v *RevocationDataVerifier) isSelfIssuedRevocation(certificateToken *model.
 	if utils.IsCollectionNotEmpty(revocationData.Certificates()) {
 		certificateChain, err := spi.NewCertificateReordererWithSigningCertificate(
 			revocationData.IssuerCertificateToken(), revocationData.Certificates()).OrderedCertificates()
-		if err == nil {
-			for _, c := range certificateChain {
-				if c.Equals(certificateToken) {
-					return true
-				}
+		if err != nil {
+			// Java's CertificateReorderer#getOrderedCertificates throws an unchecked DSSException
+			// here and nothing catches it, so the verification is aborted. Treating the chain as
+			// "certificate not found in the chain" would let a revocation token whose issuer chain
+			// cannot be ordered slip past the self-issued check, so the error is re-raised as a
+			// panic (recovered at the facade boundary).
+			panic(err)
+		}
+		for _, c := range certificateChain {
+			if c.Equals(certificateToken) {
+				return true
 			}
 		}
-		// upstream logs the reorderer failure here, dropped per PORTING.md's slf4j rule; an
-		// unresolvable chain is treated the same as "certificate not found in the chain".
 	}
 	return false
 }

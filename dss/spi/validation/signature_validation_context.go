@@ -487,9 +487,19 @@ func (c *SignatureValidationContext) isYetVerified(token model.Token) bool {
 	return false
 }
 
-func (c *SignatureValidationContext) getOrderedCertificateChains() (map[*model.CertificateToken][]*model.CertificateToken, error) {
+// getOrderedCertificateChains orders the processed certificates into certificate chains.
+// Port of getOrderedCertificateChains(). Java's CertificateReorderer#getOrderedCertificateChains
+// throws an unchecked DSSException when no chain can be built (no signing certificate found,
+// only bridge certificates); that aborts the calling check rather than letting it pass, so the
+// error is re-raised here as a panic carrying the *model.DSSError (recovered at the facade
+// boundary) instead of being reported as an empty, i.e. satisfied, status.
+func (c *SignatureValidationContext) getOrderedCertificateChains() map[*model.CertificateToken][]*model.CertificateToken {
 	order := spi.NewCertificateReorderer(c.processedCertificates)
-	return order.OrderedCertificateChains()
+	orderedCertificateChains, err := order.OrderedCertificateChains()
+	if err != nil {
+		panic(err)
+	}
+	return orderedCertificateChains
 }
 
 // getCertChain builds the complete certificate chain from the given token.
@@ -1140,28 +1150,34 @@ func (c *SignatureValidationContext) getAlternativeCRLUrls(trustAnchor *model.Ce
 // CheckAllRequiredRevocationDataPresent reports whether every processed certificate has the
 // required revocation data present. Port of checkAllRequiredRevocationDataPresent().
 func (c *SignatureValidationContext) CheckAllRequiredRevocationDataPresent() bool {
-	status, _ := c.allRequiredRevocationDataPresent()
-	return status.IsEmpty()
+	return c.allRequiredRevocationDataPresent().IsEmpty()
 }
 
 // allRequiredRevocationDataPresent returns the status of the required-revocation-data-present
 // check.
-func (c *SignatureValidationContext) allRequiredRevocationDataPresent() (*TokenStatus, error) {
+func (c *SignatureValidationContext) allRequiredRevocationDataPresent() *TokenStatus {
 	status := NewTokenStatus()
-	orderedCertificateChains, err := c.getOrderedCertificateChains()
-	if err != nil {
-		return status, err
-	}
+	orderedCertificateChains := c.getOrderedCertificateChains()
 	for _, orderedCertChain := range orderedCertificateChains {
 		c.checkRevocationForCertificateChainAgainstBestSignatureTime(orderedCertChain, time.Time{}, status, "")
 	}
 	if !status.IsEmpty() {
 		status.SetMessage("Revocation data is missing for one or more certificate(s).")
 	}
-	return status, nil
+	return status
 }
 
-func (c *SignatureValidationContext) checkRevocationForCertificateChainAgainstBestSignatureTime(certificates []*model.CertificateToken, bestSignatureTime time.Time, status *TokenStatus, context enumerations.Context) {
+// signatureValidationContextTokenStatusRecorder is the part of TokenStatus the revocation
+// checks write to. Java passes either a TokenStatus or its subclass RevocationFreshnessStatus
+// to checkRevocationForCertificateChainAgainstBestSignatureTime and tests
+// `status instanceof RevocationFreshnessStatus`; Go has no inheritance, so the parameter is
+// this interface, which both *TokenStatus and *RevocationFreshnessStatus (through the embedded
+// TokenStatus) satisfy, and the concrete type is recovered with a type assertion.
+type signatureValidationContextTokenStatusRecorder interface {
+	AddRelatedTokenAndErrorMessage(token model.Token, errorMessage string)
+}
+
+func (c *SignatureValidationContext) checkRevocationForCertificateChainAgainstBestSignatureTime(certificates []*model.CertificateToken, bestSignatureTime time.Time, status signatureValidationContextTokenStatusRecorder, context enumerations.Context) {
 	hasBestSignatureTime := !bestSignatureTime.IsZero()
 	for _, certificateToken := range certificates {
 		if c.isSelfSignedOrTrustedAtTime(certificateToken, bestSignatureTime) {
@@ -1203,7 +1219,7 @@ func (c *SignatureValidationContext) checkRevocationForCertificateChainAgainstBe
 					spi.DSSUtilsFormatDateToRFC(bestSignatureTime)+"]!")
 			}
 
-			if freshnessStatus, ok := any(status).(*RevocationFreshnessStatus); ok {
+			if freshnessStatus, ok := status.(*RevocationFreshnessStatus); ok {
 				if utils.IsCollectionNotEmpty(relatedRevocationTokens) && signatureValidationContextNoNextUpdateDefined(relatedRevocationTokens) && earliestNextUpdate.IsZero() {
 					// Define next update based on Timestamp time, when no NextUpdate is defined
 					lowestPOETime := c.getLowestPOETimeForToken(certificateToken)
@@ -1231,27 +1247,23 @@ func signatureValidationContextNoNextUpdateDefined(relatedRevocationTokens []Any
 // CheckAllPOECoveredByRevocationData reports whether every POE is covered by fresh revocation
 // data. Port of checkAllPOECoveredByRevocationData().
 func (c *SignatureValidationContext) CheckAllPOECoveredByRevocationData() bool {
-	status, _ := c.allPOECoveredByRevocationData()
-	return status.IsEmpty()
+	return c.allPOECoveredByRevocationData().IsEmpty()
 }
 
 // allPOECoveredByRevocationData returns the status of the POE-covered-by-revocation-data check.
-func (c *SignatureValidationContext) allPOECoveredByRevocationData() (*RevocationFreshnessStatus, error) {
+func (c *SignatureValidationContext) allPOECoveredByRevocationData() *RevocationFreshnessStatus {
 	status := NewRevocationFreshnessStatus()
-	orderedCertificateChains, err := c.getOrderedCertificateChains()
-	if err != nil {
-		return status, err
-	}
+	orderedCertificateChains := c.getOrderedCertificateChains()
 	for firstChainCertificate, chain := range orderedCertificateChains {
 		lastCertUsageDate := c.getLatestTimestampUsageDate(firstChainCertificate)
 		if !lastCertUsageDate.IsZero() {
-			c.checkRevocationForCertificateChainAgainstBestSignatureTime(chain, lastCertUsageDate, &status.TokenStatus, enumerations.ContextTimestamp)
+			c.checkRevocationForCertificateChainAgainstBestSignatureTime(chain, lastCertUsageDate, status, enumerations.ContextTimestamp)
 		}
 	}
 	if !status.IsEmpty() {
 		status.SetMessage("Revocation data is missing for one or more POE(s).")
 	}
-	return status, nil
+	return status
 }
 
 // CheckAllTimestampsValid reports whether every processed timestamp is valid. Port of
@@ -1568,14 +1580,11 @@ func (c *SignatureValidationContext) allSignatureCertificateHaveFreshRevocationD
 
 func (c *SignatureValidationContext) checkAtLeastOneRevocationDataPresentAfterBestSignatureTime(signature AdvancedSignature, status *RevocationFreshnessStatus) {
 	signingCertificateToken := signature.SigningCertificateToken()
-	orderedCertificateChains, err := c.getOrderedCertificateChains()
-	if err != nil {
-		return
-	}
+	orderedCertificateChains := c.getOrderedCertificateChains()
 	for firstChainCertificate, chain := range orderedCertificateChains {
 		if signingCertificateToken != nil && firstChainCertificate.Equals(signingCertificateToken) {
 			bestSignatureTime := c.getEarliestTimestampTime()
-			c.checkRevocationForCertificateChainAgainstBestSignatureTime(chain, bestSignatureTime, &status.TokenStatus, enumerations.ContextSignature)
+			c.checkRevocationForCertificateChainAgainstBestSignatureTime(chain, bestSignatureTime, status, enumerations.ContextSignature)
 		}
 	}
 }

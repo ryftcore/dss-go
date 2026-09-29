@@ -4,16 +4,12 @@
 // package; the sibling status type TokenStatus (Java spi.validation.status.TokenStatus) is
 // landed in this same package too.
 //
-// This type is load-bearing: signature_validation_context.go embeds *TokenStatus by address
-// (`&status.TokenStatus`) when calling into shared checking logic, and type-asserts the result
-// back to *RevocationFreshnessStatus - which requires RevocationFreshnessStatus to embed
-// TokenStatus as an unnamed value field (exactly mirroring Java's "extends TokenStatus"), so
-// `status.TokenStatus` resolves to the embedded field by promotion. (Note: that type assertion,
-// `any(status).(*RevocationFreshnessStatus)` against a variable statically typed *TokenStatus
-// and passed as `&status.TokenStatus`, can never succeed in Go regardless of how this type is
-// shaped - Go does not recover an enclosing struct from a promoted field's address. This is a
-// latent no-op in signature_validation_context.go, flagged here rather than silently worked
-// around.)
+// This type is load-bearing: signature_validation_context.go passes either a *TokenStatus or a
+// *RevocationFreshnessStatus to its shared checking logic through a small recorder interface
+// (both satisfy it, the latter through the promoted AddRelatedTokenAndErrorMessage) and
+// type-asserts back to *RevocationFreshnessStatus where Java tests `status instanceof
+// RevocationFreshnessStatus`; that requires RevocationFreshnessStatus to embed TokenStatus as
+// an unnamed value field (exactly mirroring Java's "extends TokenStatus").
 //
 // Go has no virtual dispatch through embedding: alert.ObjectStatus.String() (promoted via
 // TokenStatus's embedded *alert.ObjectStatus) calls its own receiver's ErrorString(), not this

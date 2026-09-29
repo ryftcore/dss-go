@@ -55,7 +55,7 @@ func (a *SignatureValidationAlerter) AssertAllRequiredRevocationDataPresent() {
 		return
 	}
 
-	status, _ := a.validationContext.allRequiredRevocationDataPresent()
+	status := a.validationContext.allRequiredRevocationDataPresent()
 	if !status.IsEmpty() {
 		a.populateMessage(status)
 		a.alert(alertOnMissingRevocationData, status)
@@ -70,7 +70,7 @@ func (a *SignatureValidationAlerter) AssertAllPOECoveredByRevocationData() {
 		return
 	}
 
-	status, _ := a.validationContext.allPOECoveredByRevocationData()
+	status := a.validationContext.allPOECoveredByRevocationData()
 	if !status.IsEmpty() {
 		a.populateMessage(status)
 		a.alert(alertOnUncoveredPOE, status)
