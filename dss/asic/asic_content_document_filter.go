@@ -127,6 +127,12 @@ func (f *ContentDocumentFilter) SetExcludedFilenames(excludedFilenames []string)
 
 // SetIncludedFilenames sets a collection of document filenames to be included in the final
 // return result despite other settings. NOTE: take precedence over all other constraints.
+//
+// As upstream, the list only adds documents of the categories whose flag is off: for an enabled
+// category the whole category is returned (minus the excluded and the included filenames when an
+// excluded list is set), so combining an enabled category with an included list does not give
+// the intersection of the two.
+//
 // Ports setIncludedFilenames(Collection).
 func (f *ContentDocumentFilter) SetIncludedFilenames(includedFilenames []string) {
 	f.includedFilenames = includedFilenames
