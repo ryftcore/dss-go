@@ -10,13 +10,13 @@
 package pdf
 
 import (
-	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/md5"
 	"crypto/rc4"
 	"crypto/sha256"
 	"crypto/sha512"
+	"crypto/subtle"
 	"encoding/binary"
 	"fmt"
 	"math"
@@ -567,22 +567,31 @@ func (d *Document) cryptFilterMethod(encDict *Dict, name Name) Name {
 
 // --- password checks -------------------------------------------------------
 
+// constantTimeEqual compares a password-derived value with the one the
+// document stores, without the early exit of bytes.Equal: how many leading
+// bytes matched is not something a caller supplying a password should be able
+// to time. pdfbox uses Arrays.equals; the answer is the same, only the timing
+// differs, so this is not a divergence.
+func constantTimeEqual(a, b []byte) bool {
+	return subtle.ConstantTimeCompare(a, b) == 1
+}
+
 func isUserPassword(pw, u, o []byte, p int32, id []byte, r, keyLen int, encMeta bool) bool {
 	if r == 5 || r == 6 {
 		if len(u) < 48 {
 			return false
 		}
 		hash := hash2AOr256(truncate127(pw), u[32:40], nil, r)
-		return bytes.Equal(hash, u[:32])
+		return constantTimeEqual(hash, u[:32])
 	}
 	computed := computeUserEntry(pw, o, p, id, r, keyLen, encMeta)
 	if r == 2 {
-		return bytes.Equal(u, computed)
+		return constantTimeEqual(u, computed)
 	}
 	if len(u) < 16 || len(computed) < 16 {
 		return false
 	}
-	return bytes.Equal(u[:16], computed[:16])
+	return constantTimeEqual(u[:16], computed[:16])
 }
 
 func isOwnerPassword(pw, u, o []byte, p int32, id []byte, r, keyLen int, encMeta bool) bool {
@@ -591,7 +600,7 @@ func isOwnerPassword(pw, u, o []byte, p int32, id []byte, r, keyLen int, encMeta
 			return false
 		}
 		hash := hash2AOr256(truncate127(pw), o[32:40], u, r)
-		return bytes.Equal(hash, o[:32])
+		return constantTimeEqual(hash, o[:32])
 	}
 	user := userPasswordFromOwner(pw, o, r, keyLen)
 	return isUserPassword(user, u, o, p, id, r, keyLen, encMeta)

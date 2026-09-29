@@ -5,7 +5,6 @@
 package pdf
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 )
@@ -168,5 +167,3 @@ func (d *Document) objectFromStm(key ObjectKey, e xrefRec) (Object, bool) {
 	}
 	return nil, false
 }
-
-var errObjStmCycle = errors.New("pdf: object stream cycle")
