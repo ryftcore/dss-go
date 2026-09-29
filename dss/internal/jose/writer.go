@@ -73,17 +73,25 @@ func writeJSONValue(sb *strings.Builder, value any) {
 	case []string:
 		// java.util.List<String> and String[] both land in the array branches; DSS builds the
 		// 'crit' header and the x5c chain this way.
-		items := make([]any, len(v))
+		// Written straight off the slice: a nil one is an empty list, as the []any this used to
+		// be copied into was never nil.
+		sb.WriteByte('[')
 		for i, s := range v {
-			items[i] = s
+			if i > 0 {
+				sb.WriteByte(',')
+			}
+			writeJSONString(sb, s)
 		}
-		writeJSONArray(sb, items)
+		sb.WriteByte(']')
 	case []*Object:
-		items := make([]any, len(v))
+		sb.WriteByte('[')
 		for i, o := range v {
-			items[i] = o
+			if i > 0 {
+				sb.WriteByte(',')
+			}
+			writeJSONObject(sb, o)
 		}
-		writeJSONArray(sb, items)
+		sb.WriteByte(']')
 	default:
 		// JSONValue's fallback: writeJSONString(value.toString(), out).
 		writeJSONString(sb, fmt.Sprint(value))
