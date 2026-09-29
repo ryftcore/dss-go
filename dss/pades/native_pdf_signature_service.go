@@ -674,73 +674,86 @@ func (s *NativePDFSignatureService) GetRevisions(document model.DSSDocument, pwd
 		fieldNames := nativePDFSignatureServiceToStringNames(fields)
 		// Upstream logs "Signature fields: {}".
 
-		byteRange := signatureDictionary.ByteRange()
-		cms := signatureDictionary.Contents()
-		byteRangeValid := s.ValidateByteRange(byteRange, document, cms)
-		byteRange.SetValid(byteRangeValid)
+		// Upstream wraps this whole per-dictionary body in try { ... } catch (Exception e) and
+		// logs "Unable to parse signature {} . Reason : {}": one malformed revision (say, a
+		// document time-stamp whose token does not match its signed data, whose
+		// NewPdfDocTimestampRevision panics as PdfDocTimestampRevision throws a DSSException) is
+		// skipped and the remaining signatures are still analysed. Whatever the body had
+		// already added to revisions or lastDSSDictionary before failing is kept, as upstream
+		// keeps it: the closure updates both in place.
+		func() {
+			defer func() {
+				// Upstream logs "Unable to parse signature {} . Reason : {}".
+				_ = recover()
+			}()
+			byteRange := signatureDictionary.ByteRange()
+			cms := signatureDictionary.Contents()
+			byteRangeValid := s.ValidateByteRange(byteRange, document, cms)
+			byteRange.SetValid(byteRangeValid)
 
-		var signedContent model.DSSDocument
-		if byteRange.IsValid() {
-			signedContent = NewPdfByteRangeDocument(document, byteRange)
-			if !nativePDFSignatureServiceIsSignedContentComplete(byteRange, signedContent) {
-				byteRange.SetValid(false)
+			var signedContent model.DSSDocument
+			if byteRange.IsValid() {
+				signedContent = NewPdfByteRangeDocument(document, byteRange)
+				if !nativePDFSignatureServiceIsSignedContentComplete(byteRange, signedContent) {
+					byteRange.SetValid(false)
+				}
 			}
-		}
 
-		if !byteRange.IsValid() {
-			signedContent = model.CreateEmptyDocument()
-			// Upstream logs "The signature '{}' has an invalid /ByteRange! The validation will
-			// result to a broken signature.".
-		}
-
-		signatureCoversWholeDocument := reader.IsSignatureCoversWholeDocument(signatureDictionary)
-
-		revisionContent := UtilsGetRevisionContent(document, byteRange)
-		if revisionReader, err := NewNativePdfDocumentReader(revisionContent, pwd); err == nil {
-			// detect a modification within the signature dictionary itself (spoofing attack)
-			nativePDFSignatureServiceVerifyPdfSignatureDictionary(signatureDictionary, fieldNames, revisionReader)
-
-			// create a DSS revision if updated
-			revisions, lastDSSDictionary = nativePDFSignatureServicePreviousDssDictAndUpdateIfNeeded(
-				revisions, compositeDssDictionary, lastDSSDictionary, revisionReader.DSSDictionary())
-			_ = revisionReader.Close()
-		}
-		// Upstream logs "Cannot read signature revision '{}' : {}" on failure and continues.
-
-		previousRevision := UtilsGetPreviousRevision(byteRange, revisionDocuments)
-		var newRevision PdfRevision
-		if s.IsDocTimestamp(signatureDictionary) {
-			newRevision = NewPdfDocTimestampRevision(signatureDictionary, fields, signedContent,
-				previousRevision, signatureCoversWholeDocument)
-
-		} else if s.IsSignature(signatureDictionary) {
-			// a signature contains all the DSS dictionaries present after it
-			var signatureDssDictionary PdfDssDict
-			if nativePDFSignatureServiceContainsDSSRevisions(revisions) {
-				signatureDssDictionary = dssDictionary
+			if !byteRange.IsValid() {
+				signedContent = model.CreateEmptyDocument()
+				// Upstream logs "The signature '{}' has an invalid /ByteRange! The validation will
+				// result to a broken signature.".
 			}
-			newRevision = NewPdfSignatureRevision(signatureDictionary, compositeDssDictionary,
-				signatureDssDictionary, fields, signedContent, previousRevision, signatureCoversWholeDocument)
 
-		}
-		// Upstream logs "The entry {} is skipped. A signature dictionary entry with a type '{}'
-		// and subFilter '{}' is not acceptable configuration!" otherwise.
+			signatureCoversWholeDocument := reader.IsSignatureCoversWholeDocument(signatureDictionary)
 
-		// add the signature/timestamp revision
-		if newRevision != nil {
-			revisions = append(revisions, newRevision)
-		}
+			revisionContent := UtilsGetRevisionContent(document, byteRange)
+			if revisionReader, err := NewNativePdfDocumentReader(revisionContent, pwd); err == nil {
+				// detect a modification within the signature dictionary itself (spoofing attack)
+				nativePDFSignatureServiceVerifyPdfSignatureDictionary(signatureDictionary, fieldNames, revisionReader)
 
-		// No nil guard on previousRevision: upstream has none either, and
-		// PAdESUtilsGetPreviousRevision, like PAdESUtils#getPreviousRevision, falls back to an
-		// empty document rather than returning nil.
-		if revisionReader, err := NewNativePdfDocumentReader(previousRevision, pwd); err == nil {
-			// check whether there is a previous update of the DSS dictionary and create a new
-			// revision if needed
-			revisions, lastDSSDictionary = nativePDFSignatureServicePreviousDssDictAndUpdateIfNeeded(
-				revisions, compositeDssDictionary, lastDSSDictionary, revisionReader.DSSDictionary())
-			_ = revisionReader.Close()
-		}
+				// create a DSS revision if updated
+				revisions, lastDSSDictionary = nativePDFSignatureServicePreviousDssDictAndUpdateIfNeeded(
+					revisions, compositeDssDictionary, lastDSSDictionary, revisionReader.DSSDictionary())
+				_ = revisionReader.Close()
+			}
+			// Upstream logs "Cannot read signature revision '{}' : {}" on failure and continues.
+
+			previousRevision := UtilsGetPreviousRevision(byteRange, revisionDocuments)
+			var newRevision PdfRevision
+			if s.IsDocTimestamp(signatureDictionary) {
+				newRevision = NewPdfDocTimestampRevision(signatureDictionary, fields, signedContent,
+					previousRevision, signatureCoversWholeDocument)
+
+			} else if s.IsSignature(signatureDictionary) {
+				// a signature contains all the DSS dictionaries present after it
+				var signatureDssDictionary PdfDssDict
+				if nativePDFSignatureServiceContainsDSSRevisions(revisions) {
+					signatureDssDictionary = dssDictionary
+				}
+				newRevision = NewPdfSignatureRevision(signatureDictionary, compositeDssDictionary,
+					signatureDssDictionary, fields, signedContent, previousRevision, signatureCoversWholeDocument)
+
+			}
+			// Upstream logs "The entry {} is skipped. A signature dictionary entry with a type '{}'
+			// and subFilter '{}' is not acceptable configuration!" otherwise.
+
+			// add the signature/timestamp revision
+			if newRevision != nil {
+				revisions = append(revisions, newRevision)
+			}
+
+			// No nil guard on previousRevision: upstream has none either, and
+			// PAdESUtilsGetPreviousRevision, like PAdESUtils#getPreviousRevision, falls back to an
+			// empty document rather than returning nil.
+			if revisionReader, err := NewNativePdfDocumentReader(previousRevision, pwd); err == nil {
+				// check whether there is a previous update of the DSS dictionary and create a new
+				// revision if needed
+				revisions, lastDSSDictionary = nativePDFSignatureServicePreviousDssDictAndUpdateIfNeeded(
+					revisions, compositeDssDictionary, lastDSSDictionary, revisionReader.DSSDictionary())
+				_ = revisionReader.Close()
+			}
+		}()
 	}
 
 	return revisions

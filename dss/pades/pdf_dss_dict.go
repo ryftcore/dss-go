@@ -238,13 +238,25 @@ func newSingleDssDict(dssDictionary PdfDict) *SingleDssDict {
 }
 
 // singleDssDictExtractVRIs extracts the VRI dictionaries embedded in the DSS dictionary.
-// Port of SingleDssDict#extractVRIs. Upstream logs and swallows any exception raised while
-// walking the /VRI dictionary; this stays silent.
-func singleDssDictExtractVRIs(dssDictionary PdfDict) []*PdfVriDict {
+// Port of SingleDssDict#extractVRIs.
+//
+// Upstream wraps the walk over the /VRI entries in try { ... } catch (Exception e), logs the
+// exception and returns Collections.emptyList(): a /VRI entry whose value is not a dictionary
+// (a number, a name, a string, null) makes `new PdfVriDict(name, null)` throw a
+// NullPointerException out of AbstractPdfDssDict's constructor, and that discards every VRI
+// dictionary of the document, not only the malformed one. The deferred recover is that catch;
+// the panic it stands for is the Go image of the NullPointerException, and slf4j is dropped.
+func singleDssDictExtractVRIs(dssDictionary PdfDict) (vris []*PdfVriDict) {
 	vriDict := dssDictionary.AsDict(PAdESConstantsVriDictionaryName)
 	if vriDict == nil {
 		return nil
 	}
+	defer func() {
+		if recover() != nil {
+			// Upstream logs "Unable to analyse VRI dictionary. Reason : {}".
+			vris = nil
+		}
+	}()
 	names := vriDict.List()
 	var result []*PdfVriDict
 	for _, name := range names {
