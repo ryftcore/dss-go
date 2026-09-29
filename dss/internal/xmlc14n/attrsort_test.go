@@ -3,7 +3,11 @@ package xmlc14n
 import (
 	"bufio"
 	"bytes"
+	"fmt"
+	"math/rand"
+	"sort"
 	"testing"
+	"time"
 )
 
 // emit renders a set the way the emitters do, so the expectations below can be read straight
@@ -127,5 +131,83 @@ func TestNSAttrQName(t *testing.T) {
 	}
 	if got := nsAttr("p", "urn:1"); got.qname != "xmlns:p" || got.local != "p" {
 		t.Errorf("nsAttr(p) = %+v", got)
+	}
+}
+
+// refAttrSet is the original attrSet: every add binary-searches its position and shifts the
+// tail. attrSet must reproduce it exactly, including which of two equal attributes survives.
+type refAttrSet struct{ items []outAttr }
+
+func (s *refAttrSet) add(a outAttr) {
+	i := sort.Search(len(s.items), func(i int) bool { return attrCompare(s.items[i], a) >= 0 })
+	if i < len(s.items) && attrCompare(s.items[i], a) == 0 {
+		return
+	}
+	s.items = append(s.items, outAttr{})
+	copy(s.items[i+1:], s.items[i:])
+	s.items[i] = a
+}
+
+func randomOutAttr(rng *rand.Rand, serial int) outAttr {
+	names := []string{"a", "b", "z", "Id", "xmlns", "\uFDF0", "\U00010000", "é"}
+	uris := []string{"", "", "urn:a", "urn:b", xmlNamespace, "urn:\U00010000", "urn:\uFDF0"}
+	local := names[rng.Intn(len(names))]
+	value := fmt.Sprint(serial) // distinguishes equal attributes: the first must win
+	if rng.Intn(4) == 0 {
+		a := nsAttr(local, value)
+		return a
+	}
+	space := uris[rng.Intn(len(uris))]
+	qname := local
+	if space != "" {
+		qname = "p" + fmt.Sprint(rng.Intn(3)) + ":" + local
+	}
+	return plainAttr(space, local, qname, value)
+}
+
+// TestAttrSetMatchesTreeSetSemantics compares the lazily sorted set with the insertion-based
+// original over random adds, with sorted() interleaved at random points the way xmlattrs.go
+// reads the set between adds.
+func TestAttrSetMatchesTreeSetSemantics(t *testing.T) {
+	rng := rand.New(rand.NewSource(3))
+	for round := 0; round < 3000; round++ {
+		var got attrSet
+		var want refAttrSet
+		for i, n := 0, rng.Intn(20); i < n; i++ {
+			a := randomOutAttr(rng, i)
+			got.add(a)
+			want.add(a)
+			if rng.Intn(5) == 0 {
+				got.sorted()
+			}
+		}
+		g := got.sorted()
+		if len(g) != len(want.items) {
+			t.Fatalf("round %d: %d attributes, want %d", round, len(g), len(want.items))
+		}
+		for i := range g {
+			if g[i] != want.items[i] {
+				t.Fatalf("round %d: position %d = %+v, want %+v", round, i, g[i], want.items[i])
+			}
+		}
+	}
+}
+
+// TestAttrSetWideElement is the X08-PERF-001 regression: 100 000 attributes on one element
+// used to cost ~10^10 element copies (every add shifted a 64-byte outAttr tail).
+func TestAttrSetWideElement(t *testing.T) {
+	const n = 100000
+	start := time.Now()
+	var set attrSet
+	for i := 0; i < n; i++ {
+		name := fmt.Sprintf("a%08d", n-i) // descending: worst case for insertion sort
+		set.add(plainAttr("", name, name, "v"))
+	}
+	got := set.sorted()
+	if elapsed := time.Since(start); elapsed > 10*time.Second {
+		t.Errorf("sorting %d attributes took %v; want O(n log n)", n, elapsed)
+	}
+	if len(got) != n || got[0].local != "a00000001" || got[n-1].local != fmt.Sprintf("a%08d", n) {
+		t.Fatalf("wide attrSet mis-sorted: len %d", len(got))
 	}
 }

@@ -3,7 +3,7 @@ package xmlc14n
 
 import (
 	"bufio"
-	"sort"
+	"slices"
 	"unicode/utf16"
 	"unicode/utf8"
 )
@@ -123,25 +123,45 @@ func compareUTF16(a, b string) int {
 // TreeSet<Attr>(COMPARE). TreeSet semantics matter twice: it sorts by the comparator alone,
 // and add() on an element that compares equal to one already present keeps the first and
 // discards the second.
+//
+// add only appends; the sorted, de-duplicated form is produced on demand by sorted() with one
+// stable sort. Inserting each attribute at its binary-searched position instead costs an O(n)
+// slice shift per insert, O(n^2) for an element with n attributes, where the TreeSet it stands
+// in for is O(n log n). Stability is what preserves "the first wins": pending attributes sit
+// after everything already folded into items, so of two equal ones the earlier add survives.
 type attrSet struct {
-	items []outAttr
+	items   []outAttr // sorted by attrCompare, no two equal; complete only when pending is empty
+	pending []outAttr // added since the last sorted(), in add order
 }
 
 func (s *attrSet) add(a outAttr) {
-	i := sort.Search(len(s.items), func(i int) bool { return attrCompare(s.items[i], a) >= 0 })
-	if i < len(s.items) && attrCompare(s.items[i], a) == 0 {
-		return // TreeSet.add: an equal element is already present.
-	}
-	s.items = append(s.items, outAttr{})
-	copy(s.items[i+1:], s.items[i:])
-	s.items[i] = a
+	s.pending = append(s.pending, a)
 }
 
-func (s *attrSet) len() int { return len(s.items) }
+// sorted returns the set in emission order. The result aliases the set's storage: it is valid
+// until the next add, and an element modified through it is modified in the set.
+func (s *attrSet) sorted() []outAttr {
+	if len(s.pending) == 0 {
+		return s.items
+	}
+	all := append(s.items, s.pending...)
+	slices.SortStableFunc(all, attrCompare)
+	out := all[:0]
+	for _, a := range all {
+		if n := len(out); n > 0 && attrCompare(out[n-1], a) == 0 {
+			continue // TreeSet.add: an equal element is already present.
+		}
+		out = append(out, a)
+	}
+	s.items, s.pending = out, nil
+	return out
+}
+
+func (s *attrSet) len() int { return len(s.sorted()) }
 
 // writeTo emits the set, which is CanonicalizerBase.outputAttrToWriter over the sorted result.
 func (s *attrSet) writeTo(w *bufio.Writer) {
-	for _, a := range s.items {
+	for _, a := range s.sorted() {
 		w.WriteByte(' ')
 		w.WriteString(a.qname)
 		w.WriteString(`="`)

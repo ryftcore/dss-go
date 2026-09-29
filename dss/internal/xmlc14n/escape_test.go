@@ -3,8 +3,26 @@ package xmlc14n
 import (
 	"bufio"
 	"bytes"
+	"io"
+	"strings"
 	"testing"
 )
+
+// TestEscapeWritersDoNotAllocate pins X08-PERF-002: the writers decode in place instead of
+// materialising a []rune per string.
+func TestEscapeWritersDoNotAllocate(t *testing.T) {
+	w := bufio.NewWriter(io.Discard)
+	s := strings.Repeat("text & <markup> \"quoted\"\r é\U0001F600 ", 200)
+	for name, fn := range map[string]func(*bufio.Writer, string){
+		"attribute": writeAttrValueEscaped,
+		"text":      writeTextEscaped,
+		"comment":   writeCarriageReturnEscaped,
+	} {
+		if allocs := testing.AllocsPerRun(20, func() { fn(w, s) }); allocs != 0 {
+			t.Errorf("%s writer allocates %v times per call, want 0", name, allocs)
+		}
+	}
+}
 
 func escaped(t *testing.T, fn func(*bufio.Writer, string), s string) string {
 	t.Helper()
