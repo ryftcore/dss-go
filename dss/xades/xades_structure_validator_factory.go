@@ -9,20 +9,26 @@
 // dropped; StructureValidatorFactory reduces to the plain singleton + factory-method shape.
 package xades
 
+import "sync"
+
 // StructureValidatorFactory creates a relevant implementation of StructureValidator.
 // Port of the class XAdESStructureValidatorFactory.
 type StructureValidatorFactory struct{}
 
 // xadesStructureValidatorFactorySingleton is the current factory instance. Port of the private
-// static singleton field.
-var xadesStructureValidatorFactorySingleton *StructureValidatorFactory
+// static singleton field. Initialised under a sync.Once: upstream's unsynchronized
+// check-then-set is harmless in Java, but it is a data race in Go under concurrent validations.
+var (
+	xadesStructureValidatorFactorySingleton *StructureValidatorFactory
+	xadesStructureValidatorFactoryOnce      sync.Once
+)
 
 // StructureValidatorFactoryGetInstance gets the instance of StructureValidatorFactory.
 // Port of the static getInstance().
 func StructureValidatorFactoryGetInstance() *StructureValidatorFactory {
-	if xadesStructureValidatorFactorySingleton == nil {
+	xadesStructureValidatorFactoryOnce.Do(func() {
 		xadesStructureValidatorFactorySingleton = &StructureValidatorFactory{}
-	}
+	})
 	return xadesStructureValidatorFactorySingleton
 }
 

@@ -17,23 +17,18 @@
 // embedding to every format that does not shadow it - CAdES, JAdES) that wraps the singular result
 // in a one-element slice. This file's MakeTimestampTokens below overrides that default.
 //
-// # GAP flagged for integrator: getTimestampScopes/getSignatureTimestampReferences/
-// # getArchiveTimestampReferences are concrete-but-overridable base methods with no override hook
+// # GAP flagged for integrator: getSignatureTimestampReferences/getArchiveTimestampReferences are
+// # concrete-but-overridable base methods with no override hook
 //
-// Three more Java methods this file overrides are declared concrete (not abstract) on the base
+// Two Java methods this file overrides are declared concrete (not abstract) on the base
 // SignatureTimestampSource and relied upon there via ordinary virtual dispatch, exactly the same
 // pattern TimestampSource already flags for IncorporateArchiveTimestampReferences/
 // GetSignatureSignedDataReferences/GetCounterSignatureReferences (see cades_timestamp_source.go's
-// file header for the precedent this follows):
+// file header for the precedent this follows). (A third, getTimestampScopes(TimestampToken), used
+// to be on this list; SignatureTimestampSourceOverrides now carries GetTimestampScopes and the
+// base's validateTimestamps() dispatches through it, so the include-filtering
+// xades.TimestampScopeFinder below is reached.)
 //
-//   - getTimestampScopes(TimestampToken) - called unqualified from the base's own
-//     validateTimestamps() for every content and archive timestamp. The base's private
-//     getTimestampScopes always constructs a bare, XAdES-agnostic
-//     validationscope.EncapsulatedTimestampScopeFinder; this file's TimestampScopeFinder
-//     override (constructing xades.TimestampScopeFinder instead, to correctly filter
-//     IndividualDataObjectsTimestamp includes) is not reached from there. See
-//     xades_timestamp_scope_finder.go's own file header for the identical note from that file's
-//     perspective.
 //   - getSignatureTimestampReferences() and getArchiveTimestampReferences(List<TimestampToken>) -
 //     both `protected`, unexported in the Go base (spi/validation/timestamp/
 //     signature_timestamp_source.go's getSignatureTimestampReferences/getArchiveTimestampReferences),
@@ -56,8 +51,9 @@
 //
 // Every non-abstract Is*/Get*/Make* method below that IS part of SignatureTimestampSourceOverrides
 // (all the boolean predicates, MakeEvidenceRecords, GetCertificateRefs/GetCRLRefs/GetOCSPRefs,
-// GetEncapsulated*Identifiers, GetArchiveTimestampType, GetCounterSignatures) dispatches correctly
-// today - only the four named above need the fixes described.
+// GetEncapsulated*Identifiers, GetArchiveTimestampType, GetCounterSignatures, GetTimestampScopes)
+// dispatches correctly today - only the getSignatureTimestampReferences/
+// getArchiveTimestampReferences pair named above needs the fix described.
 package xades
 
 import (
@@ -475,10 +471,8 @@ func xadesTimestampSourceEvidenceRecordDocument(encapsulatedEvidenceRecord *xmld
 // GetTimestampScopes generates timestamp token scopes using this format's TimestampScopeFinder
 // (filtering by IndividualDataObjectsTimestamp includes when present), rather than the base's
 // plain EncapsulatedTimestampScopeFinder. Port of the protected getTimestampScopes(TimestampToken)
-// override.
-//
-// See the file header GAP note: not yet reachable from the base's own internal validateTimestamps()
-// calls until SignatureTimestampSourceOverrides gains this method.
+// override. It is part of SignatureTimestampSourceOverrides, so the base's validateTimestamps()
+// reaches it for every content and archive timestamp, as Java's virtual dispatch does.
 func (s *TimestampSource) GetTimestampScopes(timestampToken *validation.TimestampToken) []mscope.SignatureScope {
 	timestampScopeFinder := NewTimestampScopeFinder()
 	timestampScopeFinder.SetSignature(s.signature)

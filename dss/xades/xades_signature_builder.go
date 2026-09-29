@@ -48,8 +48,10 @@ package xades
 import (
 	"errors"
 	"fmt"
+	"runtime"
 	"sync"
 	"time"
+	"weak"
 
 	"github.com/ryftcore/dss-go/dss/enumerations"
 	"github.com/ryftcore/dss-go/dss/internal/xmldom"
@@ -1720,7 +1722,11 @@ func (b *AbstractSignatureBuilder) addAssertions(signedAssertions []string, role
 // file header: it stands in for Java's `instanceof XmlPolicyWithTransforms`, which Go cannot
 // express because model.BLevelParameters hands out a *model.Policy and XmlPolicyWithTransforms
 // embeds model.Policy by value.
-var xadesSignatureBuilderPolicyTransformsRegistry sync.Map // map[*model.Policy][]DSSTransform
+//
+// The key is a weak pointer to the embedded model.Policy and a cleanup attached to the
+// XmlPolicyWithTransforms removes the entry once that policy is unreachable, so the registry does
+// not keep every registered policy (and its transforms) alive for the life of the process.
+var xadesSignatureBuilderPolicyTransformsRegistry sync.Map // map[weak.Pointer[model.Policy]][]DSSTransform
 
 // SignatureBuilderRegisterPolicyTransforms records policy as an XmlPolicyWithTransforms and
 // returns the *model.Policy to hand to BLevelParameters.SetSignaturePolicy, so that
@@ -1731,14 +1737,18 @@ var xadesSignatureBuilderPolicyTransformsRegistry sync.Map // map[*model.Policy]
 //	xmlPolicy.SetTransforms(transforms)
 //	params.BLevel().SetSignaturePolicy(xades.SignatureBuilderRegisterPolicyTransforms(xmlPolicy))
 func SignatureBuilderRegisterPolicyTransforms(policy *XmlPolicyWithTransforms) *model.Policy {
-	xadesSignatureBuilderPolicyTransformsRegistry.Store(&policy.Policy, policy.Transforms())
+	key := weak.Make(&policy.Policy)
+	xadesSignatureBuilderPolicyTransformsRegistry.Store(key, policy.Transforms())
+	runtime.AddCleanup(policy, func(k weak.Pointer[model.Policy]) {
+		xadesSignatureBuilderPolicyTransformsRegistry.Delete(k)
+	}, key)
 	return &policy.Policy
 }
 
 // SignatureBuilderPolicyTransforms resolves the ds:Transforms registered for policy, and
 // reports whether policy is the model.Policy of an XmlPolicyWithTransforms.
 func SignatureBuilderPolicyTransforms(policy *model.Policy) ([]DSSTransform, bool) {
-	value, ok := xadesSignatureBuilderPolicyTransformsRegistry.Load(policy)
+	value, ok := xadesSignatureBuilderPolicyTransformsRegistry.Load(weak.Make(policy))
 	if !ok {
 		return nil, false
 	}
