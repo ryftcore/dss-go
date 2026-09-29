@@ -15,9 +15,14 @@
 // SECURITY NOTE. The arithmetic below is the textbook Jacobian-coordinate short-Weierstrass
 // implementation over math/big, and it is NOT constant-time. That is acceptable here, and only
 // here, because these curves are used exclusively to VERIFY signatures with PUBLIC keys read out
-// of certificates: no secret scalar is ever multiplied on them. Nothing in this package may be
-// used for key generation, signing, or ECDH; crypto/ecdsa's own Sign refuses custom curves under
-// FIPS-140 mode for the same reason.
+// of certificates: no production code path multiplies a secret scalar on them. Nothing in this
+// package may be used for key generation, signing, or ECDH; crypto/ecdsa's own Sign refuses
+// custom curves under FIPS-140 mode for the same reason. The one place a secret scalar does
+// reach ScalarMult is this package's own tests, which sign with throwaway keys (a fixed d, a
+// deterministic nonce source) so that the verification path can be exercised against known
+// secrets; that is test-only and no guarantee is given for it. Nothing enforces the invariant:
+// CurveForOID hands out a plain elliptic.Curve, so a caller that signs or does ECDH on it is
+// outside the contract.
 package eccurve
 
 import (
@@ -218,7 +223,7 @@ func (c *weierstrassCurve) Double(x1, y1 *big.Int) (*big.Int, *big.Int) {
 }
 
 // ScalarMult implements elliptic.Curve by plain left-to-right double-and-add. See the package
-// note: NOT constant-time, and only ever driven by public scalars.
+// note: NOT constant-time, and meant to be driven by public scalars only.
 func (c *weierstrassCurve) ScalarMult(bx, by *big.Int, k []byte) (*big.Int, *big.Int) {
 	x, y, z := new(big.Int), new(big.Int), new(big.Int)
 	bz := jacobianZFor(bx, by)

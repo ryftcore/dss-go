@@ -107,6 +107,8 @@ func TestParseCertificateBrainpoolSignatureVerifies(t *testing.T) {
 	// Signing needs the private scalar, which the certificate obviously does not carry; instead
 	// verify that a signature made with a DIFFERENT key on the same curve is rejected, which
 	// exercises the same verification path the port uses.
+	// Test-only, like every signature made on these curves in this package: the throwaway key
+	// and the deterministic nonce source go through the non-constant-time ScalarMult.
 	other, err := ecdsa.GenerateKey(publicKey.Curve, newDeterministicReader())
 	if err != nil {
 		t.Fatalf("generating a throwaway key on the recovered curve: %v", err)

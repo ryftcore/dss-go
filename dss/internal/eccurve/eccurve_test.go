@@ -104,7 +104,9 @@ func TestCurveForOIDUnknown(t *testing.T) {
 func TestBrainpoolECDSAVerifyInteropWithStdlib(t *testing.T) {
 	curve := CurveForOID(BrainpoolP256r1OID)
 	// A deterministic key: d = 12345, Q = d*G. Signing uses this package's own arithmetic via
-	// crypto/ecdsa's legacy path, which is exactly the code under test.
+	// crypto/ecdsa's legacy path, which is exactly the code under test. Signing here is
+	// test-only: it pushes a secret scalar and a predictable nonce through the non-constant-time
+	// ScalarMult (see the package's SECURITY NOTE), which production code must never do.
 	d := big.NewInt(12345)
 	qx, qy := curve.ScalarBaseMult(d.Bytes())
 	priv := &ecdsa.PrivateKey{PublicKey: ecdsa.PublicKey{Curve: curve, X: qx, Y: qy}, D: d}
