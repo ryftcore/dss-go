@@ -23,6 +23,7 @@ present.
 | **REST and SOAP remote services**, and their clients | No remote-signing server or client. Sign in-process. |
 | **Evidence-record analyzers** — RFC 4998 ERS and RFC 6283 XMLERS | The framework, the interfaces and the report plumbing are ported, but nothing registers an `EvidenceRecordAnalyzerFactory`, so an evidence record cannot actually be parsed from a document today. |
 | **`dss-cookbook`**, coverage and BOM modules | Documentation and build-tooling modules with no runtime role. This site and `dss/examples/` serve the cookbook's purpose. |
+| **`dss-crl-parser-stream`** | CRLs are always decoded fully in memory (`dss/crlparser`); the streaming parser upstream offers for very large CRLs is not ported. |
 
 ## Supported with limits
 
@@ -94,6 +95,36 @@ classes, but a behavioural oracle corpus for them has not been built, so they
 do not carry the parity evidence every other part of the validation engine
 does. Treat them as unproven until that corpus exists — it is a tracked item.
 
+Without the tag, the signature and certificate executors report on diagnostic
+data that holds an EAA without the EAA blocks, and EAA presentation validation
+(`EAAPresentationProcessExecutor`) fails with an explicit error naming the `eaa`
+build tag.
+
+### XML
+
+- **No XML Schema validation.** No XSD validator is ported, so the XAdES
+  `StructureValidator` (`Signature.ValidateStructure`) and the trusted-list
+  `TLStructureVerifier` conformity check always report the structure as valid. A
+  trusted list that violates its schema (a missing required attribute such as
+  `Extension@Critical`, a negative `positiveInteger`) is parsed leniently, as
+  Java's lax JAXB parse does, but the structure-validation messages and the
+  parsing-error alert Java would add are not produced. Cryptographic verdicts are
+  unaffected.
+- **XPath lookup by Id is unescaped, as upstream.** A `Reference` URI value is
+  interpolated into the `@*[local-name()='Id']='value'` XPath literal without
+  escaping (`XPathQueryAttributeParameter`), exactly as Java builds it, so a value
+  containing `'` can alter or break that lookup. Signature-wrapping is defended
+  separately by the duplicate-Id checks in `xades/dss_xml_utils.go`.
+
+### Network loaders
+
+As upstream, `NativeHTTPDataLoader` has no default response-size cap, connect or
+read timeout, or redirect limit, and the `FileRevocationSource` on-disk cache has
+no size or age eviction. An application that validates untrusted documents with
+online AIA, trusted-list or revocation retrieval should call `SetMaxInputSize`,
+`SetConnectTimeout` and `SetReadTimeout` on its loaders. The `esig` CLI does this
+for `tl refresh`.
+
 ## Known divergences from Java DSS
 
 Places where both implementations do something and the something differs.
@@ -129,6 +160,43 @@ asserted — and pinned by a test so it cannot quietly widen.
 If you are diffing report XML against Java's output and see identical content
 in a different order within one list, that is this. It never changes a
 conclusion.
+
+One such place is the multi-language names of a trusted entity in the
+diagnostic data: they are emitted sorted by language
+(`XmlTrustedEntityBuilder.getLangAndValues`), where Java drains a hash map.
+
+### Deliberate hardening
+
+Places where Java's behaviour is a crash, a leak or an unrequested network
+request, and this port refuses instead. Each carries a
+`// DIVERGENCE, deliberate:` note at the cited location.
+
+- **ASiC signature-policy provider.** Upstream's ASiC analyzers hand each
+  nested signature analyzer `getSignaturePolicyProvider()`, which lazily creates
+  a default provider backed by a `NativeHTTPDataLoader` with no timeout, so
+  validating an ASiC container downloads any policy URL named inside it (plain
+  XAdES/CAdES validation does not). This port forwards only a provider the caller
+  set with `SetSignaturePolicyProvider`
+  (`asic/cades/asic_container_with_cades_analyzer.go`,
+  `asic/xades/asic_container_with_xades_analyzer.go`).
+- **Cyclic manifest references.** A manifest that lists its own time-stamp, or
+  two manifests listing each other's, recurses without end upstream and ends in a
+  `StackOverflowError`. A Go stack overflow cannot be recovered and ends the
+  process, so the port reports the cycle as an ordinary error at the point Java
+  would recurse again. Every input that terminates in Java gives the same result
+  (`validation/process/bbb/fc/abstract_signed_and_timestamped_files_covered_check.go`).
+- **PAdES parameters' `String()`.** Upstream's `toString` prints the PDF
+  password in clear text; this port prints `passwordProtection=[redacted]`
+  (`pades/pades_signature_parameters.go`, `pades/pades_timestamp_parameters.go`).
+- **Time-stamp `Accuracy` seconds.** A value beyond int64 is refused, where
+  BouncyCastle keeps an unrestricted integer. Nothing in DSS reads the accuracy
+  (`internal/cmscore/timestamp.go`).
+- **Certificates with a negative serial number** load, as they do through
+  BouncyCastle upstream, because the port enables `GODEBUG=x509negativeserial=1`
+  process-wide. This departs from the Go standard library's default, not from
+  upstream, and affects every `crypto/x509` parse in the binary unless
+  `GODEBUG` sets `x509negativeserial` explicitly
+  (`internal/eccurve/certificate.go`).
 
 ### Go toolchain sensitivity
 
