@@ -12,21 +12,24 @@
 // kept only so call sites ported unchanged from Java compile and behave inertly.
 package utils
 
+import "sync/atomic"
+
 // santuarioInitializerInitialized mirrors SantuarioInitializer.alreadyInitialized. Since
 // Init does no real work, this only tracks whether Init has been called at least once, for
-// IsInitialized's benefit.
-var santuarioInitializerInitialized = false
+// IsInitialized's benefit. It is atomic because the xades service constructors call
+// SantuarioInitializerInit on every construction, possibly from several goroutines.
+var santuarioInitializerInitialized atomic.Bool
 
 // SantuarioInitializerIsInitialized reports whether SantuarioInitializerInit has been called.
 // Ports isInitialized(); the Init.isInitialized() branch (Santuario's own global flag) has no
 // Go counterpart and is dropped, since there is no Santuario library to already be
 // initialized by another caller.
 func SantuarioInitializerIsInitialized() bool {
-	return santuarioInitializerInitialized
+	return santuarioInitializerInitialized.Load()
 }
 
 // SantuarioInitializerInit is a no-op beyond recording that it ran: see the file-level doc
 // comment for why there is nothing to initialize. Ports init()/dynamicInit().
 func SantuarioInitializerInit() {
-	santuarioInitializerInitialized = true
+	santuarioInitializerInitialized.Store(true)
 }

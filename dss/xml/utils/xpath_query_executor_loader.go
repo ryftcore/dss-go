@@ -11,8 +11,15 @@
 // ExceptionInInitializerError branch, which cannot occur here.
 package utils
 
+import "sync"
+
 // XPathQueryExecutorLoader loads an implementation of the corresponding XPath executor.
+//
+// The lazy load is guarded by a mutex: the process-global instance is shared by every
+// goroutine that evaluates an XPath query, and an unsynchronized check-then-set is a data race.
 type XPathQueryExecutorLoader struct {
+	mu sync.Mutex
+
 	// xPathQueryExecutor is the cached version of the executor.
 	xPathQueryExecutor XPathQueryExecutor
 
@@ -29,6 +36,8 @@ func NewXPathQueryExecutorLoader() *XPathQueryExecutorLoader {
 // GetXPathQueryExecutor returns a cached or provided XPathQueryExecutor, loading the default
 // implementation on first use. Ports getXPathQueryExecutor().
 func (l *XPathQueryExecutorLoader) GetXPathQueryExecutor() XPathQueryExecutor {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	if l.xPathQueryExecutor == nil {
 		l.xPathQueryExecutor = l.loadXPathQueryExecutor()
 	}
@@ -37,6 +46,8 @@ func (l *XPathQueryExecutorLoader) GetXPathQueryExecutor() XPathQueryExecutor {
 
 // SetXPathQueryExecutor sets the XPathQueryExecutor to be used. Ports setXPathQueryExecutor(XPathQueryExecutor).
 func (l *XPathQueryExecutorLoader) SetXPathQueryExecutor(xPathQueryExecutor XPathQueryExecutor) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	l.xPathQueryExecutor = xPathQueryExecutor
 }
 
@@ -49,6 +60,8 @@ func (l *XPathQueryExecutorLoader) loadXPathQueryExecutor() XPathQueryExecutor {
 // GetXPathStringExecutor returns a cached or provided XPathStringExecutor, loading the
 // default implementation on first use. Ports getXPathStringExecutor().
 func (l *XPathQueryExecutorLoader) GetXPathStringExecutor() XPathStringExecutor {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	if l.xPathStringExecutor == nil {
 		l.xPathStringExecutor = l.loadXPathStringExecutor()
 	}
@@ -57,6 +70,8 @@ func (l *XPathQueryExecutorLoader) GetXPathStringExecutor() XPathStringExecutor 
 
 // SetXPathStringExecutor sets the XPathStringExecutor to be used. Ports setXPathStringExecutor(XPathStringExecutor).
 func (l *XPathQueryExecutorLoader) SetXPathStringExecutor(xPathStringExecutor XPathStringExecutor) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
 	l.xPathStringExecutor = xPathStringExecutor
 }
 

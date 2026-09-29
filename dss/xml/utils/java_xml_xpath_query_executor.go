@@ -52,7 +52,7 @@ func (e *JavaXmlXPathQueryExecutor) GetNodeListByString(xmlNode *xmldom.Node, xP
 
 // createXPathExpression ports the protected createXPathExpression(String) helper.
 func (e *JavaXmlXPathQueryExecutor) createXPathExpression(xpathString string) (*xpath10.Expr, error) {
-	expr, err := xpath10.Compile(xpathString, namespaceContextMapToXPath10(e.namespaceContext))
+	expr, err := xpath10.Compile(xpathString, namespaceContextMapToXPath10(e.getNamespaceContext()))
 	if err != nil {
 		return nil, model.NewDSSErrorMessageCause(fmt.Sprintf("Unable to create an XPath expression : %s", err.Error()), err)
 	}
