@@ -10,6 +10,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 
 	"github.com/ryftcore/dss-go/dss"
@@ -42,10 +43,14 @@ func main() {
 		log.Fatalf("reading the signed JWS: %v", err)
 	}
 	defer body.Close()
-	buf := make([]byte, 4096)
-	n, _ := body.Read(buf)
-	compact := string(buf[:n])
-	fmt.Printf("compact JWS (%d bytes): %.80s...\n", n, compact)
+	// io.ReadAll, not a single Read: a Reader may legally return fewer bytes
+	// than the stream holds.
+	buf, err := io.ReadAll(body)
+	if err != nil {
+		log.Fatalf("reading the signed JWS: %v", err)
+	}
+	compact := string(buf)
+	fmt.Printf("compact JWS (%d bytes): %.80s...\n", len(buf), compact)
 
 	reports, err := dss.Validate(signed, dss.ValidateOptions{
 		TrustedCertificates: signer.CertificateChain(),
